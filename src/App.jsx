@@ -1,32 +1,26 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 
-/*
-  =====================================================
-  HoutarouDes Portfolio — React version
-  =====================================================
-  Converted from my old plain HTML/CSS/JS file into one
-  React component. I kept the same "retro game" vibe
-  (stage select, loadout, lobby lol) but now everything
-  is broken into small pieces + data arrays so I'm not
-  copy-pasting the same card markup 4 times.
+/* =============================================================
+   🎮 HOUTAROUDES PORTFOLIO — RETRO PIXEL LANDING PAGE
+   
+   yo this is my portfolio lol i tried to make it look like
+   a retro game but also kinda like a legit landing page at
+   the same time?? idk if it worked but here we are
 
-  Icons: I wanted to use the actual reicon-react package
-  (from reicon.dev) but this sandbox only allows a fixed
-  list of npm packages and reicon-react isn't on it, so
-  I just redrew the icons myself using the same style
-  reicon uses (24x24 box, 1.5px stroke, rounded corners).
-  If you paste this into a real project with reicon-react
-  installed, you can literally delete the icon components
-  below and swap in the real import, e.g.:
-    import { Html5, Palette, Bolt, Database } from "reicon-react";
-*/
+   features:
+   - canvas pixel rain background (kinda like matrix but cuter)
+   - pixel scroll animations (blocks fade in like minecraft lol)
+   - crt scanlines for that old monitor feel
+   - starfield that drifts in the back
+   - flickering neon title like old arcade signs
+   - typewriter effect on the subtitle cuz why not
+   
+   icons: i drew these myself cuz i couldn't install any icon
+   package in the sandbox. they're 24x24 outline style. not
+   perfect but hey it works
+   ============================================================= */
 
-/* -----------------------------------------------------
-   ICONS
-   Simple outline icons, all 24x24, stroke-based, no fill.
-   Basically doing what reicon does but by hand since I
-   can't npm install here.
------------------------------------------------------ */
+// ---- ICON HELPERS ----
 const iconProps = (size, color) => ({
   width: size,
   height: size,
@@ -38,7 +32,6 @@ const iconProps = (size, color) => ({
   strokeLinejoin: "round",
 });
 
-// </> tag icon, for HTML
 function IconCode({ size = 22, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -49,7 +42,6 @@ function IconCode({ size = 22, color = "currentColor" }) {
   );
 }
 
-// paint swatch, for CSS
 function IconPalette({ size = 22, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -62,7 +54,6 @@ function IconPalette({ size = 22, color = "currentColor" }) {
   );
 }
 
-// lightning bolt, for JavaScript
 function IconBolt({ size = 22, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -71,7 +62,6 @@ function IconBolt({ size = 22, color = "currentColor" }) {
   );
 }
 
-// server rack, for PHP (backend)
 function IconServer({ size = 22, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -83,7 +73,6 @@ function IconServer({ size = 22, color = "currentColor" }) {
   );
 }
 
-// db cylinder, for MySQL
 function IconDatabase({ size = 22, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -94,7 +83,6 @@ function IconDatabase({ size = 22, color = "currentColor" }) {
   );
 }
 
-// branching path, for Git & GitHub
 function IconGitBranch({ size = 22, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -107,7 +95,6 @@ function IconGitBranch({ size = 22, color = "currentColor" }) {
   );
 }
 
-// blueprint / grid, for System Design
 function IconLayout({ size = 22, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -118,7 +105,6 @@ function IconLayout({ size = 22, color = "currentColor" }) {
   );
 }
 
-// phone outline, for Responsive UI
 function IconDevice({ size = 22, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -128,7 +114,6 @@ function IconDevice({ size = 22, color = "currentColor" }) {
   );
 }
 
-// github mark (kept simple/outline, not the real logo shape exactly)
 function IconGithub({ size = 20, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -137,7 +122,6 @@ function IconGithub({ size = 20, color = "currentColor" }) {
   );
 }
 
-// envelope, for contact / email
 function IconMail({ size = 20, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -147,7 +131,6 @@ function IconMail({ size = 20, color = "currentColor" }) {
   );
 }
 
-// play triangle, for demo buttons
 function IconPlay({ size = 16, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -156,7 +139,6 @@ function IconPlay({ size = 16, color = "currentColor" }) {
   );
 }
 
-// diagonal arrow, for outbound links
 function IconArrowUpRight({ size = 14, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -166,7 +148,6 @@ function IconArrowUpRight({ size = 14, color = "currentColor" }) {
   );
 }
 
-// game controller, used for the little brand badge instead of "HD" text
 function IconController({ size = 18, color = "currentColor" }) {
   return (
     <svg {...iconProps(size, color)}>
@@ -178,12 +159,7 @@ function IconController({ size = 18, color = "currentColor" }) {
   );
 }
 
-/* -----------------------------------------------------
-   DATA
-   Putting the content in arrays so the JSX below is just
-   a .map() instead of me hand-typing 4 near-identical
-   <article> blocks like in the old HTML file.
------------------------------------------------------ */
+// ---- DATA ----
 const projects = [
   {
     stage: "STAGE 01 — LIVE",
@@ -209,13 +185,12 @@ const projects = [
     desc: "A concept café site with a strict minimalist look — ordering flow, menu layout, and a reservation form.",
     tags: ["HTML", "CSS", "JavaScript"],
     stats: ["PERSONAL PROJECT"],
-    // no demo link for this one, only code
     code: "https://github.com/houtaroudes/houtarou-cafe",
   },
   {
     stage: "STAGE 04 — IN PROGRESS",
     title: "Random Learning WebDev",
-    desc: "My ongoing training grounds — CSS spacing drills, JS nested-loop practice, and a POS system prototype for a café thesis project.",
+    desc: "My ongoing training grounds — CSS spacing drills, JS nested-loop practice, and a POS system prototype.",
     tags: ["HTML", "CSS", "JS"],
     stats: ["★ 1", "LEARNING SANDBOX"],
     code: "https://github.com/houtaroudes/Random-Learning-WebDev",
@@ -233,30 +208,203 @@ const loadout = [
   { icon: IconDevice, label: "Responsive UI" },
 ];
 
-const hud = [
+const hudStats = [
   { label: "Class", value: "Web Dev" },
   { label: "Status", value: "Student" },
-  { label: "Repos Cleared", value: "4" },
+  { label: "Repos", value: "4" },
   { label: "Party", value: "Open to Work" },
 ];
 
-/* -----------------------------------------------------
-   MAIN COMPONENT
------------------------------------------------------ */
+/* =============================================================
+   PIXEL RAIN CANVAS — animated pixel particles falling down
+   like a retro matrix vibe but with colored pixels. this is
+   probably overengineered for a portfolio lol but it looks cool
+   ============================================================= */
+function PixelRain() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let animId;
+    let particles = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+
+    function init() {
+      particles = [];
+      const count = Math.floor((canvas.width * canvas.height) / 8000);
+      for (let i = 0; i < count; i++) {
+        const colors = ["#3fe6ff", "#ff3f9c", "#ffd166", "rgba(255,255,255,0.6)"];
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2.5 + 1,
+          speedY: Math.random() * 0.6 + 0.1,
+          speedX: (Math.random() - 0.5) * 0.3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          opacity: Math.random() * 0.5 + 0.15,
+        });
+      }
+    }
+    init();
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of particles) {
+        p.y += p.speedY;
+        p.x += p.speedX;
+        if (p.y > canvas.height) {
+          p.y = -p.size;
+          p.x = Math.random() * canvas.width;
+        }
+        ctx.globalAlpha = p.opacity;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+      }
+      ctx.globalAlpha = 1;
+      animId = requestAnimationFrame(animate);
+    }
+
+    // respect reduced motion — don't animate if user prefers it
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!prefersReduced.matches) {
+      animate();
+    }
+
+    // re-init on resize
+    const onResize = () => { resize(); init(); };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "fixed", inset: 0, zIndex: 0,
+        pointerEvents: "none", opacity: 0.6,
+      }}
+      aria-hidden="true"
+    />
+  );
+}
+
+/* =============================================================
+   PIXEL REVEAL HOOK — elements fade in with a pixel-ish effect
+   when they scroll into view. i used IntersectionObserver cuz
+   that's the "proper" way to do scroll animations apparently
+   ============================================================= */
+function usePixelReveal(threshold = 0.12) {
+  const ref = useRef(null);
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRevealed(true);
+          obs.unobserve(el);
+        }
+      },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+
+  return [ref, revealed];
+}
+
+/* =============================================================
+   PIXEL REVEAL WRAPPER — wraps any section with the animation
+   ============================================================= */
+function PixelSection({ children, className = "", ...rest }) {
+  const [ref, revealed] = usePixelReveal(0.08);
+  return (
+    <section
+      ref={ref}
+      className={`pixel-section ${revealed ? "pixel-revealed" : ""} ${className}`}
+      {...rest}
+    >
+      {children}
+    </section>
+  );
+}
+
+/* =============================================================
+   TYPEWRITER HOOK — types text one character at a time
+   cuz every portfolio needs a typewriter effect right?? lol
+   ============================================================= */
+function useTypewriter(text, speed = 40, startDelay = 500) {
+  const [displayed, setDisplayed] = useState("");
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const startTimer = setTimeout(() => setStarted(true), startDelay);
+    return () => clearTimeout(startTimer);
+  }, [startDelay]);
+
+  useEffect(() => {
+    if (!started) return;
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setDisplayed(text.slice(0, i));
+      if (i >= text.length) clearInterval(interval);
+    }, speed);
+    return () => clearInterval(interval);
+  }, [started, text, speed]);
+
+  return displayed;
+}
+
+/* =============================================================
+   MAIN COMPONENT — the whole shebang
+   ============================================================= */
 export default function HoutarouDesPortfolio() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const typedText = useTypewriter(
+    "Full-Stack Developer — building pixel-perfect worlds, one commit at a time",
+    30,
+    800
+  );
+
   return (
     <>
       <style>{CSS}</style>
 
+      {/* gotta wrap everything in #page so the CSS variables work */}
       <div id="page">
-        {/* background layers, just decoration, no content in here */}
+        {/* animated pixel rain background — my favorite part */}
+        <PixelRain />
+
+        {/* static background layers */}
         <div className="stars" aria-hidden="true" />
         <div className="stars2" aria-hidden="true" />
         <div className="vignette" aria-hidden="true" />
         <div className="crt" aria-hidden="true" />
 
-        {/* ---------- NAV ---------- */}
-        <nav>
+        {/* ---- NAV ---- */}
+        <nav className={scrolled ? "scrolled" : ""}>
           <div className="brand">
             <div className="brand-badge">
               <IconController size={17} color="var(--cyan)" />
@@ -272,15 +420,18 @@ export default function HoutarouDesPortfolio() {
           </div>
         </nav>
 
-        {/* ---------- HERO ---------- */}
+        {/* ---- HERO / LANDING ---- */}
         <header className="hero">
+          <div className="hero-scan" aria-hidden="true" />
+
           <div className="hero-tag">PLAYER FILE — SLOT 01</div>
           <h1 className="hero-title">
             HOUTAROU<span className="accent">DES</span>
           </h1>
           <p className="hero-sub">
-            <span className="type">
-              Full-Stack Developer — building pixel-perfect worlds, one commit at a time
+            <span className="type-cursor">
+              {typedText}
+              <span className="cursor-blink">|</span>
             </span>
           </p>
           <div className="hero-ctas">
@@ -299,9 +450,9 @@ export default function HoutarouDesPortfolio() {
           <div className="press-start">▸ SCROLL TO CONTINUE ▸</div>
         </header>
 
-        {/* ---------- HUD STAT BAR ---------- */}
+        {/* ---- HUD STAT BAR ---- */}
         <div className="hud">
-          {hud.map((item) => (
+          {hudStats.map((item) => (
             <div className="hud-cell" key={item.label}>
               <div className="hud-label">{item.label}</div>
               <div className="hud-value">{item.value}</div>
@@ -309,8 +460,8 @@ export default function HoutarouDesPortfolio() {
           ))}
         </div>
 
-        {/* ---------- STAGE SELECT (projects) ---------- */}
-        <section className="section" id="stages">
+        {/* ---- STAGE SELECT (projects) ---- */}
+        <PixelSection className="section" id="stages">
           <div className="section-head">
             <div className="eyebrow">Cartridge Library</div>
             <h2 className="section-title">
@@ -331,9 +482,7 @@ export default function HoutarouDesPortfolio() {
 
                 <div className="cart-tags">
                   {p.tags.map((t) => (
-                    <span className="tag" key={t}>
-                      {t}
-                    </span>
+                    <span className="tag" key={t}>{t}</span>
                   ))}
                 </div>
 
@@ -345,12 +494,7 @@ export default function HoutarouDesPortfolio() {
 
                 <div className="cart-actions">
                   {p.demo && (
-                    <a
-                      className="primary"
-                      href={p.demo}
-                      target="_blank"
-                      rel="noopener"
-                    >
+                    <a className="primary" href={p.demo} target="_blank" rel="noopener">
                       <IconPlay size={13} /> Play Demo
                     </a>
                   )}
@@ -361,10 +505,10 @@ export default function HoutarouDesPortfolio() {
               </article>
             ))}
           </div>
-        </section>
+        </PixelSection>
 
-        {/* ---------- LOADOUT (skills) ---------- */}
-        <section className="section" id="loadout">
+        {/* ---- LOADOUT (skills) ---- */}
+        <PixelSection className="section" id="loadout">
           <div className="section-head">
             <div className="eyebrow">Inventory</div>
             <h2 className="section-title">
@@ -382,10 +526,10 @@ export default function HoutarouDesPortfolio() {
               </div>
             ))}
           </div>
-        </section>
+        </PixelSection>
 
-        {/* ---------- LOBBY (contact) ---------- */}
-        <section className="section" id="lobby">
+        {/* ---- LOBBY (contact) ---- */}
+        <PixelSection className="section" id="lobby">
           <div className="lobby">
             <div className="eyebrow">Multiplayer Lobby</div>
             <h2 className="lobby-title">Let's Build Something Together</h2>
@@ -407,12 +551,12 @@ export default function HoutarouDesPortfolio() {
               </a>
             </div>
           </div>
-        </section>
+        </PixelSection>
 
-        {/* ---------- FOOTER ---------- */}
+        {/* ---- FOOTER ---- */}
         <footer>
           <p className="credits">
-            GAME CREDITS — CODED BY <span className="hi">HOUTAROUDES</span> —
+            GAME CREDITS — CODED BY <span className="hi">HOUTAROUDES</span> — 
             © 2026 — THANKS FOR PLAYING
           </p>
         </footer>
@@ -421,14 +565,18 @@ export default function HoutarouDesPortfolio() {
   );
 }
 
-/* -----------------------------------------------------
-   CSS
-   Basically the exact same styles from my old <style>
-   tag, just moved into a template string and injected
-   with a <style> element up in the JSX. Didn't rename
-   any classes so it was easier to copy over without
-   breaking anything.
------------------------------------------------------ */
+/* =============================================================
+   CSS — ok this is the messy part lol. i just crammed all the
+   styles in one template string so i don't have to deal with
+   css files. sue me.
+
+   updates from the old version:
+   - pixel reveal animation on scroll (blocks slide up)
+   - typewriter cursor effect in the hero
+   - scan-in effect on page load (feels like an old TV turning on)
+   - pixel rain canvas background
+   - the "landing page" layout is just sections stacked nicely
+   ============================================================= */
 const CSS = `
   #page{
     --void:#070911;
@@ -454,12 +602,12 @@ const CSS = `
     position:relative;
   }
 
-  #page *{ box-sizing:border-box; }
-  #page h1, #page h2, #page h3, #page p{ margin:0; }
-  #page{ scroll-behavior:smooth; }
+  *, *::before, *::after{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  ::selection{ background:var(--cyan); color:var(--void); }
 
-  /* ambient starfield, just css gradients moving in a loop */
-  #page .stars, #page .stars2{
+  /* ---- STARFIELD ---- */
+  .stars, .stars2{
     position:fixed; inset:0; z-index:0; pointer-events:none;
     background-image:
       radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,0.9), transparent),
@@ -473,66 +621,104 @@ const CSS = `
     animation: drift 90s linear infinite;
     opacity:0.7;
   }
-  #page .stars2{ background-size: 900px 900px; animation-duration:140s; opacity:0.4; }
+  .stars2{ background-size: 900px 900px; animation-duration:140s; opacity:0.4; }
   @keyframes drift{ from{ background-position:0 0; } to{ background-position:-1000px 500px; } }
 
-  /* scanline / crt overlay, gives it that old monitor look */
-  #page .crt{
+  /* ---- CRT SCANLINES ---- */
+  .crt{
     position:fixed; inset:0; z-index:40; pointer-events:none; mix-blend-mode:overlay;
     background: repeating-linear-gradient( to bottom, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 3px);
     opacity:0.5;
   }
-  #page .vignette{
+  .vignette{
     position:fixed; inset:0; z-index:39; pointer-events:none;
     background: radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(3,4,12,0.75) 100%);
   }
 
-  #page section, #page header, #page footer{ position:relative; z-index:1; }
-
-  #page a{ color:inherit; text-decoration:none; }
-  #page .eyebrow{
+  section, header, footer{ position:relative; z-index:1; }
+  a{ color:inherit; text-decoration:none; }
+  .eyebrow{
     font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase;
     color:var(--cyan); opacity:0.85;
   }
 
-  /* ---------- NAV ---------- */
-  #page nav{
+  /* ---- PIXEL SCROLL REVEAL ---- */
+  .pixel-section{
+    opacity:0;
+    transform: translateY(40px) scale(0.97);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .pixel-section.pixel-revealed{
+    opacity:1;
+    transform: translateY(0) scale(1);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .pixel-section{ opacity:1; transform: none; transition: none; }
+    #page .hero-title{ animation:none; }
+    #page .stars, #page .stars2{ animation:none; }
+    .hero-scan{ animation:none; display:none; }
+  }
+
+  /* ---- HERO SCAN-IN ---- */
+  .hero-scan{
+    position:absolute; inset:0; z-index:-1;
+    background: linear-gradient(to bottom, transparent 0%, var(--cyan) 50%, transparent 100%);
+    opacity:0;
+    animation: scanIn 1.2s ease-out forwards;
+    pointer-events:none;
+    mix-blend-mode:overlay;
+  }
+  @keyframes scanIn{
+    0%{ opacity:0.8; transform:translateY(-100%); }
+    60%{ opacity:0.4; transform:translateY(20%); }
+    100%{ opacity:0; transform:translateY(0%); }
+  }
+
+  /* ---- NAV ---- */
+  nav{
     position:fixed; top:0; left:0; right:0; z-index:30;
     display:flex; align-items:center; justify-content:space-between;
     padding:16px clamp(20px,4vw,56px);
     background:rgba(7,9,17,0.72); backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
+    transition: background 0.3s;
   }
-  #page .brand{ display:flex; align-items:center; gap:12px; }
-  #page .brand-badge{
+  nav.scrolled{
+    background:rgba(7,9,17,0.9);
+    box-shadow:0 2px 30px rgba(63,230,255,0.08);
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-badge{
     width:34px; height:34px; display:grid; place-items:center;
     background:var(--panel-2); border:2px solid var(--cyan); box-shadow:0 0 12px var(--cyan-dim);
   }
-  #page .brand-name{ font-family:var(--font-display); font-size:0.78rem; letter-spacing:0.03em; }
-  #page .brand-name span{ color:var(--magenta); }
-  #page .nav-links{ display:flex; gap:28px; font-family:var(--font-mono); font-size:0.82rem; color:var(--dim); }
-  #page .nav-links a{ position:relative; padding:4px 0; transition:color 0.2s; }
-  #page .nav-links a:hover, #page .nav-links a:focus-visible{ color:var(--cyan); }
-  #page .nav-links a::before{ content:'> '; color:var(--magenta); opacity:0; transition:opacity .2s; }
-  #page .nav-links a:hover::before, #page .nav-links a:focus-visible::before{ opacity:1; }
-  @media (max-width:720px){ #page .nav-links{ display:none; } }
+  .brand-name{ font-family:var(--font-display); font-size:0.78rem; letter-spacing:0.03em; }
+  .brand-name span{ color:var(--magenta); }
+  .nav-links{ display:flex; gap:28px; font-family:var(--font-mono); font-size:0.82rem; color:var(--dim); }
+  .nav-links a{ position:relative; padding:4px 0; transition:color 0.2s; }
+  .nav-links a:hover, .nav-links a:focus-visible{ color:var(--cyan); }
+  .nav-links a::before{ content:'> '; color:var(--magenta); opacity:0; transition:opacity .2s; }
+  .nav-links a:hover::before, .nav-links a:focus-visible::before{ opacity:1; }
+  @media (max-width:720px){ .nav-links{ display:none; } }
 
-  /* ---------- HERO ---------- */
-  #page .hero{
+  /* ---- HERO / LANDING ---- */
+  .hero{
     min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
     text-align:center; padding:140px 20px 80px; gap:26px;
+    position:relative; overflow:hidden;
   }
-  #page .hero-tag{
+  .hero-tag{
     font-family:var(--font-mono); font-size:0.78rem; color:var(--gold); letter-spacing:0.15em;
     border:1px solid rgba(255,209,102,0.4); padding:6px 14px; background:rgba(255,209,102,0.06);
+    animation: fadeSlideUp 0.8s ease 0.2s both;
   }
-  #page .hero-title{
+  .hero-title{
     font-family:var(--font-display); line-height:1.5; letter-spacing:0.02em;
     font-size:clamp(1.6rem, 5.4vw, 3.4rem);
     text-shadow: 0 0 14px var(--cyan-dim), 0 0 40px rgba(255,63,156,0.25);
-    animation: flicker 5.5s infinite;
+    animation: flicker 5.5s infinite, fadeSlideUp 0.8s ease 0.4s both;
   }
-  #page .hero-title .accent{ color:var(--magenta); }
+  .hero-title .accent{ color:var(--magenta); }
   @keyframes flicker{
     0%, 92%, 100%{ opacity:1; }
     93%{ opacity:0.75; }
@@ -540,109 +726,121 @@ const CSS = `
     95%{ opacity:0.6; }
     96%{ opacity:1; }
   }
-  @media (prefers-reduced-motion:reduce){
-    #page .hero-title{ animation:none; }
-    #page .stars, #page .stars2{ animation:none; }
+  @keyframes fadeSlideUp{
+    from{ opacity:0; transform:translateY(30px); }
+    to{ opacity:1; transform:translateY(0); }
   }
 
-  #page .hero-sub{
+  .hero-sub{
     font-family:var(--font-mono); color:var(--dim); font-size:clamp(0.95rem,2vw,1.15rem);
-    max-width:560px;
+    max-width:560px; min-height:3.5rem;
+    animation: fadeSlideUp 0.8s ease 0.6s both;
   }
-  #page .hero-sub .type{ color:var(--cyan); border-right:2px solid var(--cyan); padding-right:4px; }
+  .type-cursor{ color:var(--cyan); }
+  .cursor-blink{
+    animation: blink 0.8s steps(2) infinite;
+    font-weight:700; margin-left:2px;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
 
-  #page .hero-ctas{ display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
-  #page .btn{
+  .hero-ctas{
+    display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-top:10px;
+    animation: fadeSlideUp 0.8s ease 0.8s both;
+  }
+  .btn{
     font-family:var(--font-mono); font-weight:700; font-size:0.85rem; letter-spacing:0.04em;
     padding:14px 26px; border:2px solid var(--cyan); background:transparent; color:var(--cyan);
     cursor:pointer; text-transform:uppercase; transition:all .18s ease; display:inline-flex; align-items:center; gap:10px;
   }
-  #page .btn:hover, #page .btn:focus-visible{ background:var(--cyan); color:var(--void); box-shadow:0 0 22px var(--cyan-dim); transform:translateY(-2px); }
-  #page .btn.solid{ background:var(--magenta); border-color:var(--magenta); color:var(--void); box-shadow:0 0 18px rgba(255,63,156,0.35); }
-  #page .btn.solid:hover{ background:transparent; color:var(--magenta); box-shadow:0 0 22px rgba(255,63,156,0.35); }
+  .btn:hover, .btn:focus-visible{ background:var(--cyan); color:var(--void); box-shadow:0 0 22px var(--cyan-dim); transform:translateY(-2px); }
+  .btn.solid{ background:var(--magenta); border-color:var(--magenta); color:var(--void); box-shadow:0 0 18px rgba(255,63,156,0.35); }
+  .btn.solid:hover{ background:transparent; color:var(--magenta); box-shadow:0 0 22px rgba(255,63,156,0.35); }
 
-  #page .press-start{ font-family:var(--font-mono); font-size:0.75rem; color:var(--dimmer); margin-top:36px; animation:blink 1.4s steps(2) infinite; }
-  @keyframes blink{ 50%{ opacity:0.15; } }
+  .press-start{
+    font-family:var(--font-mono); font-size:0.75rem; color:var(--dimmer); margin-top:36px;
+    animation:blink 1.4s steps(2) infinite, fadeSlideUp 0.8s ease 1s both;
+  }
 
-  /* ---------- HUD STAT BAR ---------- */
-  #page .hud{
+  /* ---- HUD STAT BAR ---- */
+  .hud{
     display:grid; grid-template-columns:repeat(4,1fr); max-width:960px; margin:0 auto;
     border:1px solid var(--line); background:linear-gradient(180deg, var(--panel), var(--panel-2));
+    position:relative; z-index:1;
   }
-  #page .hud-cell{ padding:20px; text-align:center; border-right:1px solid var(--line); }
-  #page .hud-cell:last-child{ border-right:none; }
-  #page .hud-label{ font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.18em; color:var(--dim); text-transform:uppercase; }
-  #page .hud-value{ font-family:var(--font-display); font-size:1rem; color:var(--gold); margin-top:10px; }
+  .hud-cell{ padding:20px; text-align:center; border-right:1px solid var(--line); }
+  .hud-cell:last-child{ border-right:none; }
+  .hud-label{ font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.18em; color:var(--dim); text-transform:uppercase; }
+  .hud-value{ font-family:var(--font-display); font-size:1rem; color:var(--gold); margin-top:10px; }
   @media (max-width:640px){
-    #page .hud{ grid-template-columns:repeat(2,1fr); }
-    #page .hud-cell:nth-child(2){ border-right:none; }
-    #page .hud-cell{ border-bottom:1px solid var(--line); }
+    .hud{ grid-template-columns:repeat(2,1fr); }
+    .hud-cell:nth-child(2){ border-right:none; }
+    .hud-cell{ border-bottom:1px solid var(--line); }
   }
 
-  /* ---------- SECTION SHELL ---------- */
-  #page .section{ padding:110px clamp(20px,5vw,64px); max-width:1180px; margin:0 auto; }
-  #page .section-head{ text-align:center; margin-bottom:56px; }
-  #page .section-title{ font-family:var(--font-display); font-size:clamp(1.1rem,2.6vw,1.7rem); margin-top:14px; }
-  #page .section-title .accent{ color:var(--cyan); }
-  #page .section-desc{ color:var(--dim); max-width:600px; margin:16px auto 0; font-size:0.98rem; }
+  /* ---- SECTION SHELL ---- */
+  .section{ padding:110px clamp(20px,5vw,64px); max-width:1180px; margin:0 auto; }
+  .section-head{ text-align:center; margin-bottom:56px; }
+  .section-title{ font-family:var(--font-display); font-size:clamp(1.1rem,2.6vw,1.7rem); margin-top:14px; }
+  .section-title .accent{ color:var(--cyan); }
+  .section-desc{ color:var(--dim); max-width:600px; margin:16px auto 0; font-size:0.98rem; }
 
-  /* ---------- STAGE SELECT (projects) ---------- */
-  #page .cart-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:28px; }
-  @media (max-width:820px){ #page .cart-grid{ grid-template-columns:1fr; } }
+  /* ---- STAGE SELECT (projects) ---- */
+  .cart-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:28px; }
+  @media (max-width:820px){ .cart-grid{ grid-template-columns:1fr; } }
 
-  #page .cart{
+  .cart{
     background:linear-gradient(160deg, var(--panel) 0%, #0c0f24 100%);
     border:1px solid var(--line); padding:26px 24px 24px; position:relative;
     transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
   }
-  #page .cart::before{
+  .cart::before{
     content:''; position:absolute; top:-9px; left:24px; width:46px; height:9px;
     background:var(--panel-2); border:1px solid var(--line); border-bottom:none;
   }
-  #page .cart:hover, #page .cart:focus-within{
+  .cart:hover, .cart:focus-within{
     transform:translateY(-6px); border-color:var(--cyan); box-shadow:0 14px 34px rgba(63,230,255,0.14);
   }
-  #page .cart-num{ font-family:var(--font-mono); font-size:0.7rem; color:var(--magenta); letter-spacing:0.1em; }
-  #page .cart-title{ font-family:var(--font-display); font-size:1rem; margin:12px 0 12px; color:var(--text); }
-  #page .cart-desc{ color:var(--dim); font-size:0.92rem; margin-bottom:16px; min-height:66px; }
-  #page .cart-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
-  #page .tag{
+  .cart-num{ font-family:var(--font-mono); font-size:0.7rem; color:var(--magenta); letter-spacing:0.1em; }
+  .cart-title{ font-family:var(--font-display); font-size:1rem; margin:12px 0 12px; color:var(--text); }
+  .cart-desc{ color:var(--dim); font-size:0.92rem; margin-bottom:16px; min-height:66px; }
+  .cart-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+  .tag{
     font-family:var(--font-mono); font-size:0.68rem; padding:4px 9px; border:1px solid var(--line);
     color:var(--cyan); background:rgba(63,230,255,0.05); letter-spacing:0.02em;
   }
-  #page .cart-stats{ display:flex; gap:18px; font-family:var(--font-mono); font-size:0.72rem; color:var(--dimmer); margin-bottom:18px; }
-  #page .cart-actions{ display:flex; gap:12px; flex-wrap:wrap; }
-  #page .cart-actions a{
+  .cart-stats{ display:flex; gap:18px; font-family:var(--font-mono); font-size:0.72rem; color:var(--dimmer); margin-bottom:18px; }
+  .cart-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+  .cart-actions a{
     font-family:var(--font-mono); font-size:0.72rem; padding:9px 14px; border:1px solid var(--dim);
     color:var(--dim); transition:all .2s; display:inline-flex; align-items:center; gap:6px;
   }
-  #page .cart-actions a.primary{ border-color:var(--gold); color:var(--gold); }
-  #page .cart-actions a:hover{ border-color:var(--cyan); color:var(--cyan); background:rgba(63,230,255,0.06); }
+  .cart-actions a.primary{ border-color:var(--gold); color:var(--gold); }
+  .cart-actions a:hover{ border-color:var(--cyan); color:var(--cyan); background:rgba(63,230,255,0.06); }
 
-  /* ---------- LOADOUT (skills) ---------- */
-  #page .loadout-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:16px; }
-  #page .slot{
+  /* ---- LOADOUT (skills) ---- */
+  .loadout-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:16px; }
+  .slot{
     aspect-ratio:1; border:1px solid var(--line); background:var(--panel);
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
     transition:all .2s;
   }
-  #page .slot:hover{ border-color:var(--gold); background:rgba(255,209,102,0.05); transform:scale(1.03); }
-  #page .slot-icon{ display:flex; align-items:center; justify-content:center; }
-  #page .slot-label{ font-family:var(--font-mono); font-size:0.72rem; color:var(--dim); text-align:center; padding:0 6px; }
+  .slot:hover{ border-color:var(--gold); background:rgba(255,209,102,0.05); transform:scale(1.03); }
+  .slot-icon{ display:flex; align-items:center; justify-content:center; }
+  .slot-label{ font-family:var(--font-mono); font-size:0.72rem; color:var(--dim); text-align:center; padding:0 6px; }
 
-  /* ---------- LOBBY (contact) ---------- */
-  #page .lobby{
+  /* ---- LOBBY (contact) ---- */
+  .lobby{
     background:linear-gradient(160deg, var(--panel-2), var(--panel));
     border:1px solid var(--line); padding:48px clamp(20px,5vw,56px); text-align:center;
   }
-  #page .lobby-title{ font-family:var(--font-display); font-size:1.1rem; margin-bottom:16px; }
-  #page .lobby-sub{ color:var(--dim); max-width:520px; margin:0 auto 32px; }
-  #page .lobby-actions{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+  .lobby-title{ font-family:var(--font-display); font-size:1.1rem; margin-bottom:16px; }
+  .lobby-sub{ color:var(--dim); max-width:520px; margin:0 auto 32px; }
+  .lobby-actions{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
 
-  /* ---------- FOOTER ---------- */
-  #page footer{ padding:50px 20px 60px; text-align:center; border-top:1px solid var(--line); }
-  #page .credits{ font-family:var(--font-mono); font-size:0.72rem; color:var(--dimmer); letter-spacing:0.05em; }
-  #page .credits .hi{ color:var(--magenta); }
+  /* ---- FOOTER ---- */
+  footer{ padding:50px 20px 60px; text-align:center; border-top:1px solid var(--line); position:relative; z-index:1; }
+  .credits{ font-family:var(--font-mono); font-size:0.72rem; color:var(--dimmer); letter-spacing:0.05em; }
+  .credits .hi{ color:var(--magenta); }
 
-  #page :focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+  :focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
 `;
