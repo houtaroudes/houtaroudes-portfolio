@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 
-/* =============================================================
-   PIXEL BACKGROUND — animated retro pixel scenery
-   ============================================================= */
+// ===== PIXEL BACKGROUND =====
+// This draws the moving background with mountains, clouds, and stars.
+// It uses a canvas element and redraws every frame to make things move.
+// The mountains slowly drift sideways and the stars twinkle!
 function PixelBackground() {
   const ref = useRef(null);
   useEffect(() => {
@@ -78,9 +79,9 @@ function PixelBackground() {
   return <canvas ref={ref} style={{position:'fixed',inset:0,zIndex:0,pointerEvents:'none',opacity:0.3}} aria-hidden="true" />;
 }
 
-/* =============================================================
-   PIXEL RAIN — particle rain overlay
-   ============================================================= */
+// ===== PIXEL RAIN =====
+// Tiny colored squares falling down like rain or snow.
+// Just a simple effect I added to make the page feel more alive!
 function PixelRain() {
   const ref=useRef(null);
   useEffect(()=>{
@@ -94,9 +95,9 @@ function PixelRain() {
   return <canvas ref={ref} style={{position:"fixed",inset:0,zIndex:1,pointerEvents:"none",opacity:0.3}} aria-hidden="true"/>;
 }
 
-/* =============================================================
-   ICON FUNCTIONS
-   ============================================================= */
+// ===== ICON HELPERS =====
+// These functions create the GitHub and Mail icons I use in buttons.
+// They return SVG elements so the icons look sharp at any size!
 const iconProps = (s,c) => ({width:s,height:s,viewBox:"0 0 24 24",fill:"none",stroke:c,strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round"});
 function IconGithub({s=18,c="currentColor"}){return <svg {...iconProps(s,c)}><path d="M9 19c-4 1.2-4-2.1-5.5-2.5M17 22v-3.2c0-.9-.3-1.5-.6-1.8 2.1-.2 4.3-1 4.3-4.7 0-1-.4-1.9-1-2.6.1-.3.4-1.3-.1-2.7 0 0-.9-.3-2.9 1a10 10 0 00-5.4 0c-2-1.3-2.9-1-2.9-1-.5 1.4-.2 2.4-.1 2.7-.6.7-1 1.6-1 2.6 0 3.7 2.2 4.5 4.3 4.7-.3.3-.5.7-.6 1.4V22"/></svg>}
 function IconMail({s=18,c="currentColor"}){return <svg {...iconProps(s,c)}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>}
@@ -131,16 +132,17 @@ function PxIcon({ name, size=18, color }) {
   return <svg width={size} height={size} viewBox={`0 0 ${vw} ${vh}`} style={{display:'inline-block',verticalAlign:'middle',flexShrink:0}} aria-hidden="true">{rects}</svg>;
 }
 
-/* =============================================================
-   HOOKS
-   ============================================================= */
+// ===== CUSTOM HOOKS =====
+// These are reusable functions that add cool features:
+// - useReveal: makes stuff fade in when you scroll down
+// - useTypewriter: makes text type itself out letter by letter
 function useReveal(t=0.1){const r=useRef(null);const[v,set]=useState(false);useEffect(()=>{const el=r.current;if(!el)return;const obs=new IntersectionObserver(([e])=>{if(e.isIntersecting){set(true);obs.unobserve(el)}},{threshold:t});obs.observe(el);return()=>obs.disconnect()},[t]);return[r,v]}
 function RS({children,className="",...rest}){const[r,v]=useReveal(0.08);return <section ref={r} className={`reveal-section ${v?"revealed":""} ${className}`} {...rest}>{children}</section>}
 function useTypewriter(text,speed=35,delay=600){const[d,set]=useState("");const[s,setS]=useState(false);useEffect(()=>{const t=setTimeout(()=>setS(true),delay);return()=>clearTimeout(t)},[delay]);useEffect(()=>{if(!s)return;let i=0;const iv=setInterval(()=>{i++;set(text.slice(0,i));if(i>=text.length)clearInterval(iv)},speed);return()=>clearInterval(iv)},[s,text,speed]);return d}
 
-/* =============================================================
-   MAIN
-   ============================================================= */
+// ===== MAIN APP COMPONENT =====
+// This is the main component that runs the whole app!
+// It manages all the state and puts all the pieces together.
 export default function Portfolio() {
   const [activeCat,setActiveCat]=useState("all");
   const [scrolled,setScrolled]=useState(false);
