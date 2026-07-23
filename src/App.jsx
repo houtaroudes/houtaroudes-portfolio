@@ -476,11 +476,9 @@ export default function Portfolio() {
   const[darkMode,setDarkMode]=useState(()=>localStorage.getItem("theme")!=="light");
   const[modalProject,setModalProject]=useState(null);
   const[formSent,setFormSent]=useState(false);
-  const[introDone,setIntroDone]=useState(()=>{
-    try { return localStorage.getItem("introPlayed") === "true"; } catch { return false; }
-  });
-  const[loading,setLoading]=useState(!introDone);
-  const[showContent,setShowContent]=useState(introDone);
+  const[introDone,setIntroDone]=useState(false);
+  const[loading,setLoading]=useState(true);
+  const[showContent,setShowContent]=useState(false);
   const activeSection=useActiveSection(["hero","projects","skills","contact"]);
 
   useEffect(()=>{
@@ -505,7 +503,6 @@ export default function Portfolio() {
       setShowContent(true);
       const t2 = setTimeout(() => {
         setIntroDone(true);
-        try { localStorage.setItem("introPlayed", "true"); } catch {}
       }, 1000);
       return () => clearTimeout(t2);
     }, 1200);
