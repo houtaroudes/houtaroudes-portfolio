@@ -470,10 +470,10 @@ export default function Portfolio() {
         transition={{ duration: 0.6, delay: introDone ? 0 : 1.4, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="nav-inner">
-          <motion.a href="#" className="logo" layoutId="main-title" transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
+          <a href="#" className="logo">
             <PxIcon name="star" size={20} />
             <span className="logo-text">Houtarou<span className="accent">Des</span></span>
-          </motion.a>
+          </a>
           <div className="nav-links">
             {[
               {id:"projects",label:"Projects"},
@@ -505,49 +505,43 @@ export default function Portfolio() {
         <div className="hero-scan" aria-hidden="true"/>
         <div className="hero-content">
           <>
-            {showContent && (
-              <>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                >
+            {/* Left side — Name flies here from center after intro */}
+            <motion.div className="hero-left"
+              layoutId="main-title"
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              style={{ opacity: showContent ? 1 : 0 }}
+            >
+              <h1 className="hero-name">
+                HOUTAROU<span className="gradient-accent">DES</span>
+              </h1>
+            </motion.div>
+
+            {/* Right side — About info + typing */}
+            <motion.div className="hero-right"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: showContent ? 1 : 0, x: showContent ? 0 : 40 }}
+              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {showContent && (
+                <>
                   <div className="hero-badge"><PxIcon name="star" size={12} /> Player File — Slot 01</div>
-                </motion.div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                >
                   <p className="hero-tagline"><CycleTypewriter /><span className="cursor-blink">|</span></p>
-                </motion.div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                >
                   <div className="hero-stats">
                     <div className="hero-stat"><PxIcon name="bolt" size={20} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
                     <div className="hero-stat"><PxIcon name="diamond" size={20} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
                     <div className="hero-stat"><PxIcon name="star" size={20} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
                     <div className="hero-stat"><PxIcon name="diamond" size={20} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
                   </div>
-                </motion.div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.7 }}
-                >
                   <div className="hero-actions">
                     <a href="#projects" className="btn primary">View Projects</a>
                     <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn"><IconGithub s={15}/> GitHub</a>
                   </div>
-                </motion.div>
-              </>
-            )}
+                </>
+              )}
+            </motion.div>
           </>
         </div>
         <motion.div
@@ -772,7 +766,7 @@ a{color:inherit;text-decoration:none}
 /* ===== 📌 Sidebar styles ===== */
 .scroll-sidebar {
   position: fixed;
-  left: 0;
+  left: 8px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 40;
@@ -781,7 +775,6 @@ a{color:inherit;text-decoration:none}
 }
 .scroll-sidebar.visible {
   pointer-events: auto;
-  opacity: 1 !important;
 }
 .sidebar-inner {
   display: flex;
@@ -795,6 +788,8 @@ a{color:inherit;text-decoration:none}
   border-radius: 0 14px 14px 0;
   backdrop-filter: blur(12px);
   box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 .sidebar-logo {
   padding: 8px;
@@ -1128,10 +1123,35 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
   );
 }
 .hero-content {
-  max-width: 800px;
-  text-align: center;
+  max-width: 1100px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
   position: relative;
   z-index: 2;
+  padding: 0 24px;
+}
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+.hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 4rem);
+  letter-spacing: -2px;
+  line-height: 1.1;
+  color: var(--text);
+  text-transform: uppercase;
+}
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
 }
 .hero-badge {
   display: inline-flex;
@@ -1155,7 +1175,7 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
   line-height: 1.4;
   margin-bottom: 20px;
   color: var(--text);
-  min-height: 2.5em;
+  min-height: 0;
 }
 .gradient-accent {
   background: linear-gradient(135deg, var(--magenta), var(--cyan));
@@ -1367,9 +1387,21 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .sidebar-nav-label { display: none; }
-  .scroll-sidebar.visible { display: flex; }
-  .scroll-sidebar .sidebar-nav-label { display: none; }
+  .scroll-sidebar { display: none; }
   .nav-clock { display: none; }
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+    padding: 0 16px;
+  }
+  .hero-left {
+    align-items: center;
+    text-align: center;
+  }
+  .hero-right {
+    align-items: center;
+  }
   .hero-stats { gap: 20px; }
   .hero-stat-value { font-size: 16px; }
 }
