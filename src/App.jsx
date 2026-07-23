@@ -657,6 +657,7 @@ export default function Portfolio() {
             gridSize={10}
             pixelColor="var(--gold)"
             animationStepDuration={0.5}
+            aspectRatio="25%"
             className="featured-pixel-card"
             style={{ width: '100%', maxWidth: '100%', border: '1px solid rgba(255,209,102,0.25)', borderRadius: '20px', overflow: 'hidden' }}
           />
