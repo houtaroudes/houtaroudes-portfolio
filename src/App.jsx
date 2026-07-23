@@ -154,10 +154,6 @@ function IntroOverlay({onDone}) {
    📌 Sidebar — shows up when you scroll down
    ============================================================= */
 function ScrollSidebar({scrolled, darkMode, setDarkMode, activeSection, scrolledDeep}) {
-  const { scrollYProgress } = useScroll();
-  const sidebarOpacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
-  const sidebarX = useTransform(scrollYProgress, [0, 0.08], [-80, 0]);
-
   const navItems = [
     {id:"hero", label:"Home", icon:"star"},
     {id:"projects", label:"Projects", icon:"note"},
@@ -167,8 +163,10 @@ function ScrollSidebar({scrolled, darkMode, setDarkMode, activeSection, scrolled
 
   return (
     <motion.aside
-      style={{ opacity: sidebarOpacity, x: sidebarX }}
       className={`scroll-sidebar ${scrolledDeep ? 'visible' : ''}`}
+      initial={{ opacity: 0, x: -80 }}
+      animate={scrolledDeep ? { opacity: 1, x: 0 } : { opacity: 0, x: -80 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className="sidebar-inner">
         {/* Mini logo */}
@@ -409,6 +407,7 @@ export default function Portfolio() {
         darkMode={darkMode}
         setDarkMode={handleThemeToggle}
         activeSection={activeSection}
+        key={scrolledDeep ? 'visible' : 'hidden'}
       />
 
       {/* NAV */}
@@ -452,57 +451,61 @@ export default function Portfolio() {
       <header className="hero" id="hero">
         <div className="hero-scan" aria-hidden="true"/>
         <div className="hero-content">
-          {showContent && (
-            <>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div className="hero-badge"><PxIcon name="star" size={12} /> Player File — Slot 01</div>
-              </motion.div>
+          <>
+            {/* Always-rendered hero title for smooth layoutId animation */}
+            <motion.h1
+              className="hero-title"
+              layoutId="main-title"
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              style={{ opacity: showContent ? 1 : 0 }}
+            >
+              HOUTAROU<span className="gradient-accent">DES</span>
+            </motion.h1>
 
-              <motion.h1
-                className="hero-title"
-                layoutId="main-title"
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              >
-                HOUTAROU<span className="gradient-accent">DES</span>
-              </motion.h1>
+            {showContent && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <div className="hero-badge"><PxIcon name="star" size={12} /> Player File — Slot 01</div>
+                </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
-                <p className="hero-sub">{typed}<span className="cursor-blink">|</span></p>
-              </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                >
+                  <p className="hero-sub">{typed}<span className="cursor-blink">|</span></p>
+                </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-              >
-                <div className="hero-stats">
-                  <div className="hero-stat"><PxIcon name="bolt" size={20} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
-                  <div className="hero-stat"><PxIcon name="diamond" size={20} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
-                  <div className="hero-stat"><PxIcon name="star" size={20} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
-                  <div className="hero-stat"><PxIcon name="diamond" size={20} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
-                </div>
-              </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                >
+                  <div className="hero-stats">
+                    <div className="hero-stat"><PxIcon name="bolt" size={20} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
+                    <div className="hero-stat"><PxIcon name="diamond" size={20} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
+                    <div className="hero-stat"><PxIcon name="star" size={20} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
+                    <div className="hero-stat"><PxIcon name="diamond" size={20} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
+                  </div>
+                </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.7 }}
-              >
-                <div className="hero-actions">
-                  <a href="#projects" className="btn primary">View Projects</a>
-                  <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn"><IconGithub s={15}/> GitHub</a>
-                </div>
-              </motion.div>
-            </>
-          )}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.7 }}
+                >
+                  <div className="hero-actions">
+                    <a href="#projects" className="btn primary">View Projects</a>
+                    <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn"><IconGithub s={15}/> GitHub</a>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </>
         </div>
         <motion.div
           className="scroll-hint"
@@ -678,14 +681,18 @@ a{color:inherit;text-decoration:none}
   justify-content: center;
   background: var(--void);
   pointer-events: none;
+  transition: background-color 0.5s ease;
 }
 .intro-title {
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 8vw, 6rem);
   letter-spacing: -1px;
   white-space: nowrap;
-  color: white;
+  color: var(--foreground);
   text-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+[data-theme="light"] .intro-title {
+  color: var(--text);
 }
 .accent-glow {
   color: var(--magenta) !important;
@@ -968,7 +975,7 @@ nav.scrolled {
 .project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
 @media(max-width:400px){.project-grid{grid-template-columns:1fr}}
 .project-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 20px 18px;position:relative;overflow:hidden;transition:all .4s var(--ease-out)}
-.project-card.featured{border-color:rgba(255,209,102,0.25);background:linear-gradient(160deg,var(--panel) 0%,#14102a 100%)}
+.project-card.featured{border-color:rgba(255,209,102,0.25);background:linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%)}
 .project-card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 8px 30px rgba(63,230,255,0.08)}
 .project-card.featured:hover{border-color:var(--gold);box-shadow:0 8px 30px rgba(255,209,102,0.1)}
 .card-glow{position:absolute;inset:0;border-radius:14px;transition:opacity .3s;pointer-events:none}
@@ -1015,7 +1022,7 @@ transition:all .3s var(--ease-out)}
 .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
 
 /* Featured */
-.featured-card{position:relative;overflow:hidden;background:linear-gradient(160deg,#14102a 0%,var(--panel) 100%);border:1px solid rgba(255,209,102,0.25);border-radius:20px;padding:48px 32px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.featured-card{position:relative;overflow:hidden;background:linear-gradient(160deg,var(--panel-2) 0%,var(--panel) 100%);border:1px solid rgba(255,209,102,0.25);border-radius:20px;padding:48px 32px;text-align:center;display:flex;flex-direction:column;align-items:center}
 .featured-glow{position:absolute;inset:0;background:radial-gradient(800px circle at 50% 50%,rgba(255,209,102,0.06),transparent);pointer-events:none}
 .featured-badge{font-family:var(--font-display);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(255,209,102,0.3);background:rgba(255,209,102,0.06);padding:6px 16px;border-radius:100px;margin-bottom:14px;position:relative;z-index:1;display:inline-flex;align-items:center;gap:6px}
 .featured-title{font-family:var(--font-display);font-size:20px;margin-bottom:12px;position:relative;z-index:1}
@@ -1089,7 +1096,7 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
   line-height: 1.1;
   margin-bottom: 20px;
   text-transform: uppercase;
-  color: white;
+  color: var(--text);
 }
 .gradient-accent {
   background: linear-gradient(135deg, var(--magenta), var(--cyan));
@@ -1301,7 +1308,8 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .sidebar-nav-label { display: none; }
-  .scroll-sidebar { display: none; }
+  .scroll-sidebar.visible { display: flex; }
+  .scroll-sidebar .sidebar-nav-label { display: none; }
   .nav-clock { display: none; }
   .hero-stats { gap: 20px; }
   .hero-stat-value { font-size: 16px; }
