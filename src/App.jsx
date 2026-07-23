@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useInView } from "framer-motion";
 
 /* =============================================================
    🎨 Pixel icons — all hand-drawn by me
@@ -250,8 +250,6 @@ const categories = [
 function useReveal(t=0.1, deps=[]){const r=useRef(null);const[v,s]=useState(false);useEffect(()=>{const e=r.current;if(!e)return;const o=new IntersectionObserver(([n])=>{if(n.isIntersecting){s(true);o.unobserve(e);}},{threshold:t});o.observe(e);return()=>o.disconnect();},[t,...deps]);return[r,v];}
 function RS({children,className="",variant="up",...p}){const[r,v]=useReveal(0.08);return <section ref={r} className={`reveal-section reveal-${variant} ${v?"revealed":""} ${className}`} {...p}>{children}</section>;}
 function useActiveSection(ids){const[a,set]=useState(ids[0]||"");useEffect(()=>{const o=new IntersectionObserver((e)=>{for(const n of e){if(n.isIntersecting){set(n.target.id);break;}}},{rootMargin:"-40% 0px -55% 0px",threshold:0});ids.forEach(id=>{const el=document.getElementById(id);if(el)o.observe(el);});return()=>o.disconnect();},[ids]);return a;}
-function useTypewriter(text,speed=35,delay=600){const[d,set]=useState("");const[s,setS]=useState(false);useEffect(()=>{const t=setTimeout(()=>setS(true),delay);return()=>clearTimeout(t)},[delay]);useEffect(()=>{if(!s)return;let i=0;const iv=setInterval(()=>{i++;set(text.slice(0,i));if(i>=text.length)clearInterval(iv)},speed);return()=>clearInterval(iv)},[s,text,speed]);return d;}
-
 /* =============================================================
    🔢 Animated number counter
    ============================================================= */
@@ -308,6 +306,48 @@ function PixelDivider(){return <div className="pixel-divider" aria-hidden="true"
 function ScrollToTop(){const[v,s]=useState(false);useEffect(()=>{const h=()=>s(window.scrollY>400);window.addEventListener('scroll',h,{passive:true});return()=>window.removeEventListener('scroll',h);},[]);return <motion.button className={`scroll-top-btn ${v?'visible':''}`} onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} aria-label="Scroll to top"
   animate={{scale:v?1:0,opacity:v?1:0}} transition={{duration:0.3,ease:"backOut"}}
 ><PxIcon name="star" size={16} /></motion.button>;}
+
+/* =============================================================
+   🔁 Multi-stage typewriter — cycles through identities
+   ============================================================= */
+const PHRASES = [
+  "I am a Full-Stack Developer",
+  "I'm a college student with a passion for coding",
+  "I build pixel-perfect web experiences",
+  "Turning ideas into interactive realities",
+];
+function CycleTypewriter() {
+  const [text, setText] = useState("");
+  const [idx, setIdx] = useState(0);
+  const [char, setChar] = useState(0);
+  const [dir, setDir] = useState(1); // 1 = typing, -1 = deleting
+
+  useEffect(() => {
+    const current = PHRASES[idx];
+    const speed = dir === 1 ? 45 : 20;
+    const pause = dir === 1 && char === current.length ? 2500 :
+                  dir === -1 && char === 0 ? 600 : 0;
+
+    if (pause > 0) {
+      const t = setTimeout(() => {
+        if (dir === -1) {
+          setIdx((idx + 1) % PHRASES.length);
+          setChar(0);
+        }
+        setDir(d => d === 1 ? -1 : 1);
+      }, pause);
+      return () => clearTimeout(t);
+    }
+
+    const t = setTimeout(() => {
+      setChar(c => c + dir);
+      setText(current.slice(0, char + dir));
+    }, speed);
+    return () => clearTimeout(t);
+  }, [idx, char, dir]);
+
+  return <>{text}</>;
+}
 
 /* =============================================================
    👀 Scroll-triggered reveal animation
@@ -375,8 +415,6 @@ export default function Portfolio() {
     return () => clearTimeout(t1);
   },[introDone]);
 
-  const typed=useTypewriter("Inspiring becoming Full-Stack Developer — building pixel-perfect worlds, one commit at a time", 30, 900);
-
   const filtered=activeCat==="all"?projects:projects.filter(p=>p.type?.toLowerCase().replace(" ","")===activeCat);
   const feat=projects.find(p=>p.featured);
 
@@ -418,9 +456,10 @@ export default function Portfolio() {
         transition={{ duration: 0.6, delay: introDone ? 0 : 1.4, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="nav-inner">
-          <a href="#" className="logo">
+          <motion.a href="#" className="logo" layoutId="main-title" transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
             <PxIcon name="star" size={20} />
-            <span className="logo-text">Houtarou<span className="accent">Des</span></span>            </a>
+            <span className="logo-text">Houtarou<span className="accent">Des</span></span>
+          </motion.a>
           <div className="nav-links">
             {[
               {id:"projects",label:"Projects"},
@@ -452,16 +491,6 @@ export default function Portfolio() {
         <div className="hero-scan" aria-hidden="true"/>
         <div className="hero-content">
           <>
-            {/* Always-rendered hero title for smooth layoutId animation */}
-            <motion.h1
-              className="hero-title"
-              layoutId="main-title"
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              style={{ opacity: showContent ? 1 : 0 }}
-            >
-              HOUTAROU<span className="gradient-accent">DES</span>
-            </motion.h1>
-
             {showContent && (
               <>
                 <motion.div
@@ -472,12 +501,16 @@ export default function Portfolio() {
                   <div className="hero-badge"><PxIcon name="star" size={12} /> Player File — Slot 01</div>
                 </motion.div>
 
+                <h1 className="hero-title">
+                  HOUTAROU<span className="gradient-accent">DES</span>
+                </h1>
+
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
                 >
-                  <p className="hero-sub">{typed}<span className="cursor-blink">|</span></p>
+                  <p className="hero-sub"><CycleTypewriter /><span className="cursor-blink">|</span></p>
                 </motion.div>
 
                 <motion.div
@@ -728,12 +761,12 @@ a{color:inherit;text-decoration:none}
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
-  padding: 16px 10px;
+  gap: 32px;
+  padding: 24px 14px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-left: none;
-  border-radius: 0 12px 12px 0;
+  border-radius: 0 14px 14px 0;
   backdrop-filter: blur(12px);
   box-shadow: 4px 0 20px rgba(0,0,0,0.3);
 }
@@ -745,14 +778,14 @@ a{color:inherit;text-decoration:none}
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 .sidebar-nav-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px;
-  border-radius: 8px;
+  gap: 12px;
+  padding: 14px 12px;
+  border-radius: 10px;
   color: var(--dim);
   transition: all 0.3s var(--ease-out);
   text-decoration: none;
@@ -792,21 +825,21 @@ a{color:inherit;text-decoration:none}
     display: inline;
   }
   .sidebar-inner {
-    padding: 20px 16px;
-    gap: 28px;
+    padding: 28px 20px;
+    gap: 36px;
   }
   .sidebar-nav {
-    gap: 6px;
+    gap: 10px;
   }
   .sidebar-nav-item {
-    padding: 10px 14px;
+    padding: 14px 16px;
   }
 }
 .sidebar-bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 .sidebar-clock {
   font-family: var(--font-mono);
