@@ -190,10 +190,7 @@ function PixelLoader({ onDone }) {
     resize();
 
     const GRID = 8;
-    const cols = ['#3fe6ff','#ff3f9c','#ffd166','#a29bfe','#4ade80'];
     const total = GRID * GRID;
-    const order = Array.from({length: total}, (_, i) => i).sort(() => Math.random() - 0.5);
-    const pixelCols = Array.from({length: total}, () => cols[Math.floor(Math.random() * cols.length)]);
 
     const NAME = 'HOUTAROUDES';
     const GRID_DUR = 800;
@@ -215,11 +212,14 @@ function PixelLoader({ onDone }) {
         const show = Math.floor(e * total);
         const cw = w / GRID, ch = h / GRID;
 
-        for (let i = 0; i < show; i++) {
-          const idx = order[i];
-          ctx.globalAlpha = 0.15 + (i / Math.max(show, 1)) * 0.75;
-          ctx.fillStyle = pixelCols[idx];
-          ctx.fillRect(Math.floor((idx % GRID) * cw), Math.floor(Math.floor(idx / GRID) * ch), Math.ceil(cw), Math.ceil(ch));
+        for (let i = 0; i < show && i < total; i++) {
+          const row = Math.floor(i / GRID);
+          const col = i % GRID;
+          const alpha = 0.12 + (i / total) * 0.6;
+          ctx.globalAlpha = alpha;
+          const bright = 0.4 + (i / total) * 0.6;
+          ctx.fillStyle = `rgba(63,230,255,${bright})`;
+          ctx.fillRect(Math.floor(col * cw), Math.floor(row * ch), Math.ceil(cw), Math.ceil(ch));
         }
         ctx.globalAlpha = 1;
 
@@ -259,7 +259,7 @@ function PixelLoader({ onDone }) {
         ctx.textBaseline = 'middle';
         for (let i = 0; i < n && i < NAME.length; i++) {
           ctx.font = 'bold 22px "Press Start 2P", monospace';
-          ctx.fillStyle = cols[i % cols.length];
+          ctx.fillStyle = '#3fe6ff';
           ctx.globalAlpha = 0.3 + 0.7 * ((i + 1) / Math.max(n, 1));
           ctx.fillText(NAME[i], w / 2 - (NAME.length * 16) / 2 + i * 16 + 8, h / 2);
         }
