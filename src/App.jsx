@@ -27,6 +27,7 @@ const PIXEL_ART = {
   note     :{c:"#ffd166",w:10,h:12,p:[2,0,3,0,4,0,1,1,2,1,3,1,4,1,5,1,0,2,1,2,2,2,3,2,4,2,5,2,6,2,0,3,1,3,2,3,3,3,5,3,0,4,1,4,2,4,3,4,5,4,0,5,1,5,2,5,3,5,4,5,1,6,2,6,3,6,4,6,2,7,3,7,2,8,3,8,2,9,3,9]},
   mountain :{c:"#4ade80",w:16,h:12,p:[0,9,1,8,9,10,10,9,2,7,3,6,8,8,9,7,10,8,4,5,5,4,6,5,7,6,8,7,3,5,7,5,2,6,8,6,0,10,1,9,2,8,3,7,4,6,5,5,6,6,7,7,8,8,9,9,10,10,11,9,12,8,13,7,14,6,15,5,11,8,12,7,13,6,14,5,15,4,11,9,12,8,13,7,14,6,15,5,14,4,15,3]},
   cloud    :{c:"#8489bd",w:16,h:10,p:[2,3,3,3,4,3,5,3,6,3,1,4,2,4,3,4,4,4,5,4,6,4,7,4,0,5,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,1,6,2,6,3,6,4,6,5,6,6,6,7,6,2,7,3,7,4,7,5,7,6,7,10,4,11,4,12,4,13,4,9,5,10,5,11,5,12,5,13,5,14,5,10,6,11,6,12,6,13,6,11,7,12,7]},
+  expand   :{c:"#3fe6ff",w:10,h:10,p:[0,0,1,0,2,0,0,1,0,2,7,0,8,0,9,0,9,1,9,2,0,7,0,8,0,9,1,9,2,9,7,9,8,9,9,9,9,8,9,7]},
 };
 
 const PS = 2;
@@ -130,6 +131,46 @@ function useActiveSection(ids){const[a,set]=useState(ids[0]||"");useEffect(()=>{
 function useTypewriter(text,speed=35,delay=600){const[d,set]=useState("");const[s,setS]=useState(false);useEffect(()=>{const t=setTimeout(()=>setS(true),delay);return()=>clearTimeout(t)},[delay]);useEffect(()=>{if(!s)return;let i=0;const iv=setInterval(()=>{i++;set(text.slice(0,i));if(i>=text.length)clearInterval(iv)},speed);return()=>clearInterval(iv)},[s,text,speed]);return d;}
 
 /* =============================================================
+   COUNT-UP HOOK
+   ============================================================= */
+function CountUpValue({target,suffix='',duration=1500,delay=300}){
+  const[c,set]=useState(0);const[r,setR]=useState(false);const ref=useRef(null);
+  useEffect(()=>{const e=ref.current;if(!e)return;const o=new IntersectionObserver(([n])=>{if(n.isIntersecting){setR(true);o.unobserve(e);}},{threshold:0.3});o.observe(e);return()=>o.disconnect();},[]);
+  useEffect(()=>{if(!r)return;let t,aid;const a=(time)=>{if(!t)t=time;const e=time-t,p=Math.min(e/duration,1),v=1-Math.pow(1-p,3);set(Math.floor(v*target));if(p<1)aid=requestAnimationFrame(a);};const s=setTimeout(()=>{aid=requestAnimationFrame(a);},delay);return()=>{clearTimeout(s);if(aid)cancelAnimationFrame(aid);};},[r,target,duration,delay]);
+  return <span ref={ref}>{c}{suffix}</span>;
+}
+
+/* =============================================================
+   PROJECT MODAL
+   ============================================================= */
+function ProjectModal({project,onClose}){
+  const closeRef=useRef(onClose);closeRef.current=onClose;
+  useEffect(()=>{const h=e=>{if(e.key==='Escape')closeRef.current();};window.addEventListener('keydown',h);return()=>window.removeEventListener('keydown',h);},[]);
+  useEffect(()=>{document.body.style.overflow='hidden';return()=>{document.body.style.overflow='';};},[]);
+  if(!project)return null;
+  return <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-content" onClick={e=>e.stopPropagation()}>
+      <button className="modal-close-btn" onClick={onClose} aria-label="Close modal"><PxIcon name="close" size={14} /></button>
+      <div className="modal-header">
+        <span className="modal-year">{project.year}</span>
+        <span className="card-badge" style={{background:project.featured?"var(--gold)":"var(--cyan)",color:"var(--void)"}}>{project.type}</span>
+      </div>
+      <h3 className="modal-title">{project.title}</h3>
+      {project.featured && <div className="modal-featured-badge"><PxIcon name="trophy" size={10} color="var(--gold)" /> MAIN QUEST</div>}
+      <p className="modal-desc">{project.desc}</p>
+      <div className="modal-section">
+        <h4 className="modal-section-title">Technologies</h4>
+        <div className="modal-tags">{project.tags.map(t=><span className="tag" key={t}>{t}</span>)}</div>
+      </div>
+      <div className="modal-actions">
+        {project.demo&&<a href={project.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} color="var(--void)" /> Live Demo</a>}
+        <a href={project.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
+      </div>
+    </div>
+  </div>;
+}
+
+/* =============================================================
    PIXEL DIVIDER
    ============================================================= */
 function PixelDivider(){return <div className="pixel-divider" aria-hidden="true"><div className="divider-glow-track"><span className="divider-glow-dot" /></div><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span></div>;}
@@ -147,6 +188,7 @@ export default function Portfolio() {
   const[scrolled,setScrolled]=useState(false);
   const[hovered,setHovered]=useState(null);
   const[darkMode,setDarkMode]=useState(()=>localStorage.getItem("theme")!=="light");
+  const[modalProject,setModalProject]=useState(null);
   const activeSection=useActiveSection(["hero","projects","skills","contact"]);
 
   useEffect(()=>{document.documentElement.setAttribute("data-theme",darkMode?"dark":"light");localStorage.setItem("theme",darkMode?"dark":"light");},[darkMode]);
@@ -188,9 +230,9 @@ export default function Portfolio() {
         <div className="hero-stagger" style={{'--stagger-i':2}}><p className="hero-sub">{typed}<span className="cursor-blink">|</span></p></div>
         <div className="hero-stagger" style={{'--stagger-i':3}}>
           <div className="hero-stats">
-            <div className="hero-stat"><PxIcon name="bolt" size={20} /><div><div className="hero-stat-value">4</div><div className="hero-stat-label">Projects</div></div></div>
-            <div className="hero-stat"><PxIcon name="diamond" size={20} color="#ffd166" /><div><div className="hero-stat-value">8</div><div className="hero-stat-label">Technologies</div></div></div>
-            <div className="hero-stat"><PxIcon name="star" size={20} /><div><div className="hero-stat-value">26+</div><div className="hero-stat-label">Exercises</div></div></div>
+            <div className="hero-stat"><PxIcon name="bolt" size={20} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
+            <div className="hero-stat"><PxIcon name="diamond" size={20} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
+            <div className="hero-stat"><PxIcon name="star" size={20} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
             <div className="hero-stat"><PxIcon name="diamond" size={20} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
           </div>
         </div>
@@ -239,6 +281,7 @@ export default function Portfolio() {
             <p className="card-desc">{p.desc}</p>
             <div className="card-tags">{p.tags.map(t=><span className="tag" key={t}>{t}</span>)}</div>
             <div className="card-actions">
+              <button className="card-link details-link" onClick={()=>setModalProject(p)}><PxIcon name="expand" size={12} /> Details</button>
               {p.demo&&<a href={p.demo} target="_blank" rel="noopener" className="card-link demo-link"><PxIcon name="play" size={12} color="#ffd166" /> Live Demo</a>}
               <a href={p.code} target="_blank" rel="noopener" className="card-link"><PxIcon name="file" size={12} /> View Code</a>
             </div>
@@ -300,6 +343,7 @@ export default function Portfolio() {
     </footer>
   </div>
   <ScrollToTop />
+  {modalProject && <ProjectModal project={modalProject} onClose={()=>setModalProject(null)} />}
   </>);
 }
 
@@ -401,6 +445,8 @@ a{color:inherit;text-decoration:none}
 .card-link{display:inline-flex;align-items:center;gap:5px;font-size:.8rem;color:var(--dim);cursor:pointer;background:none;border:none;font-family:var(--font-body);transition:color .3s var(--ease-out)}
 .card-link:hover{color:var(--cyan)}
 .demo-link{color:var(--gold)!important}
+.details-link{color:var(--cyan)!important;cursor:pointer;background:none;border:none;font-family:var(--font-body);display:inline-flex;align-items:center;gap:5px;font-size:.8rem;transition:color .3s var(--ease-out)}
+.details-link:hover{color:var(--magenta)!important}
 
 /* Scroll to top */
 .scroll-top-btn{position:fixed;bottom:24px;right:24px;z-index:50;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--panel);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;
@@ -411,6 +457,31 @@ transition:all .4s var(--wobble);transform:translateY(80px);opacity:0;box-shadow
 /* Empty state */
 .empty-state{text-align:center;padding:48px 24px;color:var(--dimmer);display:flex;flex-direction:column;align-items:center;gap:12px}
 .empty-state p{font-size:.9rem}
+
+/* ===== MODAL ===== */
+.modal-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;
+background:rgba(7,9,17,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+animation:modalOverlayIn .3s var(--ease-out) both}
+[data-theme="light"] .modal-overlay{background:rgba(0,0,0,0.3)}
+.modal-content{background:var(--panel);border:1px solid var(--cyan);border-radius:16px;padding:32px 28px;max-width:520px;width:100%;position:relative;
+box-shadow:0 0 40px rgba(63,230,255,0.1),0 20px 60px rgba(0,0,0,0.4);
+animation:modalContentIn .35s var(--wobble) both;max-height:85vh;overflow-y:auto}
+.modal-close-btn{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);
+background:var(--void);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;
+transition:all .3s var(--ease-out)}
+.modal-close-btn:hover{background:var(--magenta);color:var(--void);border-color:var(--magenta);transform:rotate(90deg)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-year{font-family:var(--font-mono);font-size:.75rem;color:var(--dimmer)}
+.modal-title{font-family:var(--font-display);font-size:18px;margin-bottom:12px;line-height:1.4;padding-right:32px}
+.modal-featured-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:8px;letter-spacing:2px;color:var(--gold);border:1px solid rgba(255,209,102,0.3);background:rgba(255,209,102,0.06);padding:4px 12px;border-radius:100px;margin-bottom:12px}
+.modal-desc{color:var(--dim);font-size:.9rem;line-height:1.7;margin-bottom:20px}
+.modal-section{margin-bottom:20px}
+.modal-section-title{font-family:var(--font-display);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--dimmer);margin-bottom:8px}
+.modal-tags{display:flex;gap:6px;flex-wrap:wrap}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+
+@keyframes modalOverlayIn{0%{opacity:0}100%{opacity:1}}
+@keyframes modalContentIn{0%{opacity:0;transform:scale(0.9) translateY(20px)}100%{opacity:1;transform:scale(1) translateY(0)}}
 
 /* Featured */
 .featured-card{position:relative;overflow:hidden;background:linear-gradient(160deg,#14102a 0%,var(--panel) 100%);border:1px solid rgba(255,209,102,0.25);border-radius:20px;padding:48px 32px;text-align:center;display:flex;flex-direction:column;align-items:center}
