@@ -33,6 +33,7 @@ const PIXEL_ART = {
   expand   :{c:"#3fe6ff",w:10,h:10,p:[0,0,1,0,2,0,0,1,0,2,7,0,8,0,9,0,9,1,9,2,0,7,0,8,0,9,1,9,2,9,7,9,8,9,9,9,9,8,9,7]},
   compass  :{c:"#3fe6ff",w:12,h:12,p:[5,0,6,0,4,1,5,1,6,1,7,1,3,2,7,2,2,3,3,3,7,3,8,3,1,4,2,4,3,4,4,4,5,4,6,4,7,4,8,4,9,4,0,5,1,5,9,5,10,5,0,6,1,6,9,6,10,6,1,7,2,7,8,7,9,7,2,8,3,8,7,8,8,8,3,9,4,9,5,9,6,9,7,9,4,10,5,10,6,10]},
   clock    :{c:"#ffd166",w:12,h:12,p:[5,0,6,0,4,1,5,1,6,1,7,1,3,2,7,2,2,3,3,3,7,3,8,3,1,4,2,4,8,4,9,4,0,5,1,5,5,5,9,5,10,5,0,6,1,6,5,6,9,6,10,6,1,7,2,7,5,7,8,7,9,7,2,8,3,8,7,8,8,8,3,9,4,9,5,9,6,9,7,9,4,10,5,10,6,10]},
+  mail     :{c:"#3fe6ff",w:12,h:10,p:[1,1,2,1,3,1,4,1,5,1,6,1,7,1,8,1,9,1,10,1,0,2,1,2,2,2,3,2,4,2,5,2,6,2,7,2,8,2,9,2,10,2,11,2,2,3,3,3,4,3,5,3,6,3,7,3,8,3,9,3,10,3,3,4,4,4,5,4,6,4,7,4,8,4,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,9,5,10,5]},
 };
 
 const PS = 2;
@@ -198,55 +199,113 @@ function PixelLoader({ onDone }) {
     }
     const pixelColors = Array.from({length: total}, () => colors[Math.floor(Math.random() * colors.length)]);
 
-    let ready = false;
+    const NAME = 'HOUTAROUDES';
+    const nameColors = ['#ffd166','#3fe6ff','#ff3f9c','#4ade80','#a29bfe'];
+    // Pre-generate random pixel positions for each letter
+    const letterPixels = NAME.split('').map(() => {
+      const px = [];
+      const count = 8 + Math.floor(Math.random() * 6);
+      for (let i = 0; i < count; i++) {
+        px.push({ x: Math.random(), y: Math.random() });
+      }
+      return px;
+    });
+
+    const GRID_DUR = 1400;
+    const NAME_DUR = 800;
+    let phase = 'grid';
     let anim;
+    let nameRevealed = false;
     let start = performance.now();
 
     function draw(time) {
       const elapsed = time - start;
-      const progress = Math.min(elapsed / 1400, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const cellsToShow = Math.floor(eased * total);
 
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = '#070911';
       ctx.fillRect(0, 0, w, h);
 
-      const cw = w / GRID;
-      const ch = h / GRID;
+      if (phase === 'grid') {
+        const progress = Math.min(elapsed / GRID_DUR, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const cellsToShow = Math.floor(eased * total);
+        const cw = w / GRID;
+        const ch = h / GRID;
 
-      for (let i = 0; i < cellsToShow; i++) {
-        const idx = order[i];
-        const row = Math.floor(idx / GRID);
-        const col = idx % GRID;
-        const alpha = 0.15 + (i / cellsToShow) * 0.75;
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = pixelColors[idx];
-        ctx.fillRect(col * cw, row * ch, Math.ceil(cw), Math.ceil(ch));
-      }
-      ctx.globalAlpha = 1;
+        for (let i = 0; i < cellsToShow; i++) {
+          const idx = order[i];
+          const row = Math.floor(idx / GRID);
+          const col = idx % GRID;
+          const alpha = 0.15 + (i / Math.max(cellsToShow, 1)) * 0.75;
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = pixelColors[idx];
+          ctx.fillRect(Math.floor(col * cw), Math.floor(row * ch), Math.ceil(cw), Math.ceil(ch));
+        }
+        ctx.globalAlpha = 1;
 
-      // Boot text
-      const pct = Math.floor(progress * 100);
-      ctx.fillStyle = '#8489bd';
-      ctx.font = '11px "JetBrains Mono", monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('> INITIALIZING PIXEL ENGINE...', w / 2, h - 70);
+        const pct = Math.floor(progress * 100);
+        ctx.fillStyle = '#8489bd';
+        ctx.font = '11px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('> INITIALIZING PIXEL ENGINE...', w / 2, h - 70);
+        ctx.fillStyle = 'rgba(132,137,189,0.15)';
+        ctx.fillRect(w / 2 - 120, h - 50, 240, 3);
+        ctx.fillStyle = '#3fe6ff';
+        ctx.fillRect(w / 2 - 120, h - 50, 240 * progress, 3);
+        ctx.fillStyle = '#8489bd';
+        ctx.font = '10px "JetBrains Mono", monospace';
+        ctx.fillText(`${pct}%`, w / 2, h - 34);
 
-      // Progress bar
-      ctx.fillStyle = 'rgba(132,137,189,0.15)';
-      ctx.fillRect(w / 2 - 120, h - 50, 240, 3);
-      ctx.fillStyle = '#3fe6ff';
-      ctx.fillRect(w / 2 - 120, h - 50, 240 * progress, 3);
-      ctx.fillStyle = '#8489bd';
-      ctx.font = '10px "JetBrains Mono", monospace';
-      ctx.fillText(`${pct}%`, w / 2, h - 34);
-
-      if (progress < 1) {
+        if (progress >= 1) {
+          phase = 'name';
+          start = time;
+        }
         anim = requestAnimationFrame(draw);
-      } else if (!ready) {
-        ready = true;
-        if (doneRef.current) doneRef.current();
+      } else if (phase === 'name') {
+        const progress = Math.min(elapsed / NAME_DUR, 1);
+        const eased = 1 - Math.pow(1 - progress, 2);
+        const lettersToShow = Math.floor(eased * NAME.length);
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        for (let i = 0; i < lettersToShow && i < NAME.length; i++) {
+          const letter = NAME[i];
+          const lx = w / 2 - (NAME.length * 14) / 2 + i * 14 + 7;
+          const ly = h / 2 - 6;
+          const alpha = 0.3 + 0.7 * ((i + 1) / Math.max(lettersToShow, 1));
+
+          // Draw pixel scatter
+          ctx.globalAlpha = 0.4;
+          ctx.fillStyle = nameColors[i % nameColors.length];
+          for (const p of letterPixels[i]) {
+            ctx.fillRect(
+              Math.floor(lx + p.x * 12 - 6),
+              Math.floor(ly + p.y * 12 - 6),
+              2, 2
+            );
+          }
+          ctx.globalAlpha = alpha;
+          ctx.font = 'bold 18px "Press Start 2P", monospace';
+          ctx.fillStyle = '#eef0ff';
+          ctx.fillText(letter, lx, ly);
+        }
+        ctx.globalAlpha = 1;
+
+        // Boot text
+        ctx.fillStyle = '#8489bd';
+        ctx.font = '11px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('> LOADING COMPLETE', w / 2, h - 70);
+
+        if (progress >= 1) {
+          if (doneRef.current && !nameRevealed) {
+            nameRevealed = true;
+            setTimeout(() => doneRef.current(), 300);
+          }
+          return;
+        }
+        anim = requestAnimationFrame(draw);
       }
     }
 
@@ -454,6 +513,7 @@ export default function Portfolio() {
   const[hovered,setHovered]=useState(null);
   const[darkMode,setDarkMode]=useState(()=>localStorage.getItem("theme")!=="light");
   const[modalProject,setModalProject]=useState(null);
+  const[formSent,setFormSent]=useState(false);
   const[introDone,setIntroDone]=useState(()=>{
     try { return localStorage.getItem("introPlayed") === "true"; } catch { return false; }
   });
@@ -692,7 +752,7 @@ export default function Portfolio() {
       {/* FEATURED */}
       {feat && (
         <RS className="section" variant="scale">
-          <div className="featured-card featured-full">
+          <div className="featured-card featured-full" onMouseEnter={hoverSound}>
             <div className="featured-glow"/>
             <div className="featured-badge"><PxIcon name="trophy" size={10} /> MAIN QUEST <PxIcon name="trophy" size={10} /></div>
             <h3 className="featured-title">{feat.title}</h3>
@@ -716,17 +776,25 @@ export default function Portfolio() {
           <p className="section-desc" style={{textAlign:"center",marginBottom:24}}>Open for freelance gigs, school projects, or just talking shop about pixel art and web dev.</p>
           <div className="hero-actions" style={{justifyContent:"center",flexDirection:'column',alignItems:'center',gap:'16px'}}>
             <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn primary"><IconGithub s={15}/> GitHub Profile</a>
-            <form action="https://formspree.io/f/xzdnjdbd" method="POST" style={{display:'flex',flexDirection:'column',gap:'10px',width:'100%',maxWidth:'400px'}}>
-              <input type="text" name="name" placeholder="Your name" className="fs-input" required />
-              <input type="email" name="email" placeholder="Your email" className="fs-input" required />
-              <textarea name="message" placeholder="Your message..." className="fs-input fs-textarea" required rows={3}></textarea>
-              <input type="hidden" name="_subject" value="New portfolio message!" />
-              <input type="text" name="_gotcha" style={{display:'none'}} />
-              <div style={{display:'flex',alignItems:'center',gap:'6px',fontSize:'0.7rem',color:'var(--dimmer)',fontFamily:'var(--font-mono)'}}>
-                <PxIcon name="file" size={10} color="var(--cyan)" />
-                <span>Sends to: houtaroudes@gmail.com</span>
-              </div>
-              <button type="submit" className="btn primary"><PxIcon name="play" size={12} color="var(--void)" /> Send Message</button>
+            <form onSubmit={async (e) => { e.preventDefault(); const d = new FormData(e.target); try { await fetch('https://formspree.io/f/xzdnjdbd', { method: 'POST', body: d, headers: { 'Accept': 'application/json' } }); setFormSent(true); } catch { e.target.submit(); } }} style={{display:'flex',flexDirection:'column',gap:'10px',width:'100%',maxWidth:'400px'}}>
+              {!formSent ? (
+                <div className="fs-fields" style={{display:'flex',flexDirection:'column',gap:'10px'}}>
+                  <input type="text" name="name" placeholder="Your name" className="fs-input" required />
+                  <input type="email" name="email" placeholder="Your email" className="fs-input" required />
+                  <textarea name="message" placeholder="Your message..." className="fs-input fs-textarea" required rows={3}></textarea>
+                  <div style={{display:'flex',alignItems:'center',gap:'6px',fontSize:'0.7rem',color:'var(--dimmer)',fontFamily:'var(--font-mono)'}}>
+                    <PxIcon name="mail" size={10} color="var(--cyan)" />
+                    <span>Sends to: houtaroudes@gmail.com</span>
+                  </div>
+                  <input type="hidden" name="_subject" value="New portfolio message!" />
+                  <input type="text" name="_gotcha" style={{display:'none'}} />
+                  <button type="submit" className="btn primary"><PxIcon name="play" size={12} color="var(--void)" /> Send Message</button>
+                </div>
+              ) : (
+                <div style={{textAlign:'center',padding:'20px 0',color:'var(--gold)',fontFamily:'var(--font-display)',fontSize:'11px',letterSpacing:'1px'}}>
+                  <PxIcon name="check" size={14} color="var(--gold)" /> MESSAGE DELIVERED!
+                </div>
+              )}
             </form>
           </div>
         </div>
