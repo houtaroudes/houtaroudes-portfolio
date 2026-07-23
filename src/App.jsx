@@ -637,23 +637,24 @@ export default function Portfolio() {
                 <h3 className="featured-title">{feat.title}</h3>
                 <p className="featured-desc">{feat.desc}</p>
                 <div className="featured-tags">{feat.tags.map(t=><span className="tag featured-tag" key={t}>{t}</span>)}</div>
-              </div>
-            }
-            secondContent={
-              <div className="featured-card" style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'16px', padding:'32px'}}>
-                <div className="featured-badge"><PxIcon name="trophy" size={10} color="var(--gold)" /> UNLOCKED</div>
                 <div className="featured-actions">
                   <a href={feat.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} /> Explore the Hub</a>
                   <a href={feat.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
                 </div>
               </div>
             }
+            secondContent={
+              <div className="featured-card" style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'16px', padding:'32px', background:'linear-gradient(160deg, rgba(255,209,102,0.12), rgba(255,209,102,0.04))'}}>
+                <div className="featured-badge"><PxIcon name="trophy" size={10} color="var(--gold)" /> PIXEL OVERRIDE</div>
+                <p style={{color:'var(--dim)', fontSize:'0.85rem', fontFamily:'var(--font-mono)', maxWidth:'360px', textAlign:'center'}}>Hover back or click to return</p>
+              </div>
+            }
             gridSize={10}
             pixelColor="var(--gold)"
             animationStepDuration={0.5}
-            aspectRatio="25%"
+            aspectRatio="30%"
             className="featured-pixel-card"
-            style={{ width: '100%', maxWidth: '100%', border: '1px solid rgba(255,209,102,0.25)', borderRadius: '20px', overflow: 'hidden' }}
+            style={{ width: '100%', maxWidth: '100%', border: '1px solid rgba(255,209,102,0.25)', borderRadius: '20px', overflow: 'hidden', minHeight: '340px' }}
           />
         </RS>
       )}
@@ -766,7 +767,7 @@ a{color:inherit;text-decoration:none}
 /* ===== 📌 Sidebar styles ===== */
 .scroll-sidebar {
   position: fixed;
-  left: 8px;
+  left: 16px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 40;
@@ -781,14 +782,13 @@ a{color:inherit;text-decoration:none}
   flex-direction: column;
   align-items: center;
   gap: 36px;
-  padding: 28px 16px;
+  padding: 28px 18px;
   background: var(--panel);
   border: 1px solid var(--border);
-  border-left: none;
-  border-radius: 0 14px 14px 0;
+  border-radius: 14px;
   backdrop-filter: blur(12px);
   box-shadow: 4px 0 20px rgba(0,0,0,0.3);
-  max-height: 90vh;
+  max-height: 85vh;
   overflow-y: auto;
 }
 .sidebar-logo {
