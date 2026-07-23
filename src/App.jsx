@@ -4,7 +4,7 @@ import PixelTrail from "./components/PixelTrail";
 import "./components/PixelTrail.css";
 
 /* =============================================================
-   🎨 Pixel icons — all hand-drawn by me
+   🎨 pixel icons i drew myself lol
    ============================================================= */
 const PIXEL_ART = {
   star     :{c:"#ffd166",w:12,h:12,p:[2,0,3,0,1,1,2,1,3,1,4,1,0,2,1,2,2,2,3,2,4,2,5,2,0,3,1,3,2,3,3,3,4,3,5,3,1,4,2,4,3,4,4,4,2,5,3,5]},
@@ -46,14 +46,14 @@ function PxIcon({name,size=18,color}) {
 }
 
 /* =============================================================
-   📦 Extra icons (GitHub, Mail)
+   📦 extra icons (github, mail)
    ============================================================= */
 const iconProps = (s,c) => ({width:s,height:s,viewBox:"0 0 24 24",fill:"none",stroke:c,strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round"});
 function IconGithub({s=18,c="currentColor"}){return <svg {...iconProps(s,c)}><path d="M9 19c-4 1.2-4-2.1-5.5-2.5M17 22v-3.2c0-.9-.3-1.5-.6-1.8 2.1-.2 4.3-1 4.3-4.7 0-1-.4-1.9-1-2.6.1-.3.4-1.3-.1-2.7 0 0-.9-.3-2.9 1a10 10 0 00-5.4 0c-2-1.3-2.9-1-2.9-1-.5 1.4-.2 2.4-.1 2.7-.6.7-1 1.6-1 2.6 0 3.7 2.2 4.5 4.3 4.7-.3.3-.5.7-.6 1.4V22"/></svg>}
 function IconMail({s=18,c="currentColor"}){return <svg {...iconProps(s,c)}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>}
 
 /* =============================================================
-   🌌 Stars, mountains & clouds on canvas
+   🌌 starry bg with mountains n clouds
    ============================================================= */
 function PixelBackground() {
   const ref=useRef(null);
@@ -86,7 +86,7 @@ function PixelBackground() {
 }
 
 /* =============================================================
-   🌧️ Falling pixel rain effect
+   🌧️ pixel rain cuz why not
    ============================================================= */
 function PixelRain() {
   const ref=useRef(null);
@@ -113,7 +113,7 @@ function PixelRain() {
 }
 
 /* =============================================================
-   🕐 Live clock — updates every second
+   🕐 live clock thingy
    ============================================================= */
 function RealtimeClock({className=""}) {
   const [time, setTime] = useState(new Date());
@@ -130,7 +130,7 @@ function RealtimeClock({className=""}) {
 }
 
 /* =============================================================
-   🎬 Intro splash — name starts center then slides left
+   🎬 intro splash - name starts in the middle then moves left
    ============================================================= */
 function IntroOverlay({onDone}) {
   return (
@@ -174,7 +174,7 @@ function IntroOverlay({onDone}) {
 }
 
 /* =============================================================
-   🖥️ Pixel loading screen — fills in grid before intro
+   🖥️ loading screen - grid fills up then shows the name
    ============================================================= */
 function PixelLoader({ onDone }) {
   const canvasRef = useRef(null);
@@ -250,7 +250,7 @@ function PixelLoader({ onDone }) {
         headGlow.addColorStop(1, 'rgba(63,230,255,0)');
         ctx.fillStyle = headGlow;
         ctx.fillRect(fillEnd - 30, barY - 4, 60, 14);
-        // Scanline sweep — a thin bright line that sweeps across the filled portion
+        // scanline sweep - makes it look cool
         const sweepX = (w / 2 - 100) + (200 * p * (Math.sin(elapsed * 0.008) * 0.5 + 0.5));
         ctx.fillStyle = 'rgba(255,255,255,0.25)';
         ctx.fillRect(sweepX, barY - 1, 3, 8);
@@ -294,13 +294,13 @@ function PixelLoader({ onDone }) {
       }
     }
 
-    // 🔊 Retro startup sound
+    // 🔊 retro startup sound (beep boop)
     try {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (AC) {
         const actx = new AC();
         const now = actx.currentTime;
-        // Rising arpeggio — C5, E5, G5, C6
+        // rising arpeggio thingy - c5, e5, g5, c6
         const notes = [523, 659, 784, 1047];
         notes.forEach((freq, i) => {
           const o = actx.createOscillator();
@@ -327,7 +327,7 @@ function PixelLoader({ onDone }) {
 }
 
 /* =============================================================
-   🔈 Pixel blip hover sound
+   🔈 hover sound effect (kinda satisfying ngl)
    ============================================================= */
 function useHoverSound() {
   const audioRef = useRef(null);
@@ -361,7 +361,7 @@ function useHoverSound() {
 }
 
 /* =============================================================
-   📊 Progress bar at the top
+   📊 scroll progress bar at top
    ============================================================= */
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
@@ -374,7 +374,7 @@ function ScrollProgress() {
 }
 
 /* =============================================================
-   📁 Projects, skills & filter data
+   📁 projects data n filters
    ============================================================= */
 const projects = [
   {id:1,title:"Motion Website",desc:"A front-end inspiration hub for exploring layout and animation ideas.",tags:["HTML","CSS","JS"],demo:"https://motion-website-des.vercel.app",code:"https://github.com/houtaroudes/motion-website",type:"Full Stack",year:"2025"},
@@ -390,13 +390,13 @@ const categories = [
 ];
 
 /* =============================================================
-   🪝 Custom React hooks
+   🪝 custom hooks i made
    ============================================================= */
 function useReveal(t=0.1, deps=[]){const r=useRef(null);const[v,s]=useState(false);useEffect(()=>{const e=r.current;if(!e)return;const o=new IntersectionObserver(([n])=>{if(n.isIntersecting){s(true);o.unobserve(e);}},{threshold:t});o.observe(e);return()=>o.disconnect();},[t,...deps]);return[r,v];}
 function RS({children,className="",variant="up",...p}){const[r,v]=useReveal(0.08);return <section ref={r} className={`reveal-section reveal-${variant} ${v?"revealed":""} ${className}`} {...p}>{children}</section>;}
 function useActiveSection(ids){const[a,set]=useState(ids[0]||"");useEffect(()=>{const o=new IntersectionObserver((e)=>{for(const n of e){if(n.isIntersecting){set(n.target.id);break;}}},{rootMargin:"-40% 0px -55% 0px",threshold:0});ids.forEach(id=>{const el=document.getElementById(id);if(el)o.observe(el);});return()=>o.disconnect();},[ids]);return a;}
 /* =============================================================
-   🔢 Animated number counter
+   🔢 number go brr counter
    ============================================================= */
 function CountUpValue({target,suffix='',duration=1500,delay=300}){
   const[c,set]=useState(0);const[r,setR]=useState(false);const ref=useRef(null);
@@ -406,7 +406,7 @@ function CountUpValue({target,suffix='',duration=1500,delay=300}){
 }
 
 /* =============================================================
-   🪟 Project detail popup modal
+   🪟 project detail popup
    ============================================================= */
 function ProjectModal({project,onClose}){
   const closeRef=useRef(onClose);closeRef.current=onClose;
@@ -441,19 +441,19 @@ function ProjectModal({project,onClose}){
 }
 
 /* =============================================================
-   ➕ Pixel-art section divider
+   ➕ pixel divider line thing
    ============================================================= */
 function PixelDivider(){return <div className="pixel-divider" aria-hidden="true"><div className="divider-glow-track"><span className="divider-glow-dot" /></div><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span></div>;}
 
 /* =============================================================
-   ⬆️ Floating back-to-top button
+   ⬆️ back to top button
    ============================================================= */
 function ScrollToTop(){const[v,s]=useState(false);useEffect(()=>{const h=()=>s(window.scrollY>400);window.addEventListener('scroll',h,{passive:true});return()=>window.removeEventListener('scroll',h);},[]);return <motion.button className={`scroll-top-btn ${v?'visible':''}`} onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} aria-label="Scroll to top"
   animate={{scale:v?1:0,opacity:v?1:0}} transition={{duration:0.3,ease:"backOut"}}
 ><PxIcon name="star" size={16} /></motion.button>;}
 
 /* =============================================================
-   🔁 Multi-stage typewriter — cycles through identities
+   🔁 typewriter thing - cycles thru different texts
    ============================================================= */
 const PHRASES = [
   "I am a Full-Stack Developer",
@@ -495,7 +495,7 @@ function CycleTypewriter() {
 }
 
 /* =============================================================
-   👀 Scroll-triggered reveal animation
+   👀 scroll reveal animation
    ============================================================= */
 function AttentionGrabber({children, className="", delay=0}) {
   const ref = useRef(null);
@@ -514,10 +514,10 @@ function AttentionGrabber({children, className="", delay=0}) {
 }
 
 /* =============================================================
-   🏠 Main Portfolio component — everything comes together
+   🏠 main portfolio component - everything comes together here
    ============================================================= */
 /* =============================================================
-   🎬 Intro play limit — 3 times per day, resets after 24h
+   🎬 intro limit - only 3 times a day then resets
    ============================================================= */
 function getIntroLimit() {
   try {
@@ -565,7 +565,7 @@ export default function Portfolio() {
   useEffect(() => {
     if (loading || introDone) return;
     const t1 = setTimeout(() => {
-      // Increment play count
+      // add 1 to the play count
       try {
         const c = parseInt(localStorage.getItem('_introCount') || '0', 10);
         localStorage.setItem('_introCount', String(c + 1));
@@ -846,7 +846,7 @@ export default function Portfolio() {
 }
 
 /* =============================================================
-   🎨 All styles in one place
+   🎨 all the css in one big blob
    ============================================================= */
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
