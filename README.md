@@ -1,5 +1,5 @@
-<<<<<<< HEAD
-# 🌟 HoutarouDes — Portfolio
+
+#  HoutarouDes — Portfolio
 
 > Full-stack developer portfolio with a retro pixel-art theme. Built with React, Vite, and hand-crafted pixel icons.
 
@@ -7,31 +7,31 @@
 [![React](https://img.shields.io/badge/React-18-61dafb?logo=react)]()
 [![Vite](https://img.shields.io/badge/Vite-6-646cff?logo=vite)]()
 
-🌐 **Live site:** [houtaroudes-portfolio.vercel.app](https://houtaroudes-portfolio.vercel.app)
+ **Live site:** [houtaroudes-portfolio.vercel.app](https://houtaroudes-portfolio.vercel.app)
 
 ---
 
-## ⚡ Features
+##  Features
 
-### 🎨 Pixel Art Icon System
+###  Pixel Art Icon System
 Hand-crafted pixel SVG icons for every section — stars, diamonds, bolts, trophies, and more. Each icon is built from raw coordinate data with no external dependencies.
 
-### 🌙 Dark / Light Mode
+###  Dark / Light Mode
 Toggle between dark (void) and light themes. Preference persists via localStorage.
 
-### 🔢 Animated Count-Up Stats
+###  Animated Count-Up Stats
 Hero statistics (projects, technologies, exercises) animate from 0 to their target values on scroll using `requestAnimationFrame` with ease-out timing.
 
-### 🪟 Project Detail Modal
+###  Project Detail Modal
 Click "Details" on any project card to open a full modal with ESC close, backdrop blur, scale-in animation, and body scroll lock.
 
-### 🎬 Scroll Reveal System
+###  Scroll Reveal System
 Sections animate in as you scroll — supporting up, left, right, scale, and fade variants with staggered child animations.
 
-### 🎯 Active Nav Highlighting
+###  Active Nav Highlighting
 The navigation bar automatically highlights the current section based on scroll position using `IntersectionObserver`.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Technology | Purpose |
 |---|---|
@@ -41,18 +41,18 @@ The navigation bar automatically highlights the current section based on scroll 
 | **Canvas API** | Animated pixel backgrounds (starfield, rain) |
 | **IntersectionObserver** | Scroll-reveal animations |
 
-## 🧩 Pixel Icon System
+##  Pixel Icon System
 
 The `PIXEL_ART` object contains 20+ hand-crafted pixel icons:
-- ⭐ `star` · `diamond` · `bolt` · `trophy` · `sword`
-- 🎨 `palette` · `sparkle` · `eye` · `search` · `close`
-- 📁 `file` · `note` · `flag` · `link` · `expand`
-- ✏️ `pencil` · `wrench` · `bulb` · `play` · `reset` · `seedling`
-- ⛰️ `mountain` · `cloud` · `check`
+-  `star` · `diamond` · `bolt` · `trophy` · `sword`
+-  `palette` · `sparkle` · `eye` · `search` · `close`
+-  `file` · `note` · `flag` · `link` · `expand`
+-  `pencil` · `wrench` · `bulb` · `play` · `reset` · `seedling`
+-  `mountain` · `cloud` · `check`
 
 Each icon is defined as a grid of pixel coordinates rendered as SVG `<rect>` elements.
 
-## 🎨 Design
+##  Design
 
 - **Theme:** Retro pixel-art with neon accents
 - **Colors:** Cyan (`#3fe6ff`), magenta (`#ff3f9c`), gold (`#ffd166`)
@@ -60,7 +60,7 @@ Each icon is defined as a grid of pixel coordinates rendered as SVG `<rect>` ele
 - **Background:** Fixed canvas starfield + pixel rain + mountain parallax
 - **Easing:** Custom cubic-bezier curves (`--ease-out`, `--wobble`)
 
-## 🚀 Getting Started
+##  Getting Started
 
 ```bash
 # Clone the repo
@@ -77,7 +77,7 @@ npm run dev
 npm run build
 ```
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 portfolio/
@@ -90,14 +90,14 @@ portfolio/
 └── vercel.json          # Vercel deployment config
 ```
 
-## 📊 Stats
+##  Stats
 
 - **Projects:** 4 (Motion Website, PixelPodWeb, Houtarou Cafe, Learning WebDev Hub)
 - **Technologies:** 8 (HTML5, CSS3, JS, React, PHP, MySQL, Git, Vite)
 - **Icons:** 20+ hand-crafted pixel SVGs
 - **Sections:** Hero with typewriter effect, projects with filter, skills grid, featured project, contact
 
-## 👤 Author
+##  Author
 
 **HoutarouDes** — Full-stack developer building pixel-perfect worlds, one commit at a time.
 
@@ -169,19 +169,6 @@ Preview the production build locally:
 npm run preview
 ```
 
-## Project Structure
-
-```
-houtaroudes-portfolio/
-├── index.html          # HTML entry point
-├── src/
-│   ├── main.jsx         # React app entry
-│   └── App.jsx          # Main portfolio component (all sections + data)
-├── vite.config.js       # Vite configuration
-├── package.json
-└── package-lock.json
-```
-
 ## Projects Featured
 
 The Project Catalog pulls from a small curated list of my own repos, including:
@@ -190,12 +177,3 @@ The Project Catalog pulls from a small curated list of my own repos, including:
 - **PixelPodWeb** — a photobooth web app with a PHP + MySQL backend
 - **Houtarou Cafe** — a minimalist concept café site with ordering and reservation flows
 - **Learning WebDev Hub** — a gamified learning hub with 26+ live-preview coding exercises
-
-## License
-
-No license specified.
-
----
-
-Built and maintained by [@houtaroudes](https://github.com/houtaroudes).
->>>>>>> 2efe7367cb844499b20c2511e1ef9b994677d710
