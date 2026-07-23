@@ -189,15 +189,15 @@ function PixelLoader({ onDone }) {
     const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
     resize();
 
-    const GRID = 14;
+    const GRID = 8;
     const cols = ['#3fe6ff','#ff3f9c','#ffd166','#a29bfe','#4ade80'];
     const total = GRID * GRID;
     const order = Array.from({length: total}, (_, i) => i).sort(() => Math.random() - 0.5);
     const pixelCols = Array.from({length: total}, () => cols[Math.floor(Math.random() * cols.length)]);
 
     const NAME = 'HOUTAROUDES';
-    const GRID_DUR = 1400;
-    const NAME_DUR = 900;
+    const GRID_DUR = 800;
+    const NAME_DUR = 500;
     let phase = 'grid';
     let anim;
     let done = false;
@@ -229,13 +229,21 @@ function PixelLoader({ onDone }) {
         ctx.font = '11px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText(bootText.slice(0, Math.max(chars, 1)), w / 2, h - 70);
-        ctx.fillStyle = 'rgba(132,137,189,0.15)';
-        ctx.fillRect(w / 2 - 120, h - 50, 240, 3);
+        const barY = h - 55;
+        ctx.fillStyle = 'rgba(132,137,189,0.18)';
+        ctx.fillRect(w / 2 - 100, barY, 200, 6);
         ctx.fillStyle = '#3fe6ff';
-        ctx.fillRect(w / 2 - 120, h - 50, 240 * p, 3);
-        ctx.fillStyle = '#8489bd';
-        ctx.font = '10px "JetBrains Mono", monospace';
-        ctx.fillText(`${Math.floor(p * 100)}%`, w / 2, h - 34);
+        const glow = ctx.createRadialGradient(w/2, barY+3, 0, w/2, barY+3, 100);
+        glow.addColorStop(0, 'rgba(63,230,255,0.15)');
+        glow.addColorStop(1, 'rgba(63,230,255,0)');
+        ctx.fillStyle = glow;
+        ctx.fillRect(w / 2 - 100, barY, 200, 6);
+        ctx.fillStyle = '#3fe6ff';
+        ctx.fillRect(w / 2 - 100, barY, 200 * p, 6);
+        ctx.fillStyle = '#eef0ff';
+        ctx.font = 'bold 11px "JetBrains Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(`${Math.floor(p * 100)}%`, w / 2 + 105, barY + 5);
 
         if (p >= 1) { phase = 'name'; start = time; }
         anim = requestAnimationFrame(draw);
@@ -264,7 +272,7 @@ function PixelLoader({ onDone }) {
 
         if (p >= 1 && !done) {
           done = true;
-          setTimeout(() => { if (doneRef.current) doneRef.current(); }, 400);
+          setTimeout(() => { if (doneRef.current) doneRef.current(); }, 200);
           return;
         }
         anim = requestAnimationFrame(draw);
