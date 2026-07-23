@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useScroll, useInView } from "framer-motion";
+import PixelTransition from "./components/PixelTransition";
+import "./components/PixelTransition.css";
+import PixelTrail from "./components/PixelTrail";
+import "./components/PixelTrail.css";
 
 /* =============================================================
    🎨 Pixel icons — all hand-drawn by me
@@ -431,6 +435,17 @@ export default function Portfolio() {
       <div className="scanlines"/>
       <ScrollProgress />
 
+      {/* 🖱️ Pixel mouse trail */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
+        <PixelTrail
+          gridSize={50}
+          trailSize={0.05}
+          maxAge={200}
+          interpolate={5}
+          color="#3fe6ff"
+        />
+      </div>
+
       {/* 🎬 Intro splash screen */}
       <AnimatePresence>
         {!introDone && (
@@ -445,7 +460,6 @@ export default function Portfolio() {
         darkMode={darkMode}
         setDarkMode={handleThemeToggle}
         activeSection={activeSection}
-        key={scrolledDeep ? 'visible' : 'hidden'}
       />
 
       {/* NAV */}
@@ -501,16 +515,12 @@ export default function Portfolio() {
                   <div className="hero-badge"><PxIcon name="star" size={12} /> Player File — Slot 01</div>
                 </motion.div>
 
-                <h1 className="hero-title">
-                  HOUTAROU<span className="gradient-accent">DES</span>
-                </h1>
-
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
+                  transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <p className="hero-sub"><CycleTypewriter /><span className="cursor-blink">|</span></p>
+                  <p className="hero-tagline"><CycleTypewriter /><span className="cursor-blink">|</span></p>
                 </motion.div>
 
                 <motion.div
@@ -625,17 +635,31 @@ export default function Portfolio() {
       {/* FEATURED */}
       {feat && (
         <RS className="section" variant="scale">
-          <div className="featured-card">
-            <div className="featured-glow"/>
-            <div className="featured-badge"><PxIcon name="trophy" size={10} /> MAIN QUEST <PxIcon name="trophy" size={10} /></div>
-            <h3 className="featured-title">{feat.title}</h3>
-            <p className="featured-desc">{feat.desc}</p>
-            <div className="featured-tags">{feat.tags.map(t=><span className="tag featured-tag" key={t}>{t}</span>)}</div>
-            <div className="featured-actions">
-              <a href={feat.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} /> Explore the Hub</a>
-              <a href={feat.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
-            </div>
-          </div>
+          <PixelTransition
+            firstContent={
+              <div className="featured-card">
+                <div className="featured-glow"/>
+                <div className="featured-badge"><PxIcon name="trophy" size={10} /> MAIN QUEST <PxIcon name="trophy" size={10} /></div>
+                <h3 className="featured-title">{feat.title}</h3>
+                <p className="featured-desc">{feat.desc}</p>
+                <div className="featured-tags">{feat.tags.map(t=><span className="tag featured-tag" key={t}>{t}</span>)}</div>
+              </div>
+            }
+            secondContent={
+              <div className="featured-card" style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'16px', padding:'32px'}}>
+                <div className="featured-badge"><PxIcon name="trophy" size={10} color="var(--gold)" /> UNLOCKED</div>
+                <div className="featured-actions">
+                  <a href={feat.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} /> Explore the Hub</a>
+                  <a href={feat.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
+                </div>
+              </div>
+            }
+            gridSize={10}
+            pixelColor="var(--gold)"
+            animationStepDuration={0.5}
+            className="featured-pixel-card"
+            style={{ width: '100%', maxWidth: '100%', border: '1px solid rgba(255,209,102,0.25)', borderRadius: '20px', overflow: 'hidden' }}
+          />
         </RS>
       )}
 
@@ -756,13 +780,14 @@ a{color:inherit;text-decoration:none}
 }
 .scroll-sidebar.visible {
   pointer-events: auto;
+  opacity: 1 !important;
 }
 .sidebar-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
-  padding: 24px 14px;
+  gap: 36px;
+  padding: 28px 16px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-left: none;
@@ -778,13 +803,13 @@ a{color:inherit;text-decoration:none}
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 .sidebar-nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 12px;
+  gap: 14px;
+  padding: 16px 14px;
   border-radius: 10px;
   color: var(--dim);
   transition: all 0.3s var(--ease-out);
@@ -815,7 +840,7 @@ a{color:inherit;text-decoration:none}
 .sidebar-nav-label {
   display: none;
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.5px;
   white-space: nowrap;
@@ -825,14 +850,14 @@ a{color:inherit;text-decoration:none}
     display: inline;
   }
   .sidebar-inner {
-    padding: 28px 20px;
-    gap: 36px;
+    padding: 32px 20px;
+    gap: 40px;
   }
   .sidebar-nav {
-    gap: 10px;
+    gap: 12px;
   }
   .sidebar-nav-item {
-    padding: 14px 16px;
+    padding: 16px 18px;
   }
 }
 .sidebar-bottom {
@@ -1122,14 +1147,14 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
   margin-bottom: 24px;
   background: rgba(63,230,255,0.04);
 }
-.hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  letter-spacing: -2px;
-  line-height: 1.1;
+.hero-tagline {
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.4;
   margin-bottom: 20px;
-  text-transform: uppercase;
   color: var(--text);
+  min-height: 2.5em;
 }
 .gradient-accent {
   background: linear-gradient(135deg, var(--magenta), var(--cyan));
