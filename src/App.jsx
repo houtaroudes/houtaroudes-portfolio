@@ -1239,7 +1239,7 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
   letter-spacing: 0.15em;
   margin-top: -2px;
 }
-.pixel-typewriter {
+.hero-tagline.pixel-typewriter {
   font-family: var(--font-display);
   font-size: clamp(0.65rem, 1.2vw, 0.85rem);
   line-height: 1.6;
