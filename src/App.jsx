@@ -259,76 +259,14 @@ function PixelLoader({ onDone }) {
 }
 
 /* =============================================================
-   💬 Floating chat widget — sends messages via email
-   ============================================================= */
-function ChatWidget() {
-  const [open, setOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [sent, setSent] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const body = `Hi Houtarou!%0A%0AFrom: ${encodeURIComponent(name)}%0AEmail: ${encodeURIComponent(email)}%0A%0A${encodeURIComponent(message)}`;
-    window.location.href = `mailto:houtaroudes@gmail.com?subject=Portfolio%20Chat%20from%20${encodeURIComponent(name)}&body=${body}`;
-    setSent(true);
-    setTimeout(() => { setOpen(false); setSent(false); setName(''); setEmail(''); setMessage(''); }, 2000);
-  };
-
-  return (
-    <>
-      <motion.button
-        className="chat-fab"
-        onClick={() => setOpen(!open)}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        aria-label="Chat"
-      >
-        {open ? <PxIcon name="close" size={14} /> : <span style={{fontSize:'16px'}}>💬</span>}
-      </motion.button>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className="chat-panel"
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="chat-header">
-              <PxIcon name="star" size={10} color="var(--cyan)" />
-              <span>Send me a message</span>
-            </div>
-            {sent ? (
-              <div className="chat-sent">✓ Message ready! Check your email client.</div>
-            ) : (
-              <form className="chat-form" onSubmit={handleSubmit}>
-                <input className="chat-input" placeholder="Your name" value={name} onChange={e => setName(e.target.value)} required />
-                <input className="chat-input" type="email" placeholder="Your email" value={email} onChange={e => setEmail(e.target.value)} required />
-                <textarea className="chat-input chat-textarea" placeholder="Your message..." value={message} onChange={e => setMessage(e.target.value)} required rows={3} />
-                <motion.button type="submit" className="btn primary chat-send" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <PxIcon name="play" size={10} color="var(--void)" /> Send
-                </motion.button>
-              </form>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
-}
-
-/* =============================================================
-   🔈 Simple hover sound synth
+   🔈 Pixel blip hover sound
    ============================================================= */
 function useHoverSound() {
   const audioRef = useRef(null);
   useEffect(() => {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    audioRef.current = new AudioCtx();
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    audioRef.current = new AC();
     return () => { if (audioRef.current) audioRef.current.close(); };
   }, []);
 
@@ -339,14 +277,15 @@ function useHoverSound() {
       if (ctx.state === 'suspended') ctx.resume();
       const o = ctx.createOscillator();
       const g = ctx.createGain();
-      o.type = 'sine';
-      o.frequency.setValueAtTime(880, ctx.currentTime);
-      o.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.08);
-      g.gain.setValueAtTime(0.04, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      o.type = 'square';
+      o.frequency.setValueAtTime(660, ctx.currentTime);
+      o.frequency.setValueAtTime(880, ctx.currentTime + 0.04);
+      o.frequency.setValueAtTime(1100, ctx.currentTime + 0.08);
+      g.gain.setValueAtTime(0.03, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
       o.connect(g).connect(ctx.destination);
       o.start(ctx.currentTime);
-      o.stop(ctx.currentTime + 0.15);
+      o.stop(ctx.currentTime + 0.12);
     } catch {}
   }, []);
 
@@ -775,9 +714,16 @@ export default function Portfolio() {
           <div className="eyebrow" style={{textAlign:"center"}}><PxIcon name="link" size={14} /> Multiplayer Lobby</div>
           <h2 className="section-title" style={{textAlign:"center"}}>Let's Build Something <span className="accent">Together</span></h2>
           <p className="section-desc" style={{textAlign:"center",marginBottom:24}}>Open for freelance gigs, school projects, or just talking shop about pixel art and web dev.</p>
-          <div className="hero-actions" style={{justifyContent:"center"}}>
+          <div className="hero-actions" style={{justifyContent:"center",flexDirection:'column',alignItems:'center',gap:'16px'}}>
             <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn primary"><IconGithub s={15}/> GitHub Profile</a>
-            <a href="mailto:houtaroudes@gmail.com" className="btn"><IconMail s={15}/> houtaroudes@gmail.com</a>
+            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" style={{display:'flex',flexDirection:'column',gap:'10px',width:'100%',maxWidth:'400px'}}>
+              <input type="text" name="name" placeholder="Your name" className="fs-input" required />
+              <input type="email" name="email" placeholder="Your email" className="fs-input" required />
+              <textarea name="message" placeholder="Your message..." className="fs-input fs-textarea" required rows={3}></textarea>
+              <input type="hidden" name="_subject" value="New portfolio message!" />
+              <input type="text" name="_gotcha" style={{display:'none'}} />
+              <button type="submit" className="btn primary"><PxIcon name="play" size={12} color="var(--void)" /> Send Message</button>
+            </form>
           </div>
         </div>
       </RS>
@@ -794,7 +740,6 @@ export default function Portfolio() {
     <AnimatePresence>
       {modalProject && <ProjectModal project={modalProject} onClose={()=>setModalProject(null)} />}
     </AnimatePresence>
-    <ChatWidget />
     <ScrollToTop />
   </>);
 }
@@ -1280,60 +1225,8 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
   justify-content: center;
   flex-wrap: wrap;
 }
-/* ===== 💬 Chat widget ===== */
-.chat-fab {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 55;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--cyan);
-  color: var(--void);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(63,230,255,0.3);
-  transition: box-shadow 0.3s var(--ease-out);
-}
-.chat-fab:hover {
-  box-shadow: 0 6px 28px rgba(63,230,255,0.45);
-}
-.chat-panel {
-  position: fixed;
-  bottom: 80px;
-  right: 24px;
-  z-index: 55;
-  width: 320px;
-  max-width: calc(100vw - 48px);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-}
-[data-theme="light"] .chat-panel {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-}
-.chat-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-display);
-  font-size: 10px;
-  letter-spacing: 1px;
-  color: var(--text);
-  margin-bottom: 16px;
-}
-.chat-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.chat-input {
+/* ===== 📝 Formspree form styles ===== */
+.fs-input {
   width: 100%;
   padding: 10px 12px;
   border-radius: 8px;
@@ -1345,25 +1238,14 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
   outline: none;
   transition: border-color 0.3s var(--ease-out);
 }
-.chat-input:focus {
+.fs-input:focus {
   border-color: var(--cyan);
 }
-.chat-textarea {
+.fs-textarea {
   resize: vertical;
-  min-height: 60px;
+  min-height: 80px;
 }
-.chat-send {
-  width: 100%;
-  justify-content: center;
-}
-.chat-sent {
-  text-align: center;
-  color: var(--cyan);
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  padding: 20px 0;
-}
-[data-theme="light"] .chat-input {
+[data-theme="light"] .fs-input {
   background: white;
   border-color: rgba(0,0,0,0.12);
 }
