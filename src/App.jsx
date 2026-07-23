@@ -566,33 +566,37 @@ export default function Portfolio() {
               style={{ opacity: showContent ? 1 : 0 }}
             >
               <h1 className="hero-name hero-name-stacked">
-                <motion.div
-                  className="hero-name-float"
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+                <motion.span
+                  className="glitch"
+                  data-text="HOUTAROU"
+                  animate={{
+                    x: [0, 0, 3, -2, 0, 0],
+                  }}
+                  transition={{
+                    duration: 0.4,
+                    repeat: Infinity,
+                    repeatDelay: 4,
+                    ease: 'steps(3)',
+                  }}
                 >
-                  {/* HOUTAROU row */}
-                  <motion.span
-                    animate={{ letterSpacing: ['0px', '6px', '0px'] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                  >
-                    HOUTAROU
-                  </motion.span>
-                  {/* DES row */}
-                  <motion.span
-                    className="gradient-accent"
-                    animate={{
-                      textShadow: [
-                        '0 0 8px rgba(255,63,156,0.4)',
-                        '0 0 30px rgba(255,63,156,0.9)',
-                        '0 0 8px rgba(255,63,156,0.4)',
-                      ],
-                    }}
-                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    DES
-                  </motion.span>
-                </motion.div>
+                  HOUTAROU
+                </motion.span>
+                <motion.span
+                  className="gradient-accent glitch"
+                  data-text="DES"
+                  animate={{
+                    x: [0, 0, -3, 2, 0, 0],
+                  }}
+                  transition={{
+                    duration: 0.4,
+                    repeat: Infinity,
+                    repeatDelay: 4.5,
+                    ease: 'steps(3)',
+                    delay: 0.3,
+                  }}
+                >
+                  DES
+                </motion.span>
               </h1>
             </motion.div>
 
