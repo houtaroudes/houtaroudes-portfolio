@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback, createPortal } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useScroll, useInView } from "framer-motion";
 import PixelTrail from "./components/PixelTrail";
 import "./components/PixelTrail.css";
@@ -413,12 +413,11 @@ function ProjectModal({project,onClose}){
   useEffect(()=>{const h=e=>{if(e.key==='Escape')closeRef.current();};window.addEventListener('keydown',h);return()=>window.removeEventListener('keydown',h);},[]);
   useEffect(()=>{document.body.style.overflow='hidden';return()=>{document.body.style.overflow='';};},[]);
   if(!project)return null;
-  return createPortal(
-    <div style={{
-      position:'fixed',inset:0,zIndex:9999,
-      display:'flex',alignItems:'center',justifyContent:'center',padding:'24px',
-      background:'rgba(0,0,0,1)'
-    }} onClick={onClose}>
+  return <div style={{
+    position:'fixed',inset:0,zIndex:9999,
+    display:'flex',alignItems:'center',justifyContent:'center',padding:'24px',
+    background:'rgba(0,0,0,1)'
+  }} onClick={onClose}>
       <div onClick={e=>e.stopPropagation()} style={{
         background:'#111827',border:'2px solid #3fe6ff',borderRadius:'20px',
         padding:'36px 32px',maxWidth:'500px',width:'100%',position:'relative',
@@ -489,9 +488,7 @@ function ProjectModal({project,onClose}){
           ><PxIcon name="file" size={12} /> View Code</a>
         </div>
       </div>
-    </div>,
-    document.body
-  );
+    </div>;
 }
 
 /* =============================================================
