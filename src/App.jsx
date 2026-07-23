@@ -223,10 +223,12 @@ function PixelLoader({ onDone }) {
         }
         ctx.globalAlpha = 1;
 
+        const bootText = '> INITIALIZING PIXEL ENGINE...';
+        const chars = Math.floor(p * bootText.length);
         ctx.fillStyle = '#8489bd';
         ctx.font = '11px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
-        ctx.fillText('> INITIALIZING PIXEL ENGINE...', w / 2, h - 70);
+        ctx.fillText(bootText.slice(0, Math.max(chars, 1)), w / 2, h - 70);
         ctx.fillStyle = 'rgba(132,137,189,0.15)';
         ctx.fillRect(w / 2 - 120, h - 50, 240, 3);
         ctx.fillStyle = '#3fe6ff';
