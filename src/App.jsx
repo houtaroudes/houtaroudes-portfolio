@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
 
 /* =============================================================
-   PIXEL ICON SYSTEM — hand-crafted pixel art SVGs
+   🎨 Pixel icons — all hand-drawn by me
    ============================================================= */
 const PIXEL_ART = {
   star     :{c:"#ffd166",w:12,h:12,p:[2,0,3,0,1,1,2,1,3,1,4,1,0,2,1,2,2,2,3,2,4,2,5,2,0,3,1,3,2,3,3,3,4,3,5,3,1,4,2,4,3,4,4,4,2,5,3,5]},
@@ -28,6 +29,8 @@ const PIXEL_ART = {
   mountain :{c:"#4ade80",w:16,h:12,p:[0,9,1,8,9,10,10,9,2,7,3,6,8,8,9,7,10,8,4,5,5,4,6,5,7,6,8,7,3,5,7,5,2,6,8,6,0,10,1,9,2,8,3,7,4,6,5,5,6,6,7,7,8,8,9,9,10,10,11,9,12,8,13,7,14,6,15,5,11,8,12,7,13,6,14,5,15,4,11,9,12,8,13,7,14,6,15,5,14,4,15,3]},
   cloud    :{c:"#8489bd",w:16,h:10,p:[2,3,3,3,4,3,5,3,6,3,1,4,2,4,3,4,4,4,5,4,6,4,7,4,0,5,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,1,6,2,6,3,6,4,6,5,6,6,6,7,6,2,7,3,7,4,7,5,7,6,7,10,4,11,4,12,4,13,4,9,5,10,5,11,5,12,5,13,5,14,5,10,6,11,6,12,6,13,6,11,7,12,7]},
   expand   :{c:"#3fe6ff",w:10,h:10,p:[0,0,1,0,2,0,0,1,0,2,7,0,8,0,9,0,9,1,9,2,0,7,0,8,0,9,1,9,2,9,7,9,8,9,9,9,9,8,9,7]},
+  compass  :{c:"#3fe6ff",w:12,h:12,p:[5,0,6,0,4,1,5,1,6,1,7,1,3,2,7,2,2,3,3,3,7,3,8,3,1,4,2,4,3,4,4,4,5,4,6,4,7,4,8,4,9,4,0,5,1,5,9,5,10,5,0,6,1,6,9,6,10,6,1,7,2,7,8,7,9,7,2,8,3,8,7,8,8,8,3,9,4,9,5,9,6,9,7,9,4,10,5,10,6,10]},
+  clock    :{c:"#ffd166",w:12,h:12,p:[5,0,6,0,4,1,5,1,6,1,7,1,3,2,7,2,2,3,3,3,7,3,8,3,1,4,2,4,8,4,9,4,0,5,1,5,5,5,9,5,10,5,0,6,1,6,5,6,9,6,10,6,1,7,2,7,5,7,8,7,9,7,2,8,3,8,7,8,8,8,3,9,4,9,5,9,6,9,7,9,4,10,5,10,6,10]},
 };
 
 const PS = 2;
@@ -40,14 +43,14 @@ function PxIcon({name,size=18,color}) {
 }
 
 /* =============================================================
-   ICON HELPERS (GitHub, Mail)
+   📦 Extra icons (GitHub, Mail)
    ============================================================= */
 const iconProps = (s,c) => ({width:s,height:s,viewBox:"0 0 24 24",fill:"none",stroke:c,strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round"});
 function IconGithub({s=18,c="currentColor"}){return <svg {...iconProps(s,c)}><path d="M9 19c-4 1.2-4-2.1-5.5-2.5M17 22v-3.2c0-.9-.3-1.5-.6-1.8 2.1-.2 4.3-1 4.3-4.7 0-1-.4-1.9-1-2.6.1-.3.4-1.3-.1-2.7 0 0-.9-.3-2.9 1a10 10 0 00-5.4 0c-2-1.3-2.9-1-2.9-1-.5 1.4-.2 2.4-.1 2.7-.6.7-1 1.6-1 2.6 0 3.7 2.2 4.5 4.3 4.7-.3.3-.5.7-.6 1.4V22"/></svg>}
 function IconMail({s=18,c="currentColor"}){return <svg {...iconProps(s,c)}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>}
 
 /* =============================================================
-   PIXEL BACKGROUND
+   🌌 Stars, mountains & clouds on canvas
    ============================================================= */
 function PixelBackground() {
   const ref=useRef(null);
@@ -67,7 +70,7 @@ function PixelBackground() {
       for(const s of stars){const tw=0.5+0.5*Math.sin(time*0.002+s.phase);ctx.globalAlpha=s.a*tw;ctx.fillStyle='#eef0ff';ctx.fillRect(Math.floor(s.x),Math.floor(s.y),s.s,s.s);s.y+=s.sp*0.1;if(s.y>h*0.4){s.y=0;s.x=Math.random()*w;}}
       ctx.globalAlpha=1;
       const mc=['#0f1535','#151b45','#1c2355']; for(let i=0;i<3;i++){const mw=w*0.8,mh=50+i*20,mx=(w-mw)/2+Math.sin(offset*0.005+i)*20;drawMountain(mx,h-80-i*15,mw,mh,mc[i]);drawMountain(mx-mw*0.3,h-80-i*15,mw*0.5,mh*0.6,mc[i]);drawMountain(mx+mw*0.5,h-80-i*15,mw*0.6,mh*0.7,mc[i]);}
-      for(const c of clouds){ctx.fillStyle='rgba(132,137,189,0.12)';const cx=Math.floor(c.x),cy=Math.floor(c.y),cw=Math.floor(c.w2),ch=Math.floor(c.h2);ctx.fillRect(cx-cw/2,cy-ch/2,cw,ch);ctx.fillRect(cx-cw/2+10,cy-ch/2-4,cw-20,ch-2);ctx.fillRect(cx-cw/2+20,cy-ch/2-8,cw-40,ch-4);c.x+=c.sp;if(c.x>w+c.w2)c.x=-c.w2;}
+      for(const c of clouds){ctx.fillStyle='rgba(132,137,189,0.12)';const cx=Math.floor(c.x),cy=Math.floor(c.y);const cw=c.w2,ch=c.h2;ctx.fillRect(cx-cw/2,cy-ch/2,cw,ch);ctx.fillRect(cx-cw/2+10,cy-ch/2-4,cw-20,ch-2);ctx.fillRect(cx-cw/2+20,cy-ch/2-8,cw-40,ch-4);c.x+=c.sp;if(c.x>w+cw)c.x=-cw;}
       ctx.fillStyle='#070911';ctx.fillRect(0,h-16,w,16);ctx.fillStyle='rgba(63,230,255,0.03)';ctx.fillRect(0,h-16,w,1);
       offset++; anim=requestAnimationFrame(animate);
     }
@@ -80,7 +83,7 @@ function PixelBackground() {
 }
 
 /* =============================================================
-   PIXEL RAIN
+   🌧️ Falling pixel rain effect
    ============================================================= */
 function PixelRain() {
   const ref=useRef(null);
@@ -103,11 +106,132 @@ function PixelRain() {
     const w=()=>{rs();init();}; window.addEventListener("resize",w);
     return()=>{cancelAnimationFrame(a);window.removeEventListener("resize",w);};
   },[]);
-  return <canvas ref={ref} style={{position:"fixed",inset:0,zIndex:1,pointerEvents:"none",opacity:0.2}} aria-hidden="true" />;
+  return <canvas ref={ref} style={{position:"fixed",inset:0,zIndex:1,pointerEvents:"none",opacity:0.15}} aria-hidden="true" />;
 }
 
 /* =============================================================
-   DATA
+   🕐 Live clock — updates every second
+   ============================================================= */
+function RealtimeClock({className=""}) {
+  const [time, setTime] = useState(new Date());
+  useEffect(() => {
+    const t = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <div className={`clock-display ${className}`}>
+      <PxIcon name="clock" size={10} color="var(--cyan)" />
+      <span>{time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+    </div>
+  );
+}
+
+/* =============================================================
+   🎬 Intro splash — name starts center then slides left
+   ============================================================= */
+function IntroOverlay({onDone}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="intro-overlay"
+    >
+      <motion.div
+        layoutId="main-title"
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="intro-title font-display"
+      >
+        <span className="glitch" data-text="HOUTAROU">HOUTAROU</span>
+        <span className="glitch accent-glow" data-text="DES">DES</span>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* =============================================================
+   📌 Sidebar — shows up when you scroll down
+   ============================================================= */
+function ScrollSidebar({scrolled, darkMode, setDarkMode, activeSection, scrolledDeep}) {
+  const { scrollYProgress } = useScroll();
+  const sidebarOpacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
+  const sidebarX = useTransform(scrollYProgress, [0, 0.08], [-80, 0]);
+
+  const navItems = [
+    {id:"hero", label:"Home", icon:"star"},
+    {id:"projects", label:"Projects", icon:"note"},
+    {id:"skills", label:"Skills", icon:"wrench"},
+    {id:"contact", label:"Contact", icon:"link"},
+  ];
+
+  return (
+    <motion.aside
+      style={{ opacity: sidebarOpacity, x: sidebarX }}
+      className={`scroll-sidebar ${scrolledDeep ? 'visible' : ''}`}
+    >
+      <div className="sidebar-inner">
+        {/* Mini logo */}
+        <div className="sidebar-logo">
+          <PxIcon name="compass" size={16} color="var(--cyan)" />
+        </div>
+
+        {/* Nav */}
+        <nav className="sidebar-nav">
+          {navItems.map(item => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={`sidebar-nav-item ${activeSection === item.id ? 'active' : ''}`}
+              title={item.label}
+            >
+              <PxIcon name={item.icon} size={14} color={activeSection === item.id ? "var(--cyan)" : undefined} />
+              <span className="sidebar-nav-label">{item.label}</span>
+            </a>
+          ))}
+        </nav>
+
+        {/* Bottom section */}
+        <div className="sidebar-bottom">
+          <RealtimeClock className="sidebar-clock" />
+          
+          <button
+            className="sidebar-theme-btn"
+            onClick={() => setDarkMode(!darkMode)}
+            title={darkMode ? "Light Mode" : "Dark Mode"}
+          >
+            <motion.svg
+              width="16" height="16" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" strokeWidth="2"
+              animate={{ rotate: darkMode ? 0 : 180 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+            >
+              {darkMode
+                ? <><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></>
+                : <><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></>}
+            </motion.svg>
+          </button>
+        </div>
+      </div>
+    </motion.aside>
+  );
+}
+
+/* =============================================================
+   📊 Progress bar at the top
+   ============================================================= */
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  return (
+    <motion.div
+      className="scroll-progress-bar"
+      style={{ scaleX: scrollYProgress }}
+    />
+  );
+}
+
+/* =============================================================
+   📁 Projects, skills & filter data
    ============================================================= */
 const projects = [
   {id:1,title:"Motion Website",desc:"A front-end inspiration hub for exploring layout and animation ideas.",tags:["HTML","CSS","JS"],demo:"https://motion-website-des.vercel.app",code:"https://github.com/houtaroudes/motion-website",type:"Full Stack",year:"2025"},
@@ -123,15 +247,15 @@ const categories = [
 ];
 
 /* =============================================================
-   HOOKS
+   🪝 Custom React hooks
    ============================================================= */
-function useReveal(t=0.1){const r=useRef(null);const[v,s]=useState(false);useEffect(()=>{const e=r.current;if(!e)return;const o=new IntersectionObserver(([n])=>{if(n.isIntersecting){s(true);o.unobserve(e);}},{threshold:t});o.observe(e);return()=>o.disconnect();},[t]);return[r,v];}
+function useReveal(t=0.1, deps=[]){const r=useRef(null);const[v,s]=useState(false);useEffect(()=>{const e=r.current;if(!e)return;const o=new IntersectionObserver(([n])=>{if(n.isIntersecting){s(true);o.unobserve(e);}},{threshold:t});o.observe(e);return()=>o.disconnect();},[t,...deps]);return[r,v];}
 function RS({children,className="",variant="up",...p}){const[r,v]=useReveal(0.08);return <section ref={r} className={`reveal-section reveal-${variant} ${v?"revealed":""} ${className}`} {...p}>{children}</section>;}
 function useActiveSection(ids){const[a,set]=useState(ids[0]||"");useEffect(()=>{const o=new IntersectionObserver((e)=>{for(const n of e){if(n.isIntersecting){set(n.target.id);break;}}},{rootMargin:"-40% 0px -55% 0px",threshold:0});ids.forEach(id=>{const el=document.getElementById(id);if(el)o.observe(el);});return()=>o.disconnect();},[ids]);return a;}
 function useTypewriter(text,speed=35,delay=600){const[d,set]=useState("");const[s,setS]=useState(false);useEffect(()=>{const t=setTimeout(()=>setS(true),delay);return()=>clearTimeout(t)},[delay]);useEffect(()=>{if(!s)return;let i=0;const iv=setInterval(()=>{i++;set(text.slice(0,i));if(i>=text.length)clearInterval(iv)},speed);return()=>clearInterval(iv)},[s,text,speed]);return d;}
 
 /* =============================================================
-   COUNT-UP HOOK
+   🔢 Animated number counter
    ============================================================= */
 function CountUpValue({target,suffix='',duration=1500,delay=300}){
   const[c,set]=useState(0);const[r,setR]=useState(false);const ref=useRef(null);
@@ -141,15 +265,20 @@ function CountUpValue({target,suffix='',duration=1500,delay=300}){
 }
 
 /* =============================================================
-   PROJECT MODAL
+   🪟 Project detail popup modal
    ============================================================= */
 function ProjectModal({project,onClose}){
   const closeRef=useRef(onClose);closeRef.current=onClose;
   useEffect(()=>{const h=e=>{if(e.key==='Escape')closeRef.current();};window.addEventListener('keydown',h);return()=>window.removeEventListener('keydown',h);},[]);
   useEffect(()=>{document.body.style.overflow='hidden';return()=>{document.body.style.overflow='';};},[]);
   if(!project)return null;
-  return <div className="modal-overlay" onClick={onClose}>
-    <div className="modal-content" onClick={e=>e.stopPropagation()}>
+  return <motion.div className="modal-overlay" onClick={onClose}
+    initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:0.2}}
+  >
+    <motion.div className="modal-content" onClick={e=>e.stopPropagation()}
+      initial={{opacity:0,scale:0.9,y:20}} animate={{opacity:1,scale:1,y:0}}
+      transition={{duration:0.35,ease:[0.34,1.56,0.64,1]}}
+    >
       <button className="modal-close-btn" onClick={onClose} aria-label="Close modal"><PxIcon name="close" size={14} /></button>
       <div className="modal-header">
         <span className="modal-year">{project.year}</span>
@@ -166,189 +295,347 @@ function ProjectModal({project,onClose}){
         {project.demo&&<a href={project.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} color="var(--void)" /> Live Demo</a>}
         <a href={project.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
       </div>
-    </div>
-  </div>;
+    </motion.div>
+  </motion.div>;
 }
 
 /* =============================================================
-   PIXEL DIVIDER
+   ➕ Pixel-art section divider
    ============================================================= */
 function PixelDivider(){return <div className="pixel-divider" aria-hidden="true"><div className="divider-glow-track"><span className="divider-glow-dot" /></div><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span></div>;}
 
 /* =============================================================
-   SCROLL TO TOP
+   ⬆️ Floating back-to-top button
    ============================================================= */
-function ScrollToTop(){const[v,s]=useState(false);useEffect(()=>{const h=()=>s(window.scrollY>400);window.addEventListener('scroll',h,{passive:true});return()=>window.removeEventListener('scroll',h);},[]);return <button className={`scroll-top-btn ${v?'visible':''}`} onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} aria-label="Scroll to top"><PxIcon name="star" size={16} /></button>;}
+function ScrollToTop(){const[v,s]=useState(false);useEffect(()=>{const h=()=>s(window.scrollY>400);window.addEventListener('scroll',h,{passive:true});return()=>window.removeEventListener('scroll',h);},[]);return <motion.button className={`scroll-top-btn ${v?'visible':''}`} onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} aria-label="Scroll to top"
+  animate={{scale:v?1:0,opacity:v?1:0}} transition={{duration:0.3,ease:"backOut"}}
+><PxIcon name="star" size={16} /></motion.button>;}
 
 /* =============================================================
-   MAIN COMPONENT
+   👀 Scroll-triggered reveal animation
+   ============================================================= */
+function AttentionGrabber({children, className="", delay=0}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  return (
+    <div ref={ref} className={`attention-grabber ${className}`}>
+      <motion.div
+        initial={{ opacity: 0, y: 60, scale: 0.9 }}
+        animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+        transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {children}
+      </motion.div>
+    </div>
+  );
+}
+
+/* =============================================================
+   🏠 Main Portfolio component — everything comes together
    ============================================================= */
 export default function Portfolio() {
   const[activeCat,setActiveCat]=useState("all");
   const[scrolled,setScrolled]=useState(false);
+  const[scrolledDeep,setScrolledDeep]=useState(false);
   const[hovered,setHovered]=useState(null);
   const[darkMode,setDarkMode]=useState(()=>localStorage.getItem("theme")!=="light");
   const[modalProject,setModalProject]=useState(null);
+  const[introDone,setIntroDone]=useState(()=>{
+    try { return localStorage.getItem("introPlayed") === "true"; } catch { return false; }
+  });
+  const[showContent,setShowContent]=useState(introDone);
   const activeSection=useActiveSection(["hero","projects","skills","contact"]);
 
-  useEffect(()=>{document.documentElement.setAttribute("data-theme",darkMode?"dark":"light");localStorage.setItem("theme",darkMode?"dark":"light");},[darkMode]);
-  useEffect(()=>{const o=()=>setScrolled(window.scrollY>50);window.addEventListener("scroll",o,{passive:true});return()=>window.removeEventListener("scroll",o);},[]);
+  useEffect(()=>{
+    document.documentElement.setAttribute("data-theme",darkMode?"dark":"light");
+    localStorage.setItem("theme",darkMode?"dark":"light");
+    // Dispatch custom event for smooth theme transitions
+    window.dispatchEvent(new CustomEvent('themechange', {detail: {theme: darkMode ? 'dark' : 'light'}}));
+  },[darkMode]);
 
-  const typed=useTypewriter("Full-Stack Developer building pixel-perfect worlds, one commit at a time",30,800);
+  useEffect(()=>{
+    const o=()=>{
+      const y=window.scrollY;
+      setScrolled(y>50);
+      setScrolledDeep(y>200);
+    };
+    window.addEventListener("scroll",o,{passive:true});
+    return()=>window.removeEventListener("scroll",o);
+  },[]);
+
+  // Intro animation sequence
+  useEffect(()=>{
+    if(introDone) return;
+    const t1 = setTimeout(() => {
+      setShowContent(true);
+      const t2 = setTimeout(() => {
+        setIntroDone(true);
+        try { localStorage.setItem("introPlayed", "true"); } catch {}
+      }, 1000);
+      return () => clearTimeout(t2);
+    }, 1200);
+    return () => clearTimeout(t1);
+  },[introDone]);
+
+  const typed=useTypewriter("Inspiring becoming Full-Stack Developer — building pixel-perfect worlds, one commit at a time", 30, 900);
+
   const filtered=activeCat==="all"?projects:projects.filter(p=>p.type?.toLowerCase().replace(" ","")===activeCat);
   const feat=projects.find(p=>p.featured);
 
-  return (<><style>{CSS}</style><div id="app"><PixelBackground/><PixelRain/><div className="vignette"/><div className="scanlines"/>
+  const handleThemeToggle = useCallback(() => {
+    setDarkMode(prev => !prev);
+  }, []);
 
-    {/* NAV */}
-    <nav className={scrolled?"scrolled":""}>
-      <div className="nav-inner">
-        <a href="#" className="logo"><PxIcon name="star" size={20} /><span className="logo-text">Houtarou<span className="accent">Des</span></span></a>
-        <div className="nav-links">
-          {[
-            {id:"projects",label:"Projects"},
-            {id:"skills",label:"Skills"},
-            {id:"contact",label:"Contact"},
-          ].map(n=><a key={n.id} href={`#${n.id}`} className={activeSection===n.id?"nav-active":""}>{n.label}</a>)}
-        </div>
-        <button className="theme-toggle-btn" onClick={()=>setDarkMode(!darkMode)} title={darkMode?"Light Mode":"Dark Mode"}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{display:'block'}}>
-            {darkMode
-              ? <><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></>
-              : <><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></>}
-          </svg>
-        </button>
-      </div>
-    </nav>
+  return (<>
+    <style>{CSS}</style>
+    <div id="app">
+      <PixelBackground/>
+      <PixelRain/>
+      <div className="vignette"/>
+      <div className="scanlines"/>
+      <ScrollProgress />
 
-    {/* HERO */}
-    <header className="hero" id="hero">
-      <div className="hero-scan" aria-hidden="true"/>
-      <div className="hero-content">
-        <div className="hero-stagger" style={{'--stagger-i':0}}><div className="hero-badge"><PxIcon name="star" size={12} /> Player File — Slot 01</div></div>
-        <div className="hero-stagger" style={{'--stagger-i':1}}><h1 className="hero-title">HOUTAROU<span className="gradient-accent">DES</span></h1></div>
-        <div className="hero-stagger" style={{'--stagger-i':2}}><p className="hero-sub">{typed}<span className="cursor-blink">|</span></p></div>
-        <div className="hero-stagger" style={{'--stagger-i':3}}>
-          <div className="hero-stats">
-            <div className="hero-stat"><PxIcon name="bolt" size={20} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
-            <div className="hero-stat"><PxIcon name="diamond" size={20} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
-            <div className="hero-stat"><PxIcon name="star" size={20} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
-            <div className="hero-stat"><PxIcon name="diamond" size={20} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
+      {/* 🎬 Intro splash screen */}
+      <AnimatePresence>
+        {!introDone && (
+          <IntroOverlay onDone={() => {}} />
+        )}
+      </AnimatePresence>
+
+      {/* 📌 Sidebar that fades in on scroll */}
+      <ScrollSidebar
+        scrolled={scrolled}
+        scrolledDeep={scrolledDeep}
+        darkMode={darkMode}
+        setDarkMode={handleThemeToggle}
+        activeSection={activeSection}
+      />
+
+      {/* NAV */}
+      <motion.nav
+        className={scrolled ? "scrolled" : ""}
+        initial={{ y: introDone ? 0 : -80 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, delay: introDone ? 0 : 1.4, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <div className="nav-inner">
+          <a href="#" className="logo">
+            <PxIcon name="star" size={20} />
+            <span className="logo-text">Houtarou<span className="accent">Des</span></span>            </a>
+          <div className="nav-links">
+            {[
+              {id:"projects",label:"Projects"},
+              {id:"skills",label:"Skills"},
+              {id:"contact",label:"Contact"},
+            ].map(n=><a key={n.id} href={`#${n.id}`} className={activeSection===n.id?"nav-active":""}>{n.label}</a>)}
+          </div>
+          <div className="nav-right">
+            <RealtimeClock className="nav-clock" />
+            <motion.button
+              className="theme-toggle-btn"
+              onClick={()=>setDarkMode(!darkMode)}
+              title={darkMode?"Light Mode":"Dark Mode"}
+              whileHover={{ rotate: 15 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{display:'block'}}>
+                {darkMode
+                  ? <><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></>
+                  : <><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></>}
+              </svg>
+            </motion.button>
           </div>
         </div>
-        <div className="hero-stagger" style={{'--stagger-i':4}}>
-          <div className="hero-actions">
-            <a href="#projects" className="btn primary">View Projects</a>
-            <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn"><IconGithub s={15}/> GitHub</a>
-          </div>
+      </motion.nav>
+
+      {/* HERO */}
+      <header className="hero" id="hero">
+        <div className="hero-scan" aria-hidden="true"/>
+        <div className="hero-content">
+          {showContent && (
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="hero-badge"><PxIcon name="star" size={12} /> Player File — Slot 01</div>
+              </motion.div>
+
+              <motion.h1
+                className="hero-title"
+                layoutId="main-title"
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              >
+                HOUTAROU<span className="gradient-accent">DES</span>
+              </motion.h1>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                <p className="hero-sub">{typed}<span className="cursor-blink">|</span></p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+              >
+                <div className="hero-stats">
+                  <div className="hero-stat"><PxIcon name="bolt" size={20} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
+                  <div className="hero-stat"><PxIcon name="diamond" size={20} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
+                  <div className="hero-stat"><PxIcon name="star" size={20} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
+                  <div className="hero-stat"><PxIcon name="diamond" size={20} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+              >
+                <div className="hero-actions">
+                  <a href="#projects" className="btn primary">View Projects</a>
+                  <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn"><IconGithub s={15}/> GitHub</a>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </div>
+        <motion.div
+          className="scroll-hint"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+          aria-hidden="true"
+        >
+          <motion.span
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            SCROLL
+          </motion.span>
+        </motion.div>
+      </header>
+
+      {/* XP BAR */}
+      <div className="xp-bar">
+        <div className="xp-inner">
+          <div className="xp-info"><span className="xp-level">Lv. 3</span><span className="xp-label">Full-Stack Developer</span></div>
+          <div className="xp-track"><motion.div className="xp-fill" initial={{width:0}} whileInView={{width:"65%"}} viewport={{once:true}} transition={{duration:1.5,ease:"easeOut"}}/><span className="xp-text">4 / 6 projects shipped</span></div>
         </div>
       </div>
-      <div className="scroll-hint" aria-hidden="true"><span>SCROLL</span></div>
-    </header>
 
-    {/* XP BAR */}
-    <div className="xp-bar">
-      <div className="xp-inner">
-        <div className="xp-info"><span className="xp-level">Lv. 3</span><span className="xp-label">Full-Stack Developer</span></div>
-        <div className="xp-track"><div className="xp-fill" style={{width:"65%"}}/><span className="xp-text">4 / 6 projects shipped</span></div>
-      </div>
-    </div>
+      <PixelDivider />
 
-    <PixelDivider />
+      {/* PROJECTS */}
+      <RS className="section" id="projects" variant="up">
+        <div className="section-head">
+          <div className="eyebrow"><PxIcon name="note" size={14} /> Cartridge Library</div>
+          <h2 className="section-title">Project <span className="accent">Catalog</span></h2>
+          <p className="section-desc">Real builds from my GitHub — click to see the code or play a live demo.</p>
+        </div>
+        <div className="filter-bar">
+          {categories.map(c=><button key={c.id} className={`filter-btn ${activeCat===c.id?"active":""}`} onClick={()=>setActiveCat(c.id)} style={activeCat===c.id?{borderColor:c.color,color:c.color}:{}}><PxIcon name={c.icon} size={14} /><span>{c.label}</span></button>)}
+        </div>
+        <motion.div className="project-grid stagger-children" layout>
+          {filtered.map((p,i)=>(
+            <motion.article
+              layout
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className={`project-card ${p.featured?"featured":""}`} key={p.id}
+              onMouseEnter={()=>setHovered(p.id)} onMouseLeave={()=>setHovered(null)}
+            >
+              <div className="card-glow" style={{opacity:hovered===p.id?1:0,
+                background:`radial-gradient(400px circle at 50% 50%,${p.featured?"rgba(255,209,102,0.08)":"rgba(63,230,255,0.06)"},transparent)`}}/>
+              <div className="card-top">
+                <span className="card-year">{p.year}</span>
+                <span className="card-badge" style={{background:p.featured?"var(--gold)":"var(--cyan)",color:"var(--void)"}}>{p.type}</span>
+              </div>
+              <h3 className="card-title">{p.title}</h3>
+              <p className="card-desc">{p.desc}</p>
+              <div className="card-tags">{p.tags.map(t=><span className="tag" key={t}>{t}</span>)}</div>
+              <div className="card-actions">
+                <button className="card-link details-link" onClick={()=>setModalProject(p)}><PxIcon name="expand" size={12} /> Details</button>
+                {p.demo&&<a href={p.demo} target="_blank" rel="noopener" className="card-link demo-link"><PxIcon name="play" size={12} color="#ffd166" /> Live Demo</a>}
+                <a href={p.code} target="_blank" rel="noopener" className="card-link"><PxIcon name="file" size={12} /> View Code</a>
+              </div>
+            </motion.article>
+          ))}
+        </motion.div>
+        {filtered.length===0&&<div className="empty-state"><PxIcon name="search" size={24} /><p>No projects in this category yet.</p></div>}
+      </RS>
 
-    {/* PROJECTS */}
-    <RS className="section" id="projects" variant="up">
-      <div className="section-head">
-        <div className="eyebrow"><PxIcon name="note" size={14} /> Cartridge Library</div>
-        <h2 className="section-title">Project <span className="accent">Catalog</span></h2>
-        <p className="section-desc">Real builds from my GitHub — click to see the code or play a live demo.</p>
-      </div>
-      <div className="filter-bar">
-        {categories.map(c=><button key={c.id} className={`filter-btn ${activeCat===c.id?"active":""}`} onClick={()=>setActiveCat(c.id)} style={activeCat===c.id?{borderColor:c.color,color:c.color}:{}}><PxIcon name={c.icon} size={14} /><span>{c.label}</span></button>)}
-      </div>
-      <div className="project-grid stagger-children">
-        {filtered.map((p,i)=>(
-          <article className={`project-card ${p.featured?"featured":""}`} key={p.id}
-            style={{'--stagger-i':i}}
-            onMouseEnter={()=>setHovered(p.id)} onMouseLeave={()=>setHovered(null)}>
-            <div className="card-glow" style={{opacity:hovered===p.id?1:0,
-              background:`radial-gradient(400px circle at 50% 50%,${p.featured?"rgba(255,209,102,0.08)":"rgba(63,230,255,0.06)"},transparent)`}}/>
-            <div className="card-top">
-              <span className="card-year">{p.year}</span>
-              <span className="card-badge" style={{background:p.featured?"var(--gold)":"var(--cyan)",color:"var(--void)"}}>{p.type}</span>
+      <PixelDivider />
+
+      {/* SKILLS */}
+      <RS className="section" id="skills" variant="scale">
+        <div className="section-head"><div className="eyebrow"><PxIcon name="wrench" size={14} /> Equipment Loadout</div><h2 className="section-title">Skills & <span className="accent">Tools</span></h2><p className="section-desc">Technologies I use to build stuff.</p></div>
+        <div className="skills-grid stagger-children">{skillBadges.map((s,i)=><motion.div
+          className="skill-badge" key={s.name}
+          whileHover={{ scale: 1.1, y: -4 }}
+          transition={{ type: "spring", stiffness: 300 }}
+          style={{"--badge-color":s.color}}
+        ><PxIcon name="diamond" size={14} color={s.color} /><span className="skill-name">{s.name}</span></motion.div>)}</div>
+      </RS>
+
+      <PixelDivider />
+
+      {/* FEATURED */}
+      {feat && (
+        <RS className="section" variant="scale">
+          <div className="featured-card">
+            <div className="featured-glow"/>
+            <div className="featured-badge"><PxIcon name="trophy" size={10} /> MAIN QUEST <PxIcon name="trophy" size={10} /></div>
+            <h3 className="featured-title">{feat.title}</h3>
+            <p className="featured-desc">{feat.desc}</p>
+            <div className="featured-tags">{feat.tags.map(t=><span className="tag featured-tag" key={t}>{t}</span>)}</div>
+            <div className="featured-actions">
+              <a href={feat.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} /> Explore the Hub</a>
+              <a href={feat.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
             </div>
-            <h3 className="card-title">{p.title}</h3>
-            <p className="card-desc">{p.desc}</p>
-            <div className="card-tags">{p.tags.map(t=><span className="tag" key={t}>{t}</span>)}</div>
-            <div className="card-actions">
-              <button className="card-link details-link" onClick={()=>setModalProject(p)}><PxIcon name="expand" size={12} /> Details</button>
-              {p.demo&&<a href={p.demo} target="_blank" rel="noopener" className="card-link demo-link"><PxIcon name="play" size={12} color="#ffd166" /> Live Demo</a>}
-              <a href={p.code} target="_blank" rel="noopener" className="card-link"><PxIcon name="file" size={12} /> View Code</a>
-            </div>
-          </article>
-        ))}
-      </div>
-      {filtered.length===0&&<div className="empty-state"><PxIcon name="search" size={24} /><p>No projects in this category yet.</p></div>}
-    </RS>
+          </div>
+        </RS>
+      )}
 
-    <PixelDivider />
+      <PixelDivider />
 
-    {/* SKILLS */}
-    <RS className="section" id="skills" variant="scale">
-      <div className="section-head"><div className="eyebrow"><PxIcon name="wrench" size={14} /> Equipment Loadout</div><h2 className="section-title">Skills & <span className="accent">Tools</span></h2><p className="section-desc">Technologies I use to build stuff.</p></div>
-      <div className="skills-grid stagger-children">{skillBadges.map((s,i)=><div className="skill-badge" key={s.name} style={{'--stagger-i':i,"--badge-color":s.color}}><PxIcon name="diamond" size={14} color={s.color} /><span className="skill-name">{s.name}</span></div>)}</div>
-    </RS>
-
-    <PixelDivider />
-
-    {/* FEATURED */}
-    {feat && (
-      <RS className="section" variant="scale">
-        <div className="featured-card">
-          <div className="featured-glow"/>
-          <div className="featured-badge"><PxIcon name="trophy" size={10} /> MAIN QUEST <PxIcon name="trophy" size={10} /></div>
-          <h3 className="featured-title">{feat.title}</h3>
-          <p className="featured-desc">{feat.desc}</p>
-          <div className="featured-tags">{feat.tags.map(t=><span className="tag featured-tag" key={t}>{t}</span>)}</div>
-          <div className="featured-actions" style={{display:"flex",gap:12,marginTop:24,flexWrap:"wrap",justifyContent:"center",position:"relative",zIndex:1}}>
-            <a href={feat.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} /> Explore the Hub</a>
-            <a href={feat.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
+      {/* CONTACT */}
+      <RS className="section" id="contact" variant="right">
+        <div className="contact-card">
+          <div className="eyebrow" style={{textAlign:"center"}}><PxIcon name="link" size={14} /> Multiplayer Lobby</div>
+          <h2 className="section-title" style={{textAlign:"center"}}>Let's Build Something <span className="accent">Together</span></h2>
+          <p className="section-desc" style={{textAlign:"center",marginBottom:24}}>Open for freelance gigs, school projects, or just talking shop about pixel art and web dev.</p>
+          <div className="hero-actions" style={{justifyContent:"center"}}>
+            <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn primary"><IconGithub s={15}/> GitHub Profile</a>
+            <a href="mailto:houtaroudes@gmail.com" className="btn"><IconMail s={15}/> Send Email</a>
           </div>
         </div>
       </RS>
-    )}
 
-    <PixelDivider />
-
-    {/* CONTACT */}
-    <RS className="section" id="contact" variant="right">
-      <div className="contact-card">
-        <div className="eyebrow" style={{textAlign:"center"}}><PxIcon name="link" size={14} /> Multiplayer Lobby</div>
-        <h2 className="section-title" style={{textAlign:"center"}}>Let's Build Something <span className="accent">Together</span></h2>
-        <p className="section-desc" style={{textAlign:"center",marginBottom:24}}>Open for freelance gigs, school projects, or just talking shop about pixel art and web dev.</p>
-        <div className="hero-actions" style={{justifyContent:"center"}}>
-          <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn primary"><IconGithub s={15}/> GitHub Profile</a>
-          <a href="mailto:houtaroudes@gmail.com" className="btn"><IconMail s={15}/> Send Email</a>
+      {/* FOOTER */}
+      <footer>
+        <div className="footer-inner">
+          <div className="pixel-footer-art" aria-hidden="true"><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /></div>
+          <p className="footer-credits"><strong>HoutarouDes</strong> — Full-Stack Developer &copy; 2026</p>
+          <p className="footer-sub">4 projects &middot; 26+ exercises &middot; infinite curiosity</p>
         </div>
-      </div>
-    </RS>
-
-    {/* FOOTER */}
-    <footer>
-      <div className="footer-inner">
-        <div className="pixel-footer-art" aria-hidden="true"><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /></div>
-        <p className="footer-credits"><strong>HoutarouDes</strong> — Full-Stack Developer &copy; 2026</p>
-        <p className="footer-sub">4 projects &middot; 26+ exercises &middot; infinite curiosity</p>
-      </div>
-    </footer>
-  </div>
-  <ScrollToTop />
-  {modalProject && <ProjectModal project={modalProject} onClose={()=>setModalProject(null)} />}
+      </footer>
+    </div>
+    <AnimatePresence>
+      {modalProject && <ProjectModal project={modalProject} onClose={()=>setModalProject(null)} />}
+    </AnimatePresence>
+    <ScrollToTop />
   </>);
 }
 
 /* =============================================================
-   CSS
+   🎨 All styles in one place
    ============================================================= */
 const CSS = `
 #app{
@@ -357,7 +644,10 @@ const CSS = `
 --text:#eef0ff; --dim:#8489bd; --dimmer:#5a5f8c;
 --font-display:'Press Start 2P',monospace; --font-body:'Space Grotesk',sans-serif; --font-mono:'JetBrains Mono',monospace;
 --ease-out:cubic-bezier(0.22,1,0.36,1); --ease-in-out:cubic-bezier(0.65,0,0.35,1);
+--sidebar-width:64px;
+--transition-theme: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 background:var(--void); color:var(--text); font-family:var(--font-body); line-height:1.6; overflow-x:hidden; position:relative; min-height:100vh;
+transition: var(--transition-theme);
 }
 [data-theme="light"] #app{
 --void:#f4f4f8; --panel:#ffffff; --panel-2:#e8ecf4; --border:rgba(0,0,0,0.08);
@@ -370,13 +660,272 @@ background:var(--void); color:var(--text); font-family:var(--font-body); line-he
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}::selection{background:var(--cyan);color:var(--void)}
 a{color:inherit;text-decoration:none}
 
+/* ===== 🌓 Theme switch smoothness ===== */
+#app {
+  transition: var(--transition-theme);
+}
+.nav-inner, .project-card, .skill-badge, .featured-card, .contact-card, footer, .xp-bar, .filter-btn, .btn, .scroll-sidebar, .modal-content, .theme-toggle-btn {
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* ===== 🎬 Fullscreen intro overlay ===== */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--void);
+  pointer-events: none;
+}
+.intro-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  letter-spacing: -1px;
+  white-space: nowrap;
+  color: white;
+  text-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+.accent-glow {
+  color: var(--magenta) !important;
+  text-shadow: 0 0 15px rgba(255,77,242,0.6) !important;
+}
+
+/* ===== 📊 Top progress bar ===== */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan), var(--magenta), var(--gold));
+  transform-origin: 0%;
+  z-index: 60;
+}
+
+/* ===== 📌 Sidebar styles ===== */
+.scroll-sidebar {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0;
+}
+.scroll-sidebar.visible {
+  pointer-events: auto;
+}
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 10px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  backdrop-filter: blur(12px);
+  box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+}
+.sidebar-logo {
+  padding: 8px;
+  background: rgba(63,230,255,0.1);
+  border-radius: 8px;
+}
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  color: var(--dim);
+  transition: all 0.3s var(--ease-out);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+.sidebar-nav-item:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.05);
+}
+.sidebar-nav-item.active {
+  color: var(--cyan);
+  background: rgba(63,230,255,0.08);
+}
+.sidebar-nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: var(--cyan);
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0 0 8px var(--cyan);
+}
+.sidebar-nav-label {
+  display: none;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+@media (min-width: 900px) {
+  .sidebar-nav-label {
+    display: inline;
+  }
+  .sidebar-inner {
+    padding: 20px 16px;
+    gap: 28px;
+  }
+  .sidebar-nav {
+    gap: 6px;
+  }
+  .sidebar-nav-item {
+    padding: 10px 14px;
+  }
+}
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.sidebar-clock {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--dimmer);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.sidebar-theme-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--dim);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--ease-out);
+}
+.sidebar-theme-btn:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  background: rgba(63,230,255,0.08);
+}
+
+/* ===== 🕐 Clock in the nav bar ===== */
+.nav-clock {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--dimmer);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 /* Theme Toggle */
 .theme-toggle-btn{background:rgba(255,255,255,0.06);border:none;color:var(--dim);width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s var(--ease-out);flex-shrink:0}
-.theme-toggle-btn:hover{background:rgba(255,255,255,0.12);color:var(--cyan);transform:rotate(15deg)}
+.theme-toggle-btn:hover{background:rgba(255,255,255,0.12);color:var(--cyan)}
 [data-theme="light"] .theme-toggle-btn{background:rgba(0,0,0,0.04);color:var(--dim)}
 [data-theme="light"] .theme-toggle-btn:hover{background:rgba(0,0,0,0.08);color:var(--cyan)}
 
-/* ===== REVEAL / STAGGER SYSTEM ===== */
+/* ===== NAV ===== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 12px 0;
+  transition: all 0.4s var(--ease-out);
+}
+nav.scrolled {
+  background: rgba(7,9,17,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0;
+}
+[data-theme="light"] nav.scrolled {
+  background: rgba(244,244,248,0.9);
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.nav-links {
+  display: flex;
+  gap: 24px;
+}
+.nav-links a {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--dim);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s var(--ease-out);
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--cyan);
+  border-radius: 2px;
+  transition: all 0.3s var(--ease-out);
+  transform: translateX(-50%);
+}
+.nav-links a:hover::after,
+.nav-links a.nav-active::after { width: 80%; }
+.nav-links a.nav-active { color: var(--cyan); }
+.nav-links a:hover { color: var(--text); }
+
+/* ===== 👁️ Scroll reveal & stagger ===== */
 .reveal-section{opacity:0;transition:opacity .8s var(--ease-out),transform .8s var(--ease-out);will-change:opacity,transform}
 .reveal-up{transform:translateY(40px)}
 .reveal-left{transform:translateX(-40px)}
@@ -388,18 +937,7 @@ a{color:inherit;text-decoration:none}
 .revealed .stagger-children > *,
 .reveal-section.revealed .stagger-children > *{opacity:1;transform:translateY(0)}
 
-/* Hero stagger */
-.hero-stagger{animation:heroStaggerIn .7s var(--ease-out) both;animation-delay:calc(var(--stagger-i,0) * 0.12s + 0.2s)}
-:root{--wobble:cubic-bezier(0.34,1.56,0.64,1)}
-@keyframes heroStaggerIn{0%{opacity:0;transform:translateY(30px) scale(0.97)}100%{opacity:1;transform:translateY(0) scale(1)}}
-
-/* ===== ACTIVE NAV ===== */
-.nav-links a{position:relative;transition:color .3s var(--ease-out)}
-.nav-links a::after{content:'';position:absolute;bottom:-4px;left:50%;width:0;height:2px;background:var(--cyan);border-radius:2px;transition:all .3s var(--ease-out);transform:translateX(-50%)}
-.nav-links a:hover::after,.nav-links a.nav-active::after{width:80%}
-.nav-links a.nav-active{color:var(--cyan)}
-
-/* ===== DIVIDER ===== */
+/* ===== ➕ Pixel divider ===== */
 .pixel-divider{display:flex;align-items:center;justify-content:center;gap:12px;padding:20px 16px;position:relative;overflow:hidden}
 .pixel-divider>span{color:var(--cyan);font-size:14px;font-family:var(--font-mono);opacity:0.3;animation:pulse 2s var(--ease-in-out) infinite}
 .pixel-divider>span:nth-child(2){animation-delay:0s}
@@ -412,7 +950,7 @@ a{color:inherit;text-decoration:none}
 @keyframes dividerGlide{0%{left:-4px;opacity:0}10%{opacity:1}90%{opacity:1}100%{left:calc(100% + 4px);opacity:0}}
 @keyframes pulse{0%,100%{opacity:0.3}50%{opacity:1}}
 
-/* ===== SECTION LAYOUT ===== */
+/* ===== 📐 Section layout ===== */
 .section{padding:80px 24px;max-width:1100px;margin:0 auto;position:relative;z-index:2}
 .section-head{text-align:center;margin-bottom:36px}
 .eyebrow{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;padding:6px 14px;border:1px solid var(--border);border-radius:100px}
@@ -449,10 +987,8 @@ a{color:inherit;text-decoration:none}
 .details-link:hover{color:var(--magenta)!important}
 
 /* Scroll to top */
-.scroll-top-btn{position:fixed;bottom:24px;right:24px;z-index:50;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--panel);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;
-transition:all .4s var(--wobble);transform:translateY(80px);opacity:0;box-shadow:0 4px 16px rgba(0,0,0,0.3)}
-.scroll-top-btn.visible{transform:translateY(0);opacity:1}
-.scroll-top-btn:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-4px);box-shadow:0 4px 24px rgba(63,230,255,0.15)}
+.scroll-top-btn{position:fixed;bottom:24px;right:24px;z-index:50;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--panel);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.3)}
+.scroll-top-btn:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 4px 24px rgba(63,230,255,0.15)}
 
 /* Empty state */
 .empty-state{text-align:center;padding:48px 24px;color:var(--dimmer);display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -460,12 +996,10 @@ transition:all .4s var(--wobble);transform:translateY(80px);opacity:0;box-shadow
 
 /* ===== MODAL ===== */
 .modal-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;
-background:rgba(7,9,17,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-animation:modalOverlayIn .3s var(--ease-out) both}
+background:rgba(7,9,17,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
 [data-theme="light"] .modal-overlay{background:rgba(0,0,0,0.3)}
 .modal-content{background:var(--panel);border:1px solid var(--cyan);border-radius:16px;padding:32px 28px;max-width:520px;width:100%;position:relative;
-box-shadow:0 0 40px rgba(63,230,255,0.1),0 20px 60px rgba(0,0,0,0.4);
-animation:modalContentIn .35s var(--wobble) both;max-height:85vh;overflow-y:auto}
+box-shadow:0 0 40px rgba(63,230,255,0.1),0 20px 60px rgba(0,0,0,0.4);max-height:85vh;overflow-y:auto}
 .modal-close-btn{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);
 background:var(--void);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;
 transition:all .3s var(--ease-out)}
@@ -480,106 +1014,296 @@ transition:all .3s var(--ease-out)}
 .modal-tags{display:flex;gap:6px;flex-wrap:wrap}
 .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
 
-@keyframes modalOverlayIn{0%{opacity:0}100%{opacity:1}}
-@keyframes modalContentIn{0%{opacity:0;transform:scale(0.9) translateY(20px)}100%{opacity:1;transform:scale(1) translateY(0)}}
-
 /* Featured */
 .featured-card{position:relative;overflow:hidden;background:linear-gradient(160deg,#14102a 0%,var(--panel) 100%);border:1px solid rgba(255,209,102,0.25);border-radius:20px;padding:48px 32px;text-align:center;display:flex;flex-direction:column;align-items:center}
 .featured-glow{position:absolute;inset:0;background:radial-gradient(800px circle at 50% 50%,rgba(255,209,102,0.06),transparent);pointer-events:none}
 .featured-badge{font-family:var(--font-display);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(255,209,102,0.3);background:rgba(255,209,102,0.06);padding:6px 16px;border-radius:100px;margin-bottom:14px;position:relative;z-index:1;display:inline-flex;align-items:center;gap:6px}
 .featured-title{font-family:var(--font-display);font-size:20px;margin-bottom:12px;position:relative;z-index:1}
-.featured-desc{color:var(--dim);max-width:520px;font-size:.9rem;margin-bottom:16px;position:relative;z-index:1}
-.featured-tags{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
-.featured-tag{border-color:rgba(255,209,102,0.2);color:var(--gold);background:rgba(255,209,102,0.08)}
-
-/* Skills */
-.skills-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-.skill-badge{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:var(--panel);border:1px solid var(--border);border-radius:12px;transition:all .4s var(--ease-out)}
-.skill-badge:hover{transform:translateY(-4px);border-color:var(--badge-color,var(--cyan));box-shadow:0 4px 20px rgba(0,0,0,0.2)}
-.skill-name{font-weight:600;font-size:.9rem}
-
-/* Nav */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 24px;transition:all .4s var(--ease-out)}
-nav.scrolled{background:rgba(7,9,17,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:12px 24px;border-bottom:1px solid var(--border)}
-[data-theme="light"] nav.scrolled{background:rgba(244,244,248,0.9);border-color:var(--border)}
-.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:24px}
-.logo{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.logo-text{font-family:var(--font-display);font-size:13px;letter-spacing:-0.5px}
-.logo-text .accent{color:var(--magenta)}
-.nav-links{display:flex;gap:4px;flex:1;justify-content:center}
-.nav-links a{padding:6px 14px;border-radius:8px;color:var(--dim);font-size:.85rem;transition:color .3s var(--ease-out),background .3s var(--ease-out)}
-.nav-links a:hover{color:var(--text);background:rgba(255,255,255,0.04)}
-@media(max-width:640px){.nav-links a{padding:6px 10px;font-size:.8rem}.nav-links{gap:0}}
-
-/* Buttons */
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;font-family:var(--font-body);font-size:.85rem;transition:all .3s var(--ease-out)}
-.btn:hover{border-color:var(--cyan);transform:translateY(-2px);box-shadow:0 4px 20px rgba(63,230,255,0.1)}
-.btn.primary{background:var(--cyan);color:var(--void);border-color:var(--cyan);font-weight:600}
-.btn.primary:hover{background:#5cedff;box-shadow:0 4px 24px rgba(63,230,255,0.3);transform:translateY(-2px)}
-
-/* Hero */
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;padding:120px 24px 80px;text-align:center;overflow:hidden}
-.hero-scan{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0;animation:scanIn 4s var(--ease-in-out) infinite;pointer-events:none}
-.hero-content{position:relative;z-index:2;max-width:720px}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:100px;background:rgba(63,230,255,0.08);border:1px solid rgba(63,230,255,0.2);color:var(--cyan);font-family:var(--font-display);font-size:9px;letter-spacing:1px;margin-bottom:20px}
-.hero-title{font-family:var(--font-display);font-size:clamp(28px,5vw,48px);line-height:1.2;margin-bottom:16px;letter-spacing:-1px;text-shadow:0 0 14px var(--cyan-dim),0 0 40px rgba(255,63,156,0.15)}
-.gradient-accent{background:linear-gradient(135deg,var(--cyan),var(--magenta));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:1.05rem;color:var(--dim);max-width:520px;margin:0 auto 32px;line-height:1.6;min-height:2.8em}
-.cursor-blink{color:var(--cyan);animation:blink .8s steps(1) infinite}
-.hero-stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
-.hero-stat{display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--panel);border:1px solid var(--border);border-radius:12px;min-width:130px;transition:all .3s var(--ease-out)}
-.hero-stat:hover{border-color:var(--cyan);transform:translateY(-2px);box-shadow:0 4px 16px rgba(63,230,255,0.06)}
-.hero-stat-value{font-family:var(--font-display);font-size:18px;letter-spacing:1px}
-.hero-stat-label{font-size:.75rem;color:var(--dimmer);margin-top:2px}
-.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:4px}
-.scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--dimmer);font-family:var(--font-display);font-size:8px;letter-spacing:2px;animation:blink 2s steps(1) infinite;opacity:0.4}
-
-/* XP Bar */
-.xp-bar{position:relative;z-index:2;max-width:960px;margin:-20px auto 0;padding:0 24px}
-.xp-inner{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.xp-info{display:flex;align-items:center;gap:8px}
-.xp-level{font-family:var(--font-display);font-size:10px;color:var(--gold)}
-.xp-label{font-family:var(--font-mono);font-size:.7rem;color:var(--dim)}
-.xp-track{flex:1;min-width:140px;height:18px;background:var(--void);border:1px solid var(--border);border-radius:10px;position:relative;overflow:hidden}
-.xp-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--magenta));border-radius:10px;transition:width .8s ease;position:relative}
-.xp-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);animation:shimmer 2s infinite}
-.xp-text{font-family:var(--font-mono);font-size:.55rem;color:var(--text);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);white-space:nowrap}
+.featured-desc{color:var(--dim);font-size:.9rem;max-width:500px;margin-bottom:16px;position:relative;z-index:1}
+.featured-tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
+.featured-tag{background:rgba(255,209,102,0.08);border-color:rgba(255,209,102,0.2);color:var(--gold)}
+.featured-actions{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
 
 /* Contact */
-.contact-card{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:48px 32px;max-width:640px;margin:0 auto}
+.contact-card{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:48px 32px;max-width:600px;margin:0 auto}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;font-family:var(--font-body);font-size:.85rem;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--panel-2);color:var(--text);text-decoration:none;transition:all .3s var(--ease-out)}
+.btn:hover{transform:translateY(-2px);border-color:var(--cyan);color:var(--cyan);box-shadow:0 4px 16px rgba(63,230,255,0.1)}
+.btn.primary{background:var(--cyan);color:var(--void);border-color:var(--cyan)}
+.btn.primary:hover{background:rgba(63,230,255,0.8);box-shadow:0 4px 20px rgba(63,230,255,0.25)}
 
 /* Footer */
-footer{padding:40px 24px;text-align:center;position:relative;z-index:2}
-.footer-inner{max-width:600px;margin:0 auto}
-.pixel-footer-art{display:flex;gap:12px;justify-content:center;margin-bottom:16px}
-.footer-credits{font-size:.85rem;color:var(--dim);margin-bottom:4px}
-.footer-sub{font-size:.75rem;color:var(--dimmer)}
+footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
+.footer-inner{max-width:1100px;margin:0 auto;text-align:center}
+.pixel-footer-art{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+.footer-credits{font-family:var(--font-body);font-size:.85rem;color:var(--text);margin-bottom:4px}
+.footer-sub{font-size:.75rem;color:var(--dimmer);font-family:var(--font-mono)}
 
-/* Background effects */
-.vignette{position:fixed;inset:0;pointer-events:none;z-index:1;
-background:radial-gradient(ellipse at center,transparent 50%,rgba(7,9,17,0.6) 100%)}
-[data-theme="light"] .vignette{background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.04) 100%)}
-.scanlines{position:fixed;inset:0;pointer-events:none;z-index:2;
-background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px)}
-
-/* Keyframes */
-@keyframes scanIn{0%{top:0;opacity:0}10%{opacity:1}50%{top:60%;opacity:0.6}90%{opacity:1}100%{top:100%;opacity:0}}
-@keyframes blink{50%{opacity:0}}
-@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-
-/* Reduced motion */
-@media(prefers-reduced-motion:reduce){
-*,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;transition-duration:0s!important}
-.hero-stagger{animation:none!important;opacity:1!important;transform:none!important}
-.reveal-section{opacity:1!important;transform:none!important}
-.stagger-children>*{opacity:1!important;transform:none!important}
+/* ===== HERO SECTION ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  padding: 80px 24px;
+}
+.hero-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(63,230,255,0.015) 2px,
+    rgba(63,230,255,0.015) 4px
+  );
+}
+.hero-content {
+  max-width: 800px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  padding: 8px 16px;
+  border: 1px solid var(--cyan-dim);
+  border-radius: 100px;
+  margin-bottom: 24px;
+  background: rgba(63,230,255,0.04);
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  letter-spacing: -2px;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  color: white;
+}
+.gradient-accent {
+  background: linear-gradient(135deg, var(--magenta), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  color: var(--dim);
+  max-width: 600px;
+  margin: 0 auto 36px;
+  line-height: 1.6;
+}
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+  color: var(--cyan);
+  font-weight: 100;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+.hero-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+.hero-stat-value {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--text);
+}
+.hero-stat-label {
+  font-size: 0.7rem;
+  color: var(--dimmer);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--dimmer);
 }
 
-/* Responsive */
-@media(max-width:768px){
-.project-grid{grid-template-columns:1fr}
-.hero-stats{gap:12px}
-.hero-stat{min-width:100px;padding:10px 16px}
-.section{padding:48px 16px}
+/* ===== XP BAR ===== */
+.xp-bar {
+  padding: 16px 24px;
+  position: relative;
+  z-index: 2;
+}
+.xp-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.xp-info {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.xp-level {
+  font-family: var(--font-display);
+  font-size: 10px;
+  color: var(--cyan);
+  letter-spacing: 1px;
+}
+.xp-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--dimmer);
+}
+.xp-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--magenta));
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(63,230,255,0.3);
+}
+.xp-text {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text);
+}
+
+/* ===== SKILLS ===== */
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+.skill-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  cursor: default;
+  transition: all 0.3s var(--ease-out);
+}
+.skill-badge:hover {
+  border-color: var(--badge-color, var(--cyan));
+  box-shadow: 0 4px 20px rgba(var(--badge-color, 63,230,255), 0.1);
+}
+.skill-name {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ===== ⚡ Glitch text effect ===== */
+.glitch {
+  position: relative;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+.glitch::before {
+  color: var(--cyan);
+  z-index: -1;
+  animation: glitch-anim-1 2s infinite linear alternate-reverse;
+}
+.glitch::after {
+  color: var(--magenta);
+  z-index: -2;
+  animation: glitch-anim-2 3s infinite linear alternate-reverse;
+}
+@keyframes glitch-anim-1 {
+  0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
+  20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+  40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
+  60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+  80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 1px); }
+  100% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -1px); }
+}
+@keyframes glitch-anim-2 {
+  0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, 1px); }
+  20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px, -1px); }
+  40% { clip-path: inset(70% 0 10% 0); transform: translate(2px, 2px); }
+  60% { clip-path: inset(20% 0 50% 0); transform: translate(-2px, -2px); }
+  80% { clip-path: inset(50% 0 30% 0); transform: translate(1px, 1px); }
+  100% { clip-path: inset(5% 0 80% 0); transform: translate(-1px, -1px); }
+}
+
+/* ===== 🎞️ CRT vignette + scanlines ===== */
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(7,9,17,0.6) 100%);
+}
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  opacity: 0.3;
+}
+
+/* ===== 📱 Mobile fixes ===== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .sidebar-nav-label { display: none; }
+  .scroll-sidebar { display: none; }
+  .nav-clock { display: none; }
+  .hero-stats { gap: 20px; }
+  .hero-stat-value { font-size: 16px; }
 }
 `;
