@@ -213,8 +213,8 @@ function PixelLoader({ onDone }) {
         const cw = w / GRID, ch = h / GRID;
 
         for (let i = 0; i < show && i < total; i++) {
-          const row = Math.floor(i / GRID);
-          const col = i % GRID;
+          const col = Math.floor(i / GRID);
+          const row = i % GRID;
           const alpha = 0.12 + (i / total) * 0.6;
           ctx.globalAlpha = alpha;
           const bright = 0.4 + (i / total) * 0.6;
