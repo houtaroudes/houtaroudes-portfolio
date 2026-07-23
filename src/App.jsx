@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useScroll, useInView } from "framer-motion";
 import PixelTrail from "./components/PixelTrail";
 import "./components/PixelTrail.css";
@@ -146,34 +146,26 @@ function IntroOverlay({onDone}) {
         className="intro-title font-display"
       >
         <div className="hero-name-stacked">
-          <div className="name-row">
+          <motion.div
+            className="name-row"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
             {[..."HOUTAROU"].map((letter, i) => (
-              <motion.span
-                key={i}
-                className="glitch"
-                data-text={letter}
-                initial={{ opacity: 0, x: -10, skewX: 10 }}
-                animate={{ opacity: 1, x: 0, skewX: 0 }}
-                transition={{ delay: 0.03 * i, duration: 0.25, ease: 'easeOut' }}
-              >
-                {letter}
-              </motion.span>
+              <span key={i} className="glitch" data-text={letter}>{letter}</span>
             ))}
-          </div>
-          <div className="name-row">
+          </motion.div>
+          <motion.div
+            className="name-row"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          >
             {[..."DES"].map((letter, i) => (
-              <motion.span
-                key={i}
-                className="glitch accent-glow"
-                data-text={letter}
-                initial={{ opacity: 0, x: 10, skewX: -10 }}
-                animate={{ opacity: 1, x: 0, skewX: 0 }}
-                transition={{ delay: 0.03 * (i + 7), duration: 0.25, ease: 'easeOut' }}
-              >
-                {letter}
-              </motion.span>
+              <span key={i} className="glitch accent-glow" data-text={letter}>{letter}</span>
             ))}
-          </div>
+          </motion.div>
         </div>
       </motion.div>
     </motion.div>
@@ -264,6 +256,101 @@ function PixelLoader({ onDone }) {
   }, []);
 
   return <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, zIndex: 200 }} />;
+}
+
+/* =============================================================
+   💬 Floating chat widget — sends messages via email
+   ============================================================= */
+function ChatWidget() {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [sent, setSent] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const body = `Hi Houtarou!%0A%0AFrom: ${encodeURIComponent(name)}%0AEmail: ${encodeURIComponent(email)}%0A%0A${encodeURIComponent(message)}`;
+    window.location.href = `mailto:houtaroudes@gmail.com?subject=Portfolio%20Chat%20from%20${encodeURIComponent(name)}&body=${body}`;
+    setSent(true);
+    setTimeout(() => { setOpen(false); setSent(false); setName(''); setEmail(''); setMessage(''); }, 2000);
+  };
+
+  return (
+    <>
+      <motion.button
+        className="chat-fab"
+        onClick={() => setOpen(!open)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        aria-label="Chat"
+      >
+        {open ? <PxIcon name="close" size={14} /> : <span style={{fontSize:'16px'}}>💬</span>}
+      </motion.button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="chat-panel"
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="chat-header">
+              <PxIcon name="star" size={10} color="var(--cyan)" />
+              <span>Send me a message</span>
+            </div>
+            {sent ? (
+              <div className="chat-sent">✓ Message ready! Check your email client.</div>
+            ) : (
+              <form className="chat-form" onSubmit={handleSubmit}>
+                <input className="chat-input" placeholder="Your name" value={name} onChange={e => setName(e.target.value)} required />
+                <input className="chat-input" type="email" placeholder="Your email" value={email} onChange={e => setEmail(e.target.value)} required />
+                <textarea className="chat-input chat-textarea" placeholder="Your message..." value={message} onChange={e => setMessage(e.target.value)} required rows={3} />
+                <motion.button type="submit" className="btn primary chat-send" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <PxIcon name="play" size={10} color="var(--void)" /> Send
+                </motion.button>
+              </form>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+/* =============================================================
+   🔈 Simple hover sound synth
+   ============================================================= */
+function useHoverSound() {
+  const audioRef = useRef(null);
+  useEffect(() => {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    audioRef.current = new AudioCtx();
+    return () => { if (audioRef.current) audioRef.current.close(); };
+  }, []);
+
+  const play = useCallback(() => {
+    const ctx = audioRef.current;
+    if (!ctx) return;
+    try {
+      if (ctx.state === 'suspended') ctx.resume();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(880, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.08);
+      g.gain.setValueAtTime(0.04, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      o.connect(g).connect(ctx.destination);
+      o.start(ctx.currentTime);
+      o.stop(ctx.currentTime + 0.15);
+    } catch {}
+  }, []);
+
+  return play;
 }
 
 /* =============================================================
@@ -464,6 +551,7 @@ export default function Portfolio() {
     return () => clearTimeout(t1);
   }, [loading, introDone]);
 
+  const hoverSound = useHoverSound();
   const filtered=activeCat==="all"?projects:projects.filter(p=>p.type?.toLowerCase().replace(" ","")===activeCat);
   const feat=projects.find(p=>p.featured);
 
@@ -547,37 +635,8 @@ export default function Portfolio() {
               style={{ opacity: showContent ? 1 : 0 }}
             >
               <h1 className="hero-name hero-name-stacked">
-                <motion.span
-                  className="glitch"
-                  data-text="HOUTAROU"
-                  animate={{
-                    x: [0, 0, 3, -2, 0, 0],
-                  }}
-                  transition={{
-                    duration: 0.4,
-                    repeat: Infinity,
-                    repeatDelay: 4,
-                    ease: 'steps(3)',
-                  }}
-                >
-                  HOUTAROU
-                </motion.span>
-                <motion.span
-                  className="gradient-accent glitch"
-                  data-text="DES"
-                  animate={{
-                    x: [0, 0, -3, 2, 0, 0],
-                  }}
-                  transition={{
-                    duration: 0.4,
-                    repeat: Infinity,
-                    repeatDelay: 4.5,
-                    ease: 'steps(3)',
-                    delay: 0.3,
-                  }}
-                >
-                  DES
-                </motion.span>
+                <span>HOUTAROU</span>
+                <span className="gradient-accent">DES</span>
               </h1>
             </motion.div>
 
@@ -654,7 +713,7 @@ export default function Portfolio() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               className={`project-card ${p.featured?"featured":""}`} key={p.id}
-              onMouseEnter={()=>setHovered(p.id)} onMouseLeave={()=>setHovered(null)}
+              onMouseEnter={()=>{setHovered(p.id);hoverSound();}} onMouseLeave={()=>setHovered(null)}
             >
               <div className="card-glow" style={{opacity:hovered===p.id?1:0,
                 background:`radial-gradient(400px circle at 50% 50%,${p.featured?"rgba(255,209,102,0.08)":"rgba(63,230,255,0.06)"},transparent)`}}/>
@@ -718,7 +777,7 @@ export default function Portfolio() {
           <p className="section-desc" style={{textAlign:"center",marginBottom:24}}>Open for freelance gigs, school projects, or just talking shop about pixel art and web dev.</p>
           <div className="hero-actions" style={{justifyContent:"center"}}>
             <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn primary"><IconGithub s={15}/> GitHub Profile</a>
-            <a href="mailto:houtaroudes@gmail.com" className="btn"><IconMail s={15}/> Send Email</a>
+            <a href="mailto:houtaroudes@gmail.com" className="btn"><IconMail s={15}/> houtaroudes@gmail.com</a>
           </div>
         </div>
       </RS>
@@ -735,6 +794,7 @@ export default function Portfolio() {
     <AnimatePresence>
       {modalProject && <ProjectModal project={modalProject} onClose={()=>setModalProject(null)} />}
     </AnimatePresence>
+    <ChatWidget />
     <ScrollToTop />
   </>);
 }
@@ -1191,10 +1251,10 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
 @keyframes blink { 50% { opacity: 0; } }
 .hero-stats {
   display: flex;
-  gap: 24px;
+  gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 .hero-stat {
   display: flex;
@@ -1220,6 +1280,94 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
   justify-content: center;
   flex-wrap: wrap;
 }
+/* ===== 💬 Chat widget ===== */
+.chat-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 55;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--cyan);
+  color: var(--void);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(63,230,255,0.3);
+  transition: box-shadow 0.3s var(--ease-out);
+}
+.chat-fab:hover {
+  box-shadow: 0 6px 28px rgba(63,230,255,0.45);
+}
+.chat-panel {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  z-index: 55;
+  width: 320px;
+  max-width: calc(100vw - 48px);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+[data-theme="light"] .chat-panel {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.chat-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.chat-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--void);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.3s var(--ease-out);
+}
+.chat-input:focus {
+  border-color: var(--cyan);
+}
+.chat-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+.chat-send {
+  width: 100%;
+  justify-content: center;
+}
+.chat-sent {
+  text-align: center;
+  color: var(--cyan);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 20px 0;
+}
+[data-theme="light"] .chat-input {
+  background: white;
+  border-color: rgba(0,0,0,0.12);
+}
+
 .scroll-hint {
   position: absolute;
   bottom: 32px;
