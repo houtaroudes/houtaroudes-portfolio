@@ -566,25 +566,33 @@ export default function Portfolio() {
               style={{ opacity: showContent ? 1 : 0 }}
             >
               <h1 className="hero-name hero-name-stacked">
-                <motion.span
-                  animate={{ letterSpacing: ['0px', '2px', '0px'] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                <motion.div
+                  className="hero-name-float"
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
                 >
-                  HOUTAROU
-                </motion.span>
-                <motion.span
-                  className="gradient-accent"
-                  animate={{
-                    textShadow: [
-                      '0 0 8px rgba(255,63,156,0.4)',
-                      '0 0 20px rgba(255,63,156,0.8)',
-                      '0 0 8px rgba(255,63,156,0.4)',
-                    ],
-                  }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                  DES
-                </motion.span>
+                  {/* HOUTAROU row */}
+                  <motion.span
+                    animate={{ letterSpacing: ['0px', '6px', '0px'] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                  >
+                    HOUTAROU
+                  </motion.span>
+                  {/* DES row */}
+                  <motion.span
+                    className="gradient-accent"
+                    animate={{
+                      textShadow: [
+                        '0 0 8px rgba(255,63,156,0.4)',
+                        '0 0 30px rgba(255,63,156,0.9)',
+                        '0 0 8px rgba(255,63,156,0.4)',
+                      ],
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                  >
+                    DES
+                  </motion.span>
+                </motion.div>
               </h1>
             </motion.div>
 
@@ -879,6 +887,30 @@ nav.scrolled {
 [data-theme="light"] nav a:not(.logo):hover,
 [data-theme="light"] nav a.nav-active {
   color: var(--cyan);
+}
+[data-theme="light"] .project-card {
+  background: var(--panel);
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+[data-theme="light"] .project-card:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 4px 12px rgba(8,145,178,0.1);
+}
+[data-theme="light"] .featured-card {
+  background: white;
+  border-color: rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+[data-theme="light"] .skill-badge {
+  background: white;
+  border-color: rgba(0,0,0,0.08);
+}
+[data-theme="light"] .card-desc {
+  color: var(--dim);
+}
+[data-theme="light"] .card-year {
+  color: var(--dimmer);
 }
 .nav-inner {
   max-width: 1100px;
