@@ -287,7 +287,7 @@ function PixelLoader({ onDone }) {
 
         if (p >= 1 && !done) {
           done = true;
-          setTimeout(() => { if (doneRef.current) doneRef.current(); }, 200);
+          setTimeout(() => { if (doneRef.current) doneRef.current(); }, 100);
           return;
         }
         anim = requestAnimationFrame(draw);
@@ -550,9 +550,9 @@ export default function Portfolio() {
       setShowContent(true);
       const t2 = setTimeout(() => {
         setIntroDone(true);
-      }, 1000);
+      }, 500);
       return () => clearTimeout(t2);
-    }, 1200);
+    }, 600);
     return () => clearTimeout(t1);
   }, [loading, introDone]);
 
