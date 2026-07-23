@@ -190,60 +190,39 @@ function PixelLoader({ onDone }) {
     resize();
 
     const GRID = 14;
-    const colors = ['#3fe6ff','#ff3f9c','#ffd166','#a29bfe','#4ade80'];
+    const cols = ['#3fe6ff','#ff3f9c','#ffd166','#a29bfe','#4ade80'];
     const total = GRID * GRID;
-    const order = Array.from({length: total}, (_, i) => i);
-    for (let i = order.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [order[i], order[j]] = [order[j], order[i]];
-    }
-    const pixelColors = Array.from({length: total}, () => colors[Math.floor(Math.random() * colors.length)]);
+    const order = Array.from({length: total}, (_, i) => i).sort(() => Math.random() - 0.5);
+    const pixelCols = Array.from({length: total}, () => cols[Math.floor(Math.random() * cols.length)]);
 
     const NAME = 'HOUTAROUDES';
-    const nameColors = ['#ffd166','#3fe6ff','#ff3f9c','#4ade80','#a29bfe'];
-    // Pre-generate random pixel positions for each letter
-    const letterPixels = NAME.split('').map(() => {
-      const px = [];
-      const count = 8 + Math.floor(Math.random() * 6);
-      for (let i = 0; i < count; i++) {
-        px.push({ x: Math.random(), y: Math.random() });
-      }
-      return px;
-    });
-
     const GRID_DUR = 1400;
-    const NAME_DUR = 800;
+    const NAME_DUR = 900;
     let phase = 'grid';
     let anim;
-    let nameRevealed = false;
+    let done = false;
     let start = performance.now();
 
     function draw(time) {
       const elapsed = time - start;
-
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = '#070911';
       ctx.fillRect(0, 0, w, h);
 
       if (phase === 'grid') {
-        const progress = Math.min(elapsed / GRID_DUR, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const cellsToShow = Math.floor(eased * total);
-        const cw = w / GRID;
-        const ch = h / GRID;
+        const p = Math.min(elapsed / GRID_DUR, 1);
+        const e = 1 - Math.pow(1 - p, 3);
+        const show = Math.floor(e * total);
+        const cw = w / GRID, ch = h / GRID;
 
-        for (let i = 0; i < cellsToShow; i++) {
+        for (let i = 0; i < show; i++) {
           const idx = order[i];
-          const row = Math.floor(idx / GRID);
-          const col = idx % GRID;
-          const alpha = 0.15 + (i / Math.max(cellsToShow, 1)) * 0.75;
-          ctx.globalAlpha = alpha;
-          ctx.fillStyle = pixelColors[idx];
-          ctx.fillRect(Math.floor(col * cw), Math.floor(row * ch), Math.ceil(cw), Math.ceil(ch));
+          ctx.globalAlpha = 0.15 + (i / Math.max(show, 1)) * 0.75;
+          ctx.fillStyle = pixelCols[idx];
+          ctx.fillRect(Math.floor((idx % GRID) * cw), Math.floor(Math.floor(idx / GRID) * ch), Math.ceil(cw), Math.ceil(ch));
         }
         ctx.globalAlpha = 1;
 
-        const pct = Math.floor(progress * 100);
         ctx.fillStyle = '#8489bd';
         ctx.font = '11px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
@@ -251,58 +230,39 @@ function PixelLoader({ onDone }) {
         ctx.fillStyle = 'rgba(132,137,189,0.15)';
         ctx.fillRect(w / 2 - 120, h - 50, 240, 3);
         ctx.fillStyle = '#3fe6ff';
-        ctx.fillRect(w / 2 - 120, h - 50, 240 * progress, 3);
+        ctx.fillRect(w / 2 - 120, h - 50, 240 * p, 3);
         ctx.fillStyle = '#8489bd';
         ctx.font = '10px "JetBrains Mono", monospace';
-        ctx.fillText(`${pct}%`, w / 2, h - 34);
+        ctx.fillText(`${Math.floor(p * 100)}%`, w / 2, h - 34);
 
-        if (progress >= 1) {
-          phase = 'name';
-          start = time;
-        }
+        if (p >= 1) { phase = 'name'; start = time; }
         anim = requestAnimationFrame(draw);
-      } else if (phase === 'name') {
-        const progress = Math.min(elapsed / NAME_DUR, 1);
-        const eased = 1 - Math.pow(1 - progress, 2);
-        const lettersToShow = Math.floor(eased * NAME.length);
+        return;
+      }
+
+      if (phase === 'name') {
+        const p = Math.min(elapsed / NAME_DUR, 1);
+        const e = 1 - Math.pow(1 - p, 2);
+        const n = Math.floor(e * NAME.length);
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-
-        for (let i = 0; i < lettersToShow && i < NAME.length; i++) {
-          const letter = NAME[i];
-          const lx = w / 2 - (NAME.length * 14) / 2 + i * 14 + 7;
-          const ly = h / 2 - 6;
-          const alpha = 0.3 + 0.7 * ((i + 1) / Math.max(lettersToShow, 1));
-
-          // Draw pixel scatter
-          ctx.globalAlpha = 0.4;
-          ctx.fillStyle = nameColors[i % nameColors.length];
-          for (const p of letterPixels[i]) {
-            ctx.fillRect(
-              Math.floor(lx + p.x * 12 - 6),
-              Math.floor(ly + p.y * 12 - 6),
-              2, 2
-            );
-          }
-          ctx.globalAlpha = alpha;
-          ctx.font = 'bold 18px "Press Start 2P", monospace';
-          ctx.fillStyle = '#eef0ff';
-          ctx.fillText(letter, lx, ly);
+        for (let i = 0; i < n && i < NAME.length; i++) {
+          ctx.font = 'bold 22px "Press Start 2P", monospace';
+          ctx.fillStyle = cols[i % cols.length];
+          ctx.globalAlpha = 0.3 + 0.7 * ((i + 1) / Math.max(n, 1));
+          ctx.fillText(NAME[i], w / 2 - (NAME.length * 16) / 2 + i * 16 + 8, h / 2);
         }
         ctx.globalAlpha = 1;
 
-        // Boot text
         ctx.fillStyle = '#8489bd';
         ctx.font = '11px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText('> LOADING COMPLETE', w / 2, h - 70);
 
-        if (progress >= 1) {
-          if (doneRef.current && !nameRevealed) {
-            nameRevealed = true;
-            setTimeout(() => doneRef.current(), 300);
-          }
+        if (p >= 1 && !done) {
+          done = true;
+          setTimeout(() => { if (doneRef.current) doneRef.current(); }, 400);
           return;
         }
         anim = requestAnimationFrame(draw);
