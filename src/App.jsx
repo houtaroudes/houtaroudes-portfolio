@@ -131,23 +131,6 @@ function RealtimeClock({className=""}) {
 /* =============================================================
    🎬 Intro splash — name starts center then slides left
    ============================================================= */
-const nameRow1 = "HOUTAROU".split("");
-const nameRow2 = "DES".split("");
-
-const letterVariants = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: {
-      delay: i * 0.06,
-      duration: 0.4,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  }),
-};
-
 function IntroOverlay({onDone}) {
   return (
     <motion.div
@@ -164,30 +147,28 @@ function IntroOverlay({onDone}) {
       >
         <div className="hero-name-stacked">
           <div className="name-row">
-            {nameRow1.map((letter, i) => (
+            {[..."HOUTAROU"].map((letter, i) => (
               <motion.span
                 key={i}
                 className="glitch"
                 data-text={letter}
-                custom={i}
-                variants={letterVariants}
-                initial="hidden"
-                animate="visible"
+                initial={{ opacity: 0, x: -10, skewX: 10 }}
+                animate={{ opacity: 1, x: 0, skewX: 0 }}
+                transition={{ delay: 0.03 * i, duration: 0.25, ease: 'easeOut' }}
               >
                 {letter}
               </motion.span>
             ))}
           </div>
           <div className="name-row">
-            {nameRow2.map((letter, i) => (
+            {[..."DES"].map((letter, i) => (
               <motion.span
                 key={i}
                 className="glitch accent-glow"
                 data-text={letter}
-                custom={i + nameRow1.length}
-                variants={letterVariants}
-                initial="hidden"
-                animate="visible"
+                initial={{ opacity: 0, x: 10, skewX: -10 }}
+                animate={{ opacity: 1, x: 0, skewX: 0 }}
+                transition={{ delay: 0.03 * (i + 7), duration: 0.25, ease: 'easeOut' }}
               >
                 {letter}
               </motion.span>
@@ -613,10 +594,10 @@ export default function Portfolio() {
                   <p className="hero-tagline pixel-typewriter"><CycleTypewriter /><span className="cursor-blink">|</span></p>
 
                   <div className="hero-stats">
-                    <div className="hero-stat"><PxIcon name="bolt" size={20} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
-                    <div className="hero-stat"><PxIcon name="diamond" size={20} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
-                    <div className="hero-stat"><PxIcon name="star" size={20} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
-                    <div className="hero-stat"><PxIcon name="diamond" size={20} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
+                    <div className="hero-stat"><PxIcon name="bolt" size={14} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
+                    <div className="hero-stat"><PxIcon name="diamond" size={14} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
+                    <div className="hero-stat"><PxIcon name="star" size={14} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
+                    <div className="hero-stat"><PxIcon name="diamond" size={14} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
                   </div>
 
                   <div className="hero-actions">
@@ -1210,24 +1191,24 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
 @keyframes blink { 50% { opacity: 0; } }
 .hero-stats {
   display: flex;
-  gap: 32px;
+  gap: 24px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 .hero-stat {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   text-align: left;
 }
 .hero-stat-value {
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 14px;
   color: var(--text);
 }
 .hero-stat-label {
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   color: var(--dimmer);
   font-family: var(--font-mono);
   text-transform: uppercase;
