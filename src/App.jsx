@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, createPortal } from "react";
 import { motion, AnimatePresence, useScroll, useInView } from "framer-motion";
 import PixelTrail from "./components/PixelTrail";
 import "./components/PixelTrail.css";
@@ -413,29 +413,85 @@ function ProjectModal({project,onClose}){
   useEffect(()=>{const h=e=>{if(e.key==='Escape')closeRef.current();};window.addEventListener('keydown',h);return()=>window.removeEventListener('keydown',h);},[]);
   useEffect(()=>{document.body.style.overflow='hidden';return()=>{document.body.style.overflow='';};},[]);
   if(!project)return null;
-  return <div className="modal-overlay" onClick={onClose}>
-    <motion.div className="modal-content" onClick={e=>e.stopPropagation()}
-      initial={{scale:0.95,y:20,opacity:0}} animate={{scale:1,y:0,opacity:1}}
-      transition={{duration:0.3,ease:[0.34,1.56,0.64,1]}}
-      style={{background:'var(--panel)'}}
-    >
-      <button className="modal-close-btn" onClick={onClose} aria-label="Close modal"><PxIcon name="close" size={14} /></button>
-      <div className="modal-header">
-        <span className="modal-year">{project.year}</span>
-        <span className="card-badge" style={{background:project.featured?"var(--gold)":"var(--cyan)",color:"var(--void)"}}>{project.type}</span>
+  return createPortal(
+    <div style={{
+      position:'fixed',inset:0,zIndex:9999,
+      display:'flex',alignItems:'center',justifyContent:'center',padding:'24px',
+      background:'rgba(0,0,0,1)'
+    }} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{
+        background:'#111827',border:'2px solid #3fe6ff',borderRadius:'20px',
+        padding:'36px 32px',maxWidth:'500px',width:'100%',position:'relative',
+        boxShadow:'0 24px 80px rgba(0,0,0,0.7)',
+        maxHeight:'85vh',overflowY:'auto'
+      }}>
+        <button onClick={onClose} style={{
+          position:'absolute',top:'14px',right:'14px',width:'32px',height:'32px',
+          borderRadius:'8px',border:'1px solid rgba(255,255,255,0.15)',
+          background:'#1f2937',color:'#9ca3af',cursor:'pointer',
+          display:'flex',alignItems:'center',justifyContent:'center',
+          fontSize:'18px',lineHeight:1,transition:'all .2s'
+        }} onMouseEnter={e=>{e.currentTarget.style.background='#db2777';e.currentTarget.style.color='#fff';e.currentTarget.style.transform='rotate(90deg)'}}
+          onMouseLeave={e=>{e.currentTarget.style.background='#1f2937';e.currentTarget.style.color='#9ca3af';e.currentTarget.style.transform='rotate(0deg)'}}
+        aria-label="Close modal">
+          <PxIcon name="close" size={14} />
+        </button>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'16px'}}>
+          <span style={{fontFamily:'"JetBrains Mono",monospace',fontSize:'0.75rem',color:'#9ca3af'}}>{project.year}</span>
+          <span style={{
+            fontFamily:'"Press Start 2P",monospace',fontSize:'8px',letterSpacing:'1px',textTransform:'uppercase',
+            padding:'4px 12px',borderRadius:'6px',
+            background:project.featured?'#ffd166':'#3fe6ff',
+            color:'#070911'
+          }}>{project.type}</span>
+        </div>
+        <h3 style={{
+          fontFamily:'"Press Start 2P",monospace',fontSize:'18px',marginBottom:'14px',lineHeight:'1.4',
+          paddingRight:'32px',color:'#f8fafc'
+        }}>{project.title}</h3>
+        {project.featured && <div style={{
+          display:'inline-flex',alignItems:'center',gap:'6px',
+          fontFamily:'"Press Start 2P",monospace',fontSize:'8px',letterSpacing:'2px',
+          color:'#ffd166',border:'1px solid rgba(255,209,102,0.3)',
+          background:'rgba(255,209,102,0.08)',padding:'4px 14px',borderRadius:'100px',marginBottom:'14px'
+        }}><PxIcon name="trophy" size={10} color="#ffd166" /> MAIN QUEST</div>}
+        <p style={{color:'#e2e8f0',fontSize:'0.95rem',lineHeight:'1.7',marginBottom:'20px'}}>{project.desc}</p>
+        <div style={{marginBottom:'20px'}}>
+          <h4 style={{fontFamily:'"Press Start 2P",monospace',fontSize:'9px',letterSpacing:'1px',textTransform:'uppercase',color:'#94a3b8',marginBottom:'8px'}}>Technologies</h4>
+          <div style={{display:'flex',gap:'6px',flexWrap:'wrap'}}>
+            {project.tags.map(t=>(
+              <span key={t} style={{
+                padding:'5px 12px',borderRadius:'8px',fontSize:'0.75rem',
+                background:'rgba(63,230,255,0.1)',color:'#67e8f9',
+                border:'1px solid rgba(63,230,255,0.25)',fontFamily:'"JetBrains Mono",monospace'
+              }}>{t}</span>
+            ))}
+          </div>
+        </div>
+        <div style={{display:'flex',gap:'10px',flexWrap:'wrap',marginTop:'4px'}}>
+          {project.demo&&(
+            <a href={project.demo} target="_blank" rel="noopener" style={{
+              display:'inline-flex',alignItems:'center',gap:'6px',padding:'10px 22px',
+              borderRadius:'10px',fontSize:'0.75rem',fontFamily:'"Press Start 2P",monospace',
+              background:'#3fe6ff',color:'#070911',border:'none',cursor:'pointer',textDecoration:'none',
+              transition:'all .2s'
+            }} onMouseEnter={e=>{e.currentTarget.style.background='#22d3ee'}}
+              onMouseLeave={e=>{e.currentTarget.style.background='#3fe6ff'}}
+            ><PxIcon name="play" size={12} color="#070911" /> Live Demo</a>
+          )}
+          <a href={project.code} target="_blank" rel="noopener" style={{
+            display:'inline-flex',alignItems:'center',gap:'6px',padding:'10px 22px',
+            borderRadius:'10px',fontSize:'0.75rem',fontFamily:'"Press Start 2P",monospace',
+            background:'transparent',color:'#94a3b8',border:'1px solid rgba(255,255,255,0.15)',
+            cursor:'pointer',textDecoration:'none',transition:'all .2s'
+          }} onMouseEnter={e=>{e.currentTarget.style.color='#3fe6ff';e.currentTarget.style.borderColor='#3fe6ff'}}
+            onMouseLeave={e=>{e.currentTarget.style.color='#94a3b8';e.currentTarget.style.borderColor='rgba(255,255,255,0.15)'}}
+          ><PxIcon name="file" size={12} /> View Code</a>
+        </div>
       </div>
-      <h3 className="modal-title">{project.title}</h3>
-      {project.featured && <div className="modal-featured-badge"><PxIcon name="trophy" size={10} color="var(--gold)" /> MAIN QUEST</div>}
-      <p className="modal-desc">{project.desc}</p>
-      <div className="modal-section">
-        <h4 className="modal-section-title">Technologies</h4>
-        <div className="modal-tags">{project.tags.map(t=><span className="tag" key={t}>{t}</span>)}</div>
-      </div>
-      <div className="modal-actions">
-        {project.demo&&<a href={project.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} color="var(--void)" /> Live Demo</a>}
-        <a href={project.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>        </div>
-      </motion.div>
-    </div>;
+    </div>,
+    document.body
+  );
 }
 
 /* =============================================================
