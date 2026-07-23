@@ -516,16 +516,34 @@ function AttentionGrabber({children, className="", delay=0}) {
 /* =============================================================
    🏠 Main Portfolio component — everything comes together
    ============================================================= */
+/* =============================================================
+   🎬 Intro play limit — 3 times per day, resets after 24h
+   ============================================================= */
+function getIntroLimit() {
+  try {
+    const today = new Date().toDateString();
+    const savedDate = localStorage.getItem('_introDate');
+    if (savedDate !== today) {
+      localStorage.setItem('_introDate', today);
+      localStorage.setItem('_introCount', '0');
+      return false;
+    }
+    const count = parseInt(localStorage.getItem('_introCount') || '0', 10);
+    return count >= 3;
+  } catch { return false; }
+}
+
 export default function Portfolio() {
+  const introLimited = getIntroLimit();
   const[activeCat,setActiveCat]=useState("all");
   const[scrolled,setScrolled]=useState(false);
   const[hovered,setHovered]=useState(null);
   const[darkMode,setDarkMode]=useState(()=>localStorage.getItem("theme")!=="light");
   const[modalProject,setModalProject]=useState(null);
   const[formSent,setFormSent]=useState(false);
-  const[introDone,setIntroDone]=useState(false);
-  const[loading,setLoading]=useState(true);
-  const[showContent,setShowContent]=useState(false);
+  const[introDone,setIntroDone]=useState(introLimited);
+  const[loading,setLoading]=useState(!introLimited);
+  const[showContent,setShowContent]=useState(introLimited);
   const activeSection=useActiveSection(["hero","projects","skills","contact"]);
 
   useEffect(()=>{
@@ -547,6 +565,11 @@ export default function Portfolio() {
   useEffect(() => {
     if (loading || introDone) return;
     const t1 = setTimeout(() => {
+      // Increment play count
+      try {
+        const c = parseInt(localStorage.getItem('_introCount') || '0', 10);
+        localStorage.setItem('_introCount', String(c + 1));
+      } catch {}
       setShowContent(true);
       const t2 = setTimeout(() => {
         setIntroDone(true);
