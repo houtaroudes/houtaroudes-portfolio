@@ -416,7 +416,7 @@ function ProjectModal({project,onClose}){
   return <div style={{
     position:'fixed',inset:0,zIndex:9999,
     display:'flex',alignItems:'center',justifyContent:'center',padding:'24px',
-    background:'rgba(0,0,0,1)'
+    background:'rgba(0,0,0,0.85)'
   }} onClick={onClose}>
       <div onClick={e=>e.stopPropagation()} style={{
         background:'#111827',border:'2px solid #3fe6ff',borderRadius:'20px',
