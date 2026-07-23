@@ -131,6 +131,23 @@ function RealtimeClock({className=""}) {
 /* =============================================================
    🎬 Intro splash — name starts center then slides left
    ============================================================= */
+const nameRow1 = "HOUTAROU".split("");
+const nameRow2 = "DES".split("");
+
+const letterVariants = {
+  hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: {
+      delay: i * 0.06,
+      duration: 0.4,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
+};
+
 function IntroOverlay({onDone}) {
   return (
     <motion.div
@@ -146,12 +163,126 @@ function IntroOverlay({onDone}) {
         className="intro-title font-display"
       >
         <div className="hero-name-stacked">
-          <span className="glitch" data-text="HOUTAROU">HOUTAROU</span>
-          <span className="glitch accent-glow" data-text="DES">DES</span>
+          <div className="name-row">
+            {nameRow1.map((letter, i) => (
+              <motion.span
+                key={i}
+                className="glitch"
+                data-text={letter}
+                custom={i}
+                variants={letterVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </div>
+          <div className="name-row">
+            {nameRow2.map((letter, i) => (
+              <motion.span
+                key={i}
+                className="glitch accent-glow"
+                data-text={letter}
+                custom={i + nameRow1.length}
+                variants={letterVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </div>
         </div>
       </motion.div>
     </motion.div>
   );
+}
+
+/* =============================================================
+   🖥️ Pixel loading screen — fills in grid before intro
+   ============================================================= */
+function PixelLoader({ onDone }) {
+  const canvasRef = useRef(null);
+  const doneRef = useRef(onDone);
+  doneRef.current = onDone;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w, h;
+    const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
+    resize();
+
+    const GRID = 14;
+    const colors = ['#3fe6ff','#ff3f9c','#ffd166','#a29bfe','#4ade80'];
+    const total = GRID * GRID;
+    const order = Array.from({length: total}, (_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    const pixelColors = Array.from({length: total}, () => colors[Math.floor(Math.random() * colors.length)]);
+
+    let ready = false;
+    let anim;
+    let start = performance.now();
+
+    function draw(time) {
+      const elapsed = time - start;
+      const progress = Math.min(elapsed / 1400, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const cellsToShow = Math.floor(eased * total);
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#070911';
+      ctx.fillRect(0, 0, w, h);
+
+      const cw = w / GRID;
+      const ch = h / GRID;
+
+      for (let i = 0; i < cellsToShow; i++) {
+        const idx = order[i];
+        const row = Math.floor(idx / GRID);
+        const col = idx % GRID;
+        const alpha = 0.15 + (i / cellsToShow) * 0.75;
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = pixelColors[idx];
+        ctx.fillRect(col * cw, row * ch, Math.ceil(cw), Math.ceil(ch));
+      }
+      ctx.globalAlpha = 1;
+
+      // Boot text
+      const pct = Math.floor(progress * 100);
+      ctx.fillStyle = '#8489bd';
+      ctx.font = '11px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('> INITIALIZING PIXEL ENGINE...', w / 2, h - 70);
+
+      // Progress bar
+      ctx.fillStyle = 'rgba(132,137,189,0.15)';
+      ctx.fillRect(w / 2 - 120, h - 50, 240, 3);
+      ctx.fillStyle = '#3fe6ff';
+      ctx.fillRect(w / 2 - 120, h - 50, 240 * progress, 3);
+      ctx.fillStyle = '#8489bd';
+      ctx.font = '10px "JetBrains Mono", monospace';
+      ctx.fillText(`${pct}%`, w / 2, h - 34);
+
+      if (progress < 1) {
+        anim = requestAnimationFrame(draw);
+      } else if (!ready) {
+        ready = true;
+        if (doneRef.current) doneRef.current();
+      }
+    }
+
+    anim = requestAnimationFrame(draw);
+    window.addEventListener('resize', resize);
+    return () => { cancelAnimationFrame(anim); window.removeEventListener('resize', resize); };
+  }, []);
+
+  return <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, zIndex: 200 }} />;
 }
 
 /* =============================================================
@@ -319,6 +450,7 @@ export default function Portfolio() {
   const[introDone,setIntroDone]=useState(()=>{
     try { return localStorage.getItem("introPlayed") === "true"; } catch { return false; }
   });
+  const[loading,setLoading]=useState(!introDone);
   const[showContent,setShowContent]=useState(introDone);
   const activeSection=useActiveSection(["hero","projects","skills","contact"]);
 
@@ -338,9 +470,8 @@ export default function Portfolio() {
     return()=>window.removeEventListener("scroll",o);
   },[]);
 
-  // Intro animation sequence
-  useEffect(()=>{
-    if(introDone) return;
+  useEffect(() => {
+    if (loading || introDone) return;
     const t1 = setTimeout(() => {
       setShowContent(true);
       const t2 = setTimeout(() => {
@@ -350,12 +481,10 @@ export default function Portfolio() {
       return () => clearTimeout(t2);
     }, 1200);
     return () => clearTimeout(t1);
-  },[introDone]);
+  }, [loading, introDone]);
 
   const filtered=activeCat==="all"?projects:projects.filter(p=>p.type?.toLowerCase().replace(" ","")===activeCat);
   const feat=projects.find(p=>p.featured);
-
-
 
   return (<>
     <style>{CSS}</style>
@@ -377,9 +506,12 @@ export default function Portfolio() {
         />
       </div>
 
+      {/* 🖥️ Pixel loading screen */}
+      {loading && <PixelLoader onDone={() => setLoading(false)} />}
+
       {/* 🎬 Intro splash screen */}
       <AnimatePresence>
-        {!introDone && (
+        {!loading && !introDone && (
           <IntroOverlay onDone={() => {}} />
         )}
       </AnimatePresence>
@@ -716,7 +848,20 @@ nav.scrolled {
   padding: 8px 0;
 }
 [data-theme="light"] nav.scrolled {
-  background: rgba(244,244,248,0.9);
+  background: rgba(244,244,248,0.92);
+  border-bottom-color: rgba(0,0,0,0.1);
+}
+[data-theme="light"] .nav-clock {
+  color: var(--dim);
+  border-color: rgba(0,0,0,0.1);
+  background: rgba(0,0,0,0.03);
+}
+[data-theme="light"] nav a:not(.logo) {
+  color: var(--dim);
+}
+[data-theme="light"] nav a:not(.logo):hover,
+[data-theme="light"] nav a.nav-active {
+  color: var(--cyan);
 }
 .nav-inner {
   max-width: 1100px;
@@ -885,7 +1030,14 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
 .hero-name-stacked {
   display: flex;
   flex-direction: column;
+  align-items: center;
   line-height: 1;
+  gap: 4px;
+}
+.name-row {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
 }
 .hero-name-stacked .gradient-accent {
   font-size: 0.7em;
