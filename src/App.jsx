@@ -413,11 +413,9 @@ function ProjectModal({project,onClose}){
   useEffect(()=>{const h=e=>{if(e.key==='Escape')closeRef.current();};window.addEventListener('keydown',h);return()=>window.removeEventListener('keydown',h);},[]);
   useEffect(()=>{document.body.style.overflow='hidden';return()=>{document.body.style.overflow='';};},[]);
   if(!project)return null;
-  return <motion.div className="modal-overlay" onClick={onClose}
-    initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:0.2}}
-  >
+  return <div className="modal-overlay" onClick={onClose}>
     <motion.div className="modal-content" onClick={e=>e.stopPropagation()}
-      initial={{scale:0.95,y:20}} animate={{scale:1,y:0}}
+      initial={{scale:0.95,y:20,opacity:0}} animate={{scale:1,y:0,opacity:1}}
       transition={{duration:0.3,ease:[0.34,1.56,0.64,1]}}
       style={{background:'var(--panel)'}}
     >
@@ -435,10 +433,9 @@ function ProjectModal({project,onClose}){
       </div>
       <div className="modal-actions">
         {project.demo&&<a href={project.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} color="var(--void)" /> Live Demo</a>}
-        <a href={project.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
-      </div>
-    </motion.div>
-  </motion.div>;
+        <a href={project.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>        </div>
+      </motion.div>
+    </div>;
 }
 
 /* =============================================================
