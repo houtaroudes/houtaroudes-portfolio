@@ -1,7 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useInView } from "framer-motion";
-import PixelTransition from "./components/PixelTransition";
-import "./components/PixelTransition.css";
 import PixelTrail from "./components/PixelTrail";
 import "./components/PixelTrail.css";
 
@@ -147,75 +145,12 @@ function IntroOverlay({onDone}) {
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         className="intro-title font-display"
       >
-        <span className="glitch" data-text="HOUTAROU">HOUTAROU</span>
-        <span className="glitch accent-glow" data-text="DES">DES</span>
+        <div className="hero-name-stacked">
+          <span className="glitch" data-text="HOUTAROU">HOUTAROU</span>
+          <span className="glitch accent-glow" data-text="DES">DES</span>
+        </div>
       </motion.div>
     </motion.div>
-  );
-}
-
-/* =============================================================
-   📌 Sidebar — shows up when you scroll down
-   ============================================================= */
-function ScrollSidebar({scrolled, darkMode, setDarkMode, activeSection, scrolledDeep}) {
-  const navItems = [
-    {id:"hero", label:"Home", icon:"star"},
-    {id:"projects", label:"Projects", icon:"note"},
-    {id:"skills", label:"Skills", icon:"wrench"},
-    {id:"contact", label:"Contact", icon:"link"},
-  ];
-
-  return (
-    <motion.aside
-      className={`scroll-sidebar ${scrolledDeep ? 'visible' : ''}`}
-      initial={{ opacity: 0, x: -80 }}
-      animate={scrolledDeep ? { opacity: 1, x: 0 } : { opacity: 0, x: -80 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-    >
-      <div className="sidebar-inner">
-        {/* Mini logo */}
-        <div className="sidebar-logo">
-          <PxIcon name="compass" size={16} color="var(--cyan)" />
-        </div>
-
-        {/* Nav */}
-        <nav className="sidebar-nav">
-          {navItems.map(item => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              className={`sidebar-nav-item ${activeSection === item.id ? 'active' : ''}`}
-              title={item.label}
-            >
-              <PxIcon name={item.icon} size={14} color={activeSection === item.id ? "var(--cyan)" : undefined} />
-              <span className="sidebar-nav-label">{item.label}</span>
-            </a>
-          ))}
-        </nav>
-
-        {/* Bottom section */}
-        <div className="sidebar-bottom">
-          <RealtimeClock className="sidebar-clock" />
-          
-          <button
-            className="sidebar-theme-btn"
-            onClick={() => setDarkMode(!darkMode)}
-            title={darkMode ? "Light Mode" : "Dark Mode"}
-          >
-            <motion.svg
-              width="16" height="16" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" strokeWidth="2"
-              animate={{ rotate: darkMode ? 0 : 180 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-            >
-              {darkMode
-                ? <><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></>
-                : <><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></>}
-            </motion.svg>
-          </button>
-        </div>
-      </div>
-    </motion.aside>
   );
 }
 
@@ -378,7 +313,6 @@ function AttentionGrabber({children, className="", delay=0}) {
 export default function Portfolio() {
   const[activeCat,setActiveCat]=useState("all");
   const[scrolled,setScrolled]=useState(false);
-  const[scrolledDeep,setScrolledDeep]=useState(false);
   const[hovered,setHovered]=useState(null);
   const[darkMode,setDarkMode]=useState(()=>localStorage.getItem("theme")!=="light");
   const[modalProject,setModalProject]=useState(null);
@@ -399,7 +333,6 @@ export default function Portfolio() {
     const o=()=>{
       const y=window.scrollY;
       setScrolled(y>50);
-      setScrolledDeep(y>200);
     };
     window.addEventListener("scroll",o,{passive:true});
     return()=>window.removeEventListener("scroll",o);
@@ -422,9 +355,7 @@ export default function Portfolio() {
   const filtered=activeCat==="all"?projects:projects.filter(p=>p.type?.toLowerCase().replace(" ","")===activeCat);
   const feat=projects.find(p=>p.featured);
 
-  const handleThemeToggle = useCallback(() => {
-    setDarkMode(prev => !prev);
-  }, []);
+
 
   return (<>
     <style>{CSS}</style>
@@ -452,15 +383,6 @@ export default function Portfolio() {
           <IntroOverlay onDone={() => {}} />
         )}
       </AnimatePresence>
-
-      {/* 📌 Sidebar that fades in on scroll */}
-      <ScrollSidebar
-        scrolled={scrolled}
-        scrolledDeep={scrolledDeep}
-        darkMode={darkMode}
-        setDarkMode={handleThemeToggle}
-        activeSection={activeSection}
-      />
 
       {/* NAV */}
       <motion.nav
@@ -511,8 +433,9 @@ export default function Portfolio() {
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               style={{ opacity: showContent ? 1 : 0 }}
             >
-              <h1 className="hero-name">
-                HOUTAROU<span className="gradient-accent">DES</span>
+              <h1 className="hero-name hero-name-stacked">
+                <span>HOUTAROU</span>
+                <span className="gradient-accent">DES</span>
               </h1>
             </motion.div>
 
@@ -526,7 +449,7 @@ export default function Portfolio() {
                 <>
                   <div className="hero-badge"><PxIcon name="star" size={12} /> Player File — Slot 01</div>
 
-                  <p className="hero-tagline"><CycleTypewriter /><span className="cursor-blink">|</span></p>
+                  <p className="hero-tagline pixel-typewriter"><CycleTypewriter /><span className="cursor-blink">|</span></p>
 
                   <div className="hero-stats">
                     <div className="hero-stat"><PxIcon name="bolt" size={20} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
@@ -629,33 +552,17 @@ export default function Portfolio() {
       {/* FEATURED */}
       {feat && (
         <RS className="section" variant="scale">
-          <PixelTransition
-            firstContent={
-              <div className="featured-card">
-                <div className="featured-glow"/>
-                <div className="featured-badge"><PxIcon name="trophy" size={10} /> MAIN QUEST <PxIcon name="trophy" size={10} /></div>
-                <h3 className="featured-title">{feat.title}</h3>
-                <p className="featured-desc">{feat.desc}</p>
-                <div className="featured-tags">{feat.tags.map(t=><span className="tag featured-tag" key={t}>{t}</span>)}</div>
-                <div className="featured-actions">
-                  <a href={feat.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} /> Explore the Hub</a>
-                  <a href={feat.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
-                </div>
-              </div>
-            }
-            secondContent={
-              <div className="featured-card" style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'16px', padding:'32px', background:'linear-gradient(160deg, rgba(255,209,102,0.12), rgba(255,209,102,0.04))'}}>
-                <div className="featured-badge"><PxIcon name="trophy" size={10} color="var(--gold)" /> PIXEL OVERRIDE</div>
-                <p style={{color:'var(--dim)', fontSize:'0.85rem', fontFamily:'var(--font-mono)', maxWidth:'360px', textAlign:'center'}}>Hover back or click to return</p>
-              </div>
-            }
-            gridSize={10}
-            pixelColor="var(--gold)"
-            animationStepDuration={0.5}
-            aspectRatio="30%"
-            className="featured-pixel-card"
-            style={{ width: '100%', maxWidth: '100%', border: '1px solid rgba(255,209,102,0.25)', borderRadius: '20px', overflow: 'hidden', minHeight: '340px' }}
-          />
+          <div className="featured-card featured-full">
+            <div className="featured-glow"/>
+            <div className="featured-badge"><PxIcon name="trophy" size={10} /> MAIN QUEST <PxIcon name="trophy" size={10} /></div>
+            <h3 className="featured-title">{feat.title}</h3>
+            <p className="featured-desc">{feat.desc}</p>
+            <div className="featured-tags">{feat.tags.map(t=><span className="tag featured-tag" key={t}>{t}</span>)}</div>
+            <div className="featured-actions">
+              <a href={feat.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} /> Explore the Hub</a>
+              <a href={feat.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
+            </div>
+          </div>
         </RS>
       )}
 
@@ -720,7 +627,7 @@ a{color:inherit;text-decoration:none}
 #app {
   transition: var(--transition-theme);
 }
-.nav-inner, .project-card, .skill-badge, .featured-card, .contact-card, footer, .xp-bar, .filter-btn, .btn, .scroll-sidebar, .modal-content, .theme-toggle-btn {
+.nav-inner, .project-card, .skill-badge, .featured-card, .contact-card, footer, .xp-bar, .filter-btn, .btn, .modal-content, .theme-toggle-btn {
   transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 }
 
@@ -765,130 +672,6 @@ a{color:inherit;text-decoration:none}
 }
 
 /* ===== 📌 Sidebar styles ===== */
-.scroll-sidebar {
-  position: fixed;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 40;
-  pointer-events: none;
-  opacity: 0;
-}
-.scroll-sidebar.visible {
-  pointer-events: auto;
-}
-.sidebar-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 36px;
-  padding: 28px 18px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  backdrop-filter: blur(12px);
-  box-shadow: 4px 0 20px rgba(0,0,0,0.3);
-  max-height: 85vh;
-  overflow-y: auto;
-}
-.sidebar-logo {
-  padding: 8px;
-  background: rgba(63,230,255,0.1);
-  border-radius: 8px;
-}
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.sidebar-nav-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 14px;
-  border-radius: 10px;
-  color: var(--dim);
-  transition: all 0.3s var(--ease-out);
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-}
-.sidebar-nav-item:hover {
-  color: var(--text);
-  background: rgba(255,255,255,0.05);
-}
-.sidebar-nav-item.active {
-  color: var(--cyan);
-  background: rgba(63,230,255,0.08);
-}
-.sidebar-nav-item.active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 60%;
-  background: var(--cyan);
-  border-radius: 0 3px 3px 0;
-  box-shadow: 0 0 8px var(--cyan);
-}
-.sidebar-nav-label {
-  display: none;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-}
-@media (min-width: 900px) {
-  .sidebar-nav-label {
-    display: inline;
-  }
-  .sidebar-inner {
-    padding: 32px 20px;
-    gap: 40px;
-  }
-  .sidebar-nav {
-    gap: 12px;
-  }
-  .sidebar-nav-item {
-    padding: 16px 18px;
-  }
-}
-.sidebar-bottom {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-.sidebar-clock {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  color: var(--dimmer);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.sidebar-theme-btn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--dim);
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s var(--ease-out);
-}
-.sidebar-theme-btn:hover {
-  color: var(--cyan);
-  border-color: var(--cyan);
-  background: rgba(63,230,255,0.08);
-}
-
 /* ===== 🕐 Clock in the nav bar ===== */
 .nav-clock {
   font-family: var(--font-mono);
@@ -1098,6 +881,29 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
 .pixel-footer-art{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
 .footer-credits{font-family:var(--font-body);font-size:.85rem;color:var(--text);margin-bottom:4px}
 .footer-sub{font-size:.75rem;color:var(--dimmer);font-family:var(--font-mono)}
+
+.hero-name-stacked {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.hero-name-stacked .gradient-accent {
+  font-size: 0.7em;
+  letter-spacing: 0.15em;
+  margin-top: -2px;
+}
+.pixel-typewriter {
+  font-family: var(--font-display);
+  font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+}
+.featured-full {
+  width: 100%;
+  border: 1px solid rgba(255,209,102,0.25);
+  border-radius: 20px;
+  overflow: hidden;
+}
 
 /* ===== HERO SECTION ===== */
 .hero {
@@ -1386,8 +1192,6 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
 /* ===== 📱 Mobile fixes ===== */
 @media (max-width: 768px) {
   .nav-links { display: none; }
-  .sidebar-nav-label { display: none; }
-  .scroll-sidebar { display: none; }
   .nav-clock { display: none; }
   .hero-content {
     grid-template-columns: 1fr;
