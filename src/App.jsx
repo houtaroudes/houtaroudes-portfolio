@@ -716,12 +716,16 @@ export default function Portfolio() {
           <p className="section-desc" style={{textAlign:"center",marginBottom:24}}>Open for freelance gigs, school projects, or just talking shop about pixel art and web dev.</p>
           <div className="hero-actions" style={{justifyContent:"center",flexDirection:'column',alignItems:'center',gap:'16px'}}>
             <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn primary"><IconGithub s={15}/> GitHub Profile</a>
-            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" style={{display:'flex',flexDirection:'column',gap:'10px',width:'100%',maxWidth:'400px'}}>
+            <form action="https://formspree.io/f/xzdnjdbd" method="POST" style={{display:'flex',flexDirection:'column',gap:'10px',width:'100%',maxWidth:'400px'}}>
               <input type="text" name="name" placeholder="Your name" className="fs-input" required />
               <input type="email" name="email" placeholder="Your email" className="fs-input" required />
               <textarea name="message" placeholder="Your message..." className="fs-input fs-textarea" required rows={3}></textarea>
               <input type="hidden" name="_subject" value="New portfolio message!" />
               <input type="text" name="_gotcha" style={{display:'none'}} />
+              <div style={{display:'flex',alignItems:'center',gap:'6px',fontSize:'0.7rem',color:'var(--dimmer)',fontFamily:'var(--font-mono)'}}>
+                <PxIcon name="file" size={10} color="var(--cyan)" />
+                <span>Sends to: houtaroudes@gmail.com</span>
+              </div>
               <button type="submit" className="btn primary"><PxIcon name="play" size={12} color="var(--void)" /> Send Message</button>
             </form>
           </div>
