@@ -566,8 +566,25 @@ export default function Portfolio() {
               style={{ opacity: showContent ? 1 : 0 }}
             >
               <h1 className="hero-name hero-name-stacked">
-                <span>HOUTAROU</span>
-                <span className="gradient-accent">DES</span>
+                <motion.span
+                  animate={{ letterSpacing: ['0px', '2px', '0px'] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                >
+                  HOUTAROU
+                </motion.span>
+                <motion.span
+                  className="gradient-accent"
+                  animate={{
+                    textShadow: [
+                      '0 0 8px rgba(255,63,156,0.4)',
+                      '0 0 20px rgba(255,63,156,0.8)',
+                      '0 0 8px rgba(255,63,156,0.4)',
+                    ],
+                  }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  DES
+                </motion.span>
               </h1>
             </motion.div>
 
