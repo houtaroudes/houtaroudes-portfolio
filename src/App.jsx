@@ -417,8 +417,9 @@ function ProjectModal({project,onClose}){
     initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:0.2}}
   >
     <motion.div className="modal-content" onClick={e=>e.stopPropagation()}
-      initial={{opacity:0,scale:0.9,y:20}} animate={{opacity:1,scale:1,y:0}}
-      transition={{duration:0.35,ease:[0.34,1.56,0.64,1]}}
+      initial={{scale:0.95,y:20}} animate={{scale:1,y:0}}
+      transition={{duration:0.3,ease:[0.34,1.56,0.64,1]}}
+      style={{background:'var(--panel)'}}
     >
       <button className="modal-close-btn" onClick={onClose} aria-label="Close modal"><PxIcon name="close" size={14} /></button>
       <div className="modal-header">
@@ -876,7 +877,7 @@ a{color:inherit;text-decoration:none}
 #app {
   transition: var(--transition-theme);
 }
-.nav-inner, .project-card, .skill-badge, .featured-card, .contact-card, footer, .xp-bar, .filter-btn, .btn, .modal-content, .theme-toggle-btn {
+.nav-inner, .project-card, .skill-badge, .featured-card, .contact-card, footer, .xp-bar, .filter-btn, .btn, .theme-toggle-btn {
   transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 }
 
