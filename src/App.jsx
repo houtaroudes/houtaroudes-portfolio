@@ -684,7 +684,7 @@ export default function Portfolio() {
             ].map(n=><a key={n.id} href={`#${n.id}`} className={activeSection===n.id?"nav-active":""}>{n.label}</a>)}
           </div>
           <div className="nav-right">
-            <a href="https://houtaroudes-portfolio-v2.vercel.app" className="version-btn" target="_blank" rel="noopener">
+            <a href="https://houtaroudes-myportfolio.vercel.app" className="version-btn" target="_blank" rel="noopener">
               <PxIcon name="sparkle" size={10} color="var(--cyan)" /> Simple Portfolio
             </a>
             <RealtimeClock className="nav-clock" />
