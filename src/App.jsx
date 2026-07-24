@@ -684,6 +684,9 @@ export default function Portfolio() {
             ].map(n=><a key={n.id} href={`#${n.id}`} className={activeSection===n.id?"nav-active":""}>{n.label}</a>)}
           </div>
           <div className="nav-right">
+            <a href="https://houtaroudes-portfolio-v2.vercel.app" className="version-btn" target="_blank" rel="noopener">
+              <span className="version-btn-text">✨ Modern</span>
+            </a>
             <RealtimeClock className="nav-clock" />
             <motion.button
               className="theme-toggle-btn"
@@ -990,6 +993,19 @@ a{color:inherit;text-decoration:none}
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/* Version Switch Button */
+.version-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:5px 10px;border-radius:6px;margin-right:6px;
+  font-family:var(--font-display);font-size:8px;letter-spacing:1px;text-transform:uppercase;
+  background:rgba(63,230,255,0.1);color:var(--cyan);border:1px solid rgba(63,230,255,0.2);
+  text-decoration:none;transition:all 0.3s var(--ease-out);cursor:pointer;
+}
+.version-btn:hover{
+  background:var(--cyan);color:var(--void);transform:translateY(-2px);
+  box-shadow:0 0 20px rgba(63,230,255,0.3);
 }
 
 /* Theme Toggle */
