@@ -887,7 +887,7 @@ export default function Portfolio() {
       <footer>
         <div className="footer-inner">
           <div className="pixel-footer-art" aria-hidden="true"><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /></div>
-          <p className="footer-credits"><strong>HoutarouDes</strong> — Full-Stack Developer &copy; 2026</p>
+          <p className="footer-credits"><strong>HoutarouDes</strong> — Full-Stack Developer</p>
           <p className="footer-sub">4 projects &middot; 26+ exercises &middot; infinite curiosity</p>
         </div>
       </footer>
