@@ -385,7 +385,7 @@ const projects = [
   {id:6,title:"Modern Filipino Homes Platform",desc:"A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture — sustainable homes for the modern Filipino.",tags:["React","Vite","tRPC","MySQL","Tailwind"],demo:"https://modern-fil-homes.vercel.app",code:"https://github.com/houtaroudes/modern-fil-homes",type:"Full Stack",year:"2026",featured:true},
 ];
 const skillBadges = [
-  {name:"HTML5",icon:"diamond",color:"#e34f26"},{name:"CSS3",icon:"diamond",color:"#1572b6"},{name:"JS",icon:"diamond",color:"#f7df1e"},{name:"React",icon:"diamond",color:"#61dafb"},{name:"PHP",icon:"diamond",color:"#777bb3"},{name:"MySQL",icon:"diamond",color:"#4479a1"},{name:"Git",icon:"diamond",color:"#f05032"},{name:"Vite",icon:"diamond",color:"#a29bfe"},
+  {name:"HTML5",icon:"diamond",color:"#e34f26"},{name:"CSS3",icon:"diamond",color:"#1572b6"},{name:"JS",icon:"diamond",color:"#f7df1e"},{name:"React",icon:"diamond",color:"#61dafb"},{name:"PHP",icon:"diamond",color:"#777bb3"},{name:"MySQL",icon:"diamond",color:"#4479a1"},{name:"Git",icon:"diamond",color:"#f05032"},{name:"Vite",icon:"diamond",color:"#a29bfe"},{name:"C#",icon:"diamond",color:"#68217a"},{name:"C++",icon:"diamond",color:"#00599c"},
 ];
 const categories = [
   {id:"all",label:"All Projects",icon:"star",color:"var(--gold)"},{id:"fullstack",label:"Full Stack",icon:"bolt",color:"var(--cyan)"},{id:"frontend",label:"Frontend",icon:"palette",color:"var(--magenta)"},
@@ -738,7 +738,7 @@ export default function Portfolio() {
 
                   <div className="hero-stats">
                     <div className="hero-stat"><PxIcon name="bolt" size={14} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
-                    <div className="hero-stat"><PxIcon name="diamond" size={14} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
+                    <div className="hero-stat"><PxIcon name="diamond" size={14} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={10} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
                     <div className="hero-stat"><PxIcon name="star" size={14} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
                     <div className="hero-stat"><PxIcon name="diamond" size={14} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
                   </div>
