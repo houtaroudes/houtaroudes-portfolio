@@ -153,7 +153,7 @@ function IntroOverlay({ onDone }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
-            {[..."HOUTAROU"].map((letter, i) => (
+            {[..."BRYAN"].map((letter, i) => (
               <span key={i} className="glitch" data-text={letter}>{letter}</span>
             ))}
           </motion.div>
@@ -163,7 +163,7 @@ function IntroOverlay({ onDone }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           >
-            {[..."DES"].map((letter, i) => (
+            {[..."SACUEZA"].map((letter, i) => (
               <span key={i} className="glitch accent-glow" data-text={letter}>{letter}</span>
             ))}
           </motion.div>
@@ -192,7 +192,7 @@ function PixelLoader({ onDone }) {
     const GRID = 8;
     const total = GRID * GRID;
 
-    const NAME = 'HOUTAROUDES';
+    const NAME = 'BRYAN SACUEZA';
     const GRID_DUR = 800;
     const NAME_DUR = 500;
     let phase = 'grid';
@@ -722,8 +722,8 @@ export default function Portfolio() {
               style={{ opacity: showContent ? 1 : 0 }}
             >
               <h1 className="hero-name hero-name-stacked">
-                <span>HOUTAROU</span>
-                <span className="gradient-accent">DES</span>
+                <span>BRYAN</span>
+                <span className="gradient-accent">SACUEZA</span>
               </h1>
             </motion.div>
 
