@@ -383,6 +383,7 @@ const projects = [
   { id: 4, title: "Learning WebDev Hub", desc: "My gamified learning hub with 26+ exercises, live previews, and code challenges!", tags: ["React", "Vite", "HTML", "CSS"], demo: "https://random-learning-webdev-site.vercel.app", code: "https://github.com/houtaroudes/random-learning-webdev-site", type: "Full Stack", year: "2026", featured: true },
   { id: 5, title: "Modern Filipino Homes", desc: "MONO-inspired architecture landing page with word-by-word scroll reveals, house carousel, and phase-built gallery — a premium Filipino housing showcase.", tags: ["React", "Vite", "Framer Motion"], demo: "https://modern-filipino-homes.vercel.app", code: "https://github.com/houtaroudes/Modern-Filipino-Homes", type: "Full Stack", year: "2026", featured: true },
   { id: 6, title: "Modern Filipino Homes Platform", desc: "A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture — sustainable homes for the modern Filipino.", tags: ["React", "Vite", "tRPC", "MySQL", "Tailwind"], demo: "https://modern-fil-homes.vercel.app", code: "https://github.com/houtaroudes/modern-fil-homes", type: "Full Stack", year: "2026", featured: true },
+  { id: 7, title: "MediQueue", desc: "Campus clinic appointment booking and walk-in queueing system — live NOW SERVING board that updates in real time, role-based dashboards for students/staff/admin, and a 38-check smoke test. Built in 15 modified-waterfall phases.", tags: ["PHP", "MySQL", "JS", "CSS"], code: "https://github.com/houtaroudes/mediqueue", type: "Full Stack", year: "2026", featured: true },
 ];
 const skillBadges = [
   { name: "HTML5", icon: "diamond", color: "#e34f26" }, { name: "CSS3", icon: "diamond", color: "#1572b6" }, { name: "JS", icon: "diamond", color: "#f7df1e" }, { name: "React", icon: "diamond", color: "#61dafb" }, { name: "PHP", icon: "diamond", color: "#777bb3" }, { name: "MySQL", icon: "diamond", color: "#4479a1" }, { name: "Git", icon: "diamond", color: "#f05032" }, { name: "Vite", icon: "diamond", color: "#a29bfe" }, { name: "C#", icon: "diamond", color: "#68217a" }, { name: "C++", icon: "diamond", color: "#00599c" },
@@ -739,7 +740,7 @@ export default function Portfolio() {
                   <p className="hero-tagline pixel-typewriter"><CycleTypewriter /><span className="cursor-blink">|</span></p>
 
                   <div className="hero-stats">
-                    <div className="hero-stat"><PxIcon name="bolt" size={14} /><div><div className="hero-stat-value"><CountUpValue target={4} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
+                    <div className="hero-stat"><PxIcon name="bolt" size={14} /><div><div className="hero-stat-value"><CountUpValue target={7} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
                     <div className="hero-stat"><PxIcon name="diamond" size={14} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={10} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
                     <div className="hero-stat"><PxIcon name="star" size={14} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
                     <div className="hero-stat"><PxIcon name="diamond" size={14} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
@@ -774,7 +775,7 @@ export default function Portfolio() {
       <div className="xp-bar">
         <div className="xp-inner">
           <div className="xp-info"><span className="xp-level">Lv. 3</span><span className="xp-label">Full-Stack Developer</span></div>
-          <div className="xp-track"><motion.div className="xp-fill" initial={{ width: 0 }} whileInView={{ width: "65%" }} viewport={{ once: true }} transition={{ duration: 1.5, ease: "easeOut" }} /><span className="xp-text">4 / 6 projects shipped</span></div>
+          <div className="xp-track"><motion.div className="xp-fill" initial={{ width: 0 }} whileInView={{ width: "100%" }} viewport={{ once: true }} transition={{ duration: 1.5, ease: "easeOut" }} /><span className="xp-text">7 / 7 projects shipped</span></div>
         </div>
       </div>
 
@@ -894,7 +895,7 @@ export default function Portfolio() {
         <div className="footer-inner">
           <div className="pixel-footer-art" aria-hidden="true"><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /></div>
           <p className="footer-credits"><strong>Bryan Sacueza</strong> — Full-Stack Developer</p>
-          <p className="footer-sub">4 projects &middot; 26+ exercises &middot; infinite curiosity</p>
+          <p className="footer-sub">7 projects &middot; 26+ exercises &middot; infinite curiosity</p>
         </div>
       </footer>
     </div>
