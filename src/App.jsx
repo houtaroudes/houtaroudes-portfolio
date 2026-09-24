@@ -7,115 +7,115 @@ import "./components/PixelTrail.css";
    🎨 pixel icons i drew myself lol
    ============================================================= */
 const PIXEL_ART = {
-  star     :{c:"#ffd166",w:12,h:12,p:[2,0,3,0,1,1,2,1,3,1,4,1,0,2,1,2,2,2,3,2,4,2,5,2,0,3,1,3,2,3,3,3,4,3,5,3,1,4,2,4,3,4,4,4,2,5,3,5]},
-  palette  :{c:"#3fe6ff",w:12,h:10,p:[1,0,2,0,3,0,4,0,5,0,6,0,0,1,2,1,4,1,5,1,7,1,0,2,7,2,0,3,7,3,1,4,2,4,3,4,4,4,5,4,6,4,3,5,4,5,3,6,4,6,2,7,3,7,4,7,5,7]},
-  sparkle  :{c:"#ff3f9c",w:14,h:14,p:[5,2,7,2,4,3,5,3,6,3,7,3,8,3,2,4,3,4,4,4,5,4,6,4,7,4,8,4,9,4,10,4,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,9,5,10,5,11,5,0,6,1,6,2,6,3,6,4,6,5,6,6,6,7,6,8,6,9,6,10,6,11,6,12,6,1,7,2,7,3,7,4,7,5,7,6,7,7,7,8,7,9,7,10,7,11,7,2,8,3,8,4,8,5,8,6,8,7,8,8,8,9,8,10,8,4,9,5,9,6,9,7,9,8,9,5,10,7,10]},
-  bolt     :{c:"#a29bfe",w:10,h:12,p:[3,0,4,0,3,1,4,1,2,2,3,2,4,2,5,2,1,3,2,3,3,3,4,3,5,3,0,4,1,4,2,4,3,4,4,4,1,5,2,5,3,5,4,5,5,5,1,6,2,6,3,6,4,6,2,7,3,7,4,7,2,8,3,8]},
-  sword    :{c:"#ff6b6b",w:10,h:12,p:[4,0,3,1,4,1,5,1,3,2,4,2,5,2,3,3,4,3,5,3,4,4,2,5,4,5,6,5,1,6,3,6,5,6,7,6,0,7,2,7,4,7,6,7,8,7]},
-  trophy   :{c:"#ffd166",w:12,h:12,p:[1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,0,0,1,10,1,0,2,3,2,4,2,5,2,6,2,10,2,0,3,10,3,0,4,10,4,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,9,5,3,6,4,6,5,6,6,6,7,6,4,7,5,7,6,7,4,8,5,8,6,8]},
-  check    :{c:"#4ade80",w:12,h:10,p:[7,0,6,1,7,1,5,2,7,2,4,3,7,3,3,4,7,4,2,5,6,5,7,5,1,6,5,6,0,7,4,7,0,8,1,8,2,8]},
-  wrench   :{c:"#ff9a56",w:12,h:12,p:[5,0,6,0,4,1,5,1,6,1,7,1,4,2,5,2,6,2,7,2,5,3,6,3,5,4,6,4,4,5,5,5,6,5,7,5,3,6,4,6,5,6,6,6,7,6,8,6,2,7,3,7,4,7,5,7,6,7,7,7,8,7,9,7,1,8,2,8,3,8,4,8,5,8,6,8,7,8,8,8,0,9,1,9,2,9,3,9,4,9,5,9,6,9,0,10,1,10,2,10]},
-  file     :{c:"#8489bd",w:10,h:12,p:[1,0,2,0,3,0,4,0,5,0,6,0,0,1,7,1,0,2,7,2,0,3,7,3,0,4,7,4,0,5,3,5,7,5,0,6,3,6,7,6,0,7,3,7,7,7,0,8,7,8,0,9,7,9,0,10,7,10,1,11,2,11,3,11,4,11,5,11,6,11]},
-  eye      :{c:"#3fe6ff",w:14,h:10,p:[0,3,1,3,2,3,3,3,4,3,5,3,6,3,7,3,8,3,9,3,10,3,11,3,12,3,13,3,1,4,2,4,3,4,4,4,5,4,6,4,7,4,8,4,9,4,10,4,11,4,12,4,2,5,3,5,4,5,5,5,6,5,7,5,8,5,9,5,10,5,11,5,1,6,2,6,3,6,4,6,5,6,6,6,7,6,8,6,9,6,10,6,11,6,12,6,0,7,1,7,2,7,3,7,4,7,5,7,6,7,7,7,8,7,9,7,10,7,11,7,12,7,13,7]},
-  pencil   :{c:"#ffd166",w:8,h:12,p:[3,0,2,1,3,1,4,1,2,2,3,2,4,2,1,3,2,3,3,3,4,3,5,3,1,4,2,4,3,4,4,4,5,4,0,5,1,5,2,5,3,5,4,5,5,5,6,5,0,6,1,6,2,6,3,6,4,6,5,6,6,6,0,7,1,7,2,7,3,7,4,7,5,7,6,7,0,8,1,8,2,8,6,8,1,9,5,9,1,10,5,10,2,11,3,11,4,11]},
-  bulb     :{c:"#ffd166",w:10,h:14,p:[1,0,2,0,3,0,4,0,5,0,6,0,7,0,0,1,1,1,2,1,3,1,4,1,5,1,6,1,7,1,8,1,0,2,1,2,2,2,3,2,4,2,5,2,6,2,7,2,8,2,0,3,1,3,2,3,3,3,4,3,5,3,6,3,7,3,8,3,1,4,2,4,3,4,4,4,5,4,6,4,7,4,2,5,3,5,4,5,5,5,6,5,2,6,3,6,4,6,5,6,6,6,2,7,3,7,4,7,5,7,6,7,3,8,4,8,5,8,3,9,4,9,5,9,4,10,4,11]},
-  reset    :{c:"#3fe6ff",w:12,h:12,p:[6,0,7,0,5,1,6,1,7,1,8,1,4,2,5,2,8,2,9,2,3,3,4,3,9,3,10,3,3,4,10,4,3,5,9,5,4,6,8,6,4,7,5,7,6,7,7,7,8,7,5,8,6,8,7,8,7,9,6,10,5,11]},
-  seedling :{c:"#4ade80",w:10,h:12,p:[3,0,4,0,5,0,2,1,3,1,4,1,5,1,6,1,1,2,2,2,4,2,5,2,6,2,7,2,2,3,3,3,4,3,5,3,6,3,3,4,4,4,5,4,4,5,4,6,3,7,4,7,5,7,3,8,4,8,5,8,3,9,4,9,5,9,2,10,3,10,4,10,5,10,6,10]},
-  search   :{c:"#8489bd",w:12,h:12,p:[2,0,3,0,4,0,5,0,1,1,2,1,3,1,4,1,5,1,6,1,0,2,1,2,2,2,3,2,4,2,5,2,6,2,7,2,0,3,1,3,2,3,3,3,4,3,5,3,6,3,7,3,0,4,1,4,2,4,3,4,4,4,5,4,6,4,7,4,1,5,2,5,3,5,4,5,5,5,6,5,2,6,3,6,4,6,5,6,3,7,4,7,5,8,6,8,5,9,6,9,7,10,8,10,7,11,8,11]},
-  close    :{c:"#8489bd",w:10,h:10,p:[1,0,7,0,0,1,2,1,6,1,8,1,0,2,3,2,5,2,8,2,0,3,4,3,2,4,2,5,1,6,4,6,0,7,3,7,5,7,8,7,0,8,2,8,6,8,8,8,1,9,7,9]},
-  play     :{c:"#3fe6ff",w:10,h:12,p:[3,0,2,1,3,1,1,2,2,2,3,2,0,3,1,3,2,3,3,3,0,4,1,4,2,4,3,4,0,5,1,5,2,5,3,5,0,6,1,6,2,6,3,6,1,7,2,7,3,7,2,8,3,8,3,9]},
-  link     :{c:"#3fe6ff",w:12,h:10,p:[4,0,5,0,6,0,7,0,3,1,4,1,5,1,6,1,7,1,8,1,2,2,3,2,4,2,5,2,6,2,7,2,8,2,9,2,1,3,2,3,3,3,4,3,5,3,6,3,7,3,8,3,9,3,10,3,0,4,1,4,10,4,0,5,1,5,10,5,1,6,2,6,9,6,2,7,3,7,8,7,3,8,4,8,5,8,6,8,7,8,2,9,3,9,4,9,5,9,6,9,7,9,8,9]},
-  diamond  :{c:"#3fe6ff",w:10,h:10,p:[4,0,5,0,3,1,4,1,5,1,6,1,2,2,3,2,4,2,5,2,6,2,7,2,1,3,2,3,3,3,4,3,5,3,6,3,7,3,8,3,0,4,1,4,2,4,3,4,4,4,5,4,6,4,7,4,8,4,9,4,0,5,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,9,5,1,6,2,6,3,6,4,6,5,6,6,6,7,6,8,6,2,7,3,7,4,7,5,7,6,7,7,7,3,8,4,8,5,8,6,8,4,9,5,9]},
-  flag     :{c:"#ff3f9c",w:10,h:12,p:[1,0,1,1,2,1,3,1,1,2,2,2,3,2,4,2,1,3,2,3,4,3,1,4,2,4,3,4,1,5,2,5,3,5,4,5,5,5,1,6,2,6,3,6,4,6,5,6,6,6,1,7,1,8,1,9,1,10,1,11]},
-  note     :{c:"#ffd166",w:10,h:12,p:[2,0,3,0,4,0,1,1,2,1,3,1,4,1,5,1,0,2,1,2,2,2,3,2,4,2,5,2,6,2,0,3,1,3,2,3,3,3,5,3,0,4,1,4,2,4,3,4,5,4,0,5,1,5,2,5,3,5,4,5,1,6,2,6,3,6,4,6,2,7,3,7,2,8,3,8,2,9,3,9]},
-  mountain :{c:"#4ade80",w:16,h:12,p:[0,9,1,8,9,10,10,9,2,7,3,6,8,8,9,7,10,8,4,5,5,4,6,5,7,6,8,7,3,5,7,5,2,6,8,6,0,10,1,9,2,8,3,7,4,6,5,5,6,6,7,7,8,8,9,9,10,10,11,9,12,8,13,7,14,6,15,5,11,8,12,7,13,6,14,5,15,4,11,9,12,8,13,7,14,6,15,5,14,4,15,3]},
-  cloud    :{c:"#8489bd",w:16,h:10,p:[2,3,3,3,4,3,5,3,6,3,1,4,2,4,3,4,4,4,5,4,6,4,7,4,0,5,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,1,6,2,6,3,6,4,6,5,6,6,6,7,6,2,7,3,7,4,7,5,7,6,7,10,4,11,4,12,4,13,4,9,5,10,5,11,5,12,5,13,5,14,5,10,6,11,6,12,6,13,6,11,7,12,7]},
-  expand   :{c:"#3fe6ff",w:10,h:10,p:[0,0,1,0,2,0,0,1,0,2,7,0,8,0,9,0,9,1,9,2,0,7,0,8,0,9,1,9,2,9,7,9,8,9,9,9,9,8,9,7]},
-  compass  :{c:"#3fe6ff",w:12,h:12,p:[5,0,6,0,4,1,5,1,6,1,7,1,3,2,7,2,2,3,3,3,7,3,8,3,1,4,2,4,3,4,4,4,5,4,6,4,7,4,8,4,9,4,0,5,1,5,9,5,10,5,0,6,1,6,9,6,10,6,1,7,2,7,8,7,9,7,2,8,3,8,7,8,8,8,3,9,4,9,5,9,6,9,7,9,4,10,5,10,6,10]},
-  clock    :{c:"#ffd166",w:12,h:12,p:[5,0,6,0,4,1,5,1,6,1,7,1,3,2,7,2,2,3,3,3,7,3,8,3,1,4,2,4,8,4,9,4,0,5,1,5,5,5,9,5,10,5,0,6,1,6,5,6,9,6,10,6,1,7,2,7,5,7,8,7,9,7,2,8,3,8,7,8,8,8,3,9,4,9,5,9,6,9,7,9,4,10,5,10,6,10]},
-  mail     :{c:"#3fe6ff",w:12,h:10,p:[1,1,2,1,3,1,4,1,5,1,6,1,7,1,8,1,9,1,10,1,0,2,1,2,2,2,3,2,4,2,5,2,6,2,7,2,8,2,9,2,10,2,11,2,2,3,3,3,4,3,5,3,6,3,7,3,8,3,9,3,10,3,3,4,4,4,5,4,6,4,7,4,8,4,1,5,2,5,3,5,4,5,5,5,6,5,7,5,8,5,9,5,10,5]},
+  star: { c: "#ffd166", w: 12, h: 12, p: [2, 0, 3, 0, 1, 1, 2, 1, 3, 1, 4, 1, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 0, 3, 1, 3, 2, 3, 3, 3, 4, 3, 5, 3, 1, 4, 2, 4, 3, 4, 4, 4, 2, 5, 3, 5] },
+  palette: { c: "#3fe6ff", w: 12, h: 10, p: [1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 0, 1, 2, 1, 4, 1, 5, 1, 7, 1, 0, 2, 7, 2, 0, 3, 7, 3, 1, 4, 2, 4, 3, 4, 4, 4, 5, 4, 6, 4, 3, 5, 4, 5, 3, 6, 4, 6, 2, 7, 3, 7, 4, 7, 5, 7] },
+  sparkle: { c: "#ff3f9c", w: 14, h: 14, p: [5, 2, 7, 2, 4, 3, 5, 3, 6, 3, 7, 3, 8, 3, 2, 4, 3, 4, 4, 4, 5, 4, 6, 4, 7, 4, 8, 4, 9, 4, 10, 4, 1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5, 11, 5, 0, 6, 1, 6, 2, 6, 3, 6, 4, 6, 5, 6, 6, 6, 7, 6, 8, 6, 9, 6, 10, 6, 11, 6, 12, 6, 1, 7, 2, 7, 3, 7, 4, 7, 5, 7, 6, 7, 7, 7, 8, 7, 9, 7, 10, 7, 11, 7, 2, 8, 3, 8, 4, 8, 5, 8, 6, 8, 7, 8, 8, 8, 9, 8, 10, 8, 4, 9, 5, 9, 6, 9, 7, 9, 8, 9, 5, 10, 7, 10] },
+  bolt: { c: "#a29bfe", w: 10, h: 12, p: [3, 0, 4, 0, 3, 1, 4, 1, 2, 2, 3, 2, 4, 2, 5, 2, 1, 3, 2, 3, 3, 3, 4, 3, 5, 3, 0, 4, 1, 4, 2, 4, 3, 4, 4, 4, 1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 1, 6, 2, 6, 3, 6, 4, 6, 2, 7, 3, 7, 4, 7, 2, 8, 3, 8] },
+  sword: { c: "#ff6b6b", w: 10, h: 12, p: [4, 0, 3, 1, 4, 1, 5, 1, 3, 2, 4, 2, 5, 2, 3, 3, 4, 3, 5, 3, 4, 4, 2, 5, 4, 5, 6, 5, 1, 6, 3, 6, 5, 6, 7, 6, 0, 7, 2, 7, 4, 7, 6, 7, 8, 7] },
+  trophy: { c: "#ffd166", w: 12, h: 12, p: [1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8, 0, 9, 0, 0, 1, 10, 1, 0, 2, 3, 2, 4, 2, 5, 2, 6, 2, 10, 2, 0, 3, 10, 3, 0, 4, 10, 4, 1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 3, 6, 4, 6, 5, 6, 6, 6, 7, 6, 4, 7, 5, 7, 6, 7, 4, 8, 5, 8, 6, 8] },
+  check: { c: "#4ade80", w: 12, h: 10, p: [7, 0, 6, 1, 7, 1, 5, 2, 7, 2, 4, 3, 7, 3, 3, 4, 7, 4, 2, 5, 6, 5, 7, 5, 1, 6, 5, 6, 0, 7, 4, 7, 0, 8, 1, 8, 2, 8] },
+  wrench: { c: "#ff9a56", w: 12, h: 12, p: [5, 0, 6, 0, 4, 1, 5, 1, 6, 1, 7, 1, 4, 2, 5, 2, 6, 2, 7, 2, 5, 3, 6, 3, 5, 4, 6, 4, 4, 5, 5, 5, 6, 5, 7, 5, 3, 6, 4, 6, 5, 6, 6, 6, 7, 6, 8, 6, 2, 7, 3, 7, 4, 7, 5, 7, 6, 7, 7, 7, 8, 7, 9, 7, 1, 8, 2, 8, 3, 8, 4, 8, 5, 8, 6, 8, 7, 8, 8, 8, 0, 9, 1, 9, 2, 9, 3, 9, 4, 9, 5, 9, 6, 9, 0, 10, 1, 10, 2, 10] },
+  file: { c: "#8489bd", w: 10, h: 12, p: [1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 0, 1, 7, 1, 0, 2, 7, 2, 0, 3, 7, 3, 0, 4, 7, 4, 0, 5, 3, 5, 7, 5, 0, 6, 3, 6, 7, 6, 0, 7, 3, 7, 7, 7, 0, 8, 7, 8, 0, 9, 7, 9, 0, 10, 7, 10, 1, 11, 2, 11, 3, 11, 4, 11, 5, 11, 6, 11] },
+  eye: { c: "#3fe6ff", w: 14, h: 10, p: [0, 3, 1, 3, 2, 3, 3, 3, 4, 3, 5, 3, 6, 3, 7, 3, 8, 3, 9, 3, 10, 3, 11, 3, 12, 3, 13, 3, 1, 4, 2, 4, 3, 4, 4, 4, 5, 4, 6, 4, 7, 4, 8, 4, 9, 4, 10, 4, 11, 4, 12, 4, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5, 11, 5, 1, 6, 2, 6, 3, 6, 4, 6, 5, 6, 6, 6, 7, 6, 8, 6, 9, 6, 10, 6, 11, 6, 12, 6, 0, 7, 1, 7, 2, 7, 3, 7, 4, 7, 5, 7, 6, 7, 7, 7, 8, 7, 9, 7, 10, 7, 11, 7, 12, 7, 13, 7] },
+  pencil: { c: "#ffd166", w: 8, h: 12, p: [3, 0, 2, 1, 3, 1, 4, 1, 2, 2, 3, 2, 4, 2, 1, 3, 2, 3, 3, 3, 4, 3, 5, 3, 1, 4, 2, 4, 3, 4, 4, 4, 5, 4, 0, 5, 1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 0, 6, 1, 6, 2, 6, 3, 6, 4, 6, 5, 6, 6, 6, 0, 7, 1, 7, 2, 7, 3, 7, 4, 7, 5, 7, 6, 7, 0, 8, 1, 8, 2, 8, 6, 8, 1, 9, 5, 9, 1, 10, 5, 10, 2, 11, 3, 11, 4, 11] },
+  bulb: { c: "#ffd166", w: 10, h: 14, p: [1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2, 0, 3, 1, 3, 2, 3, 3, 3, 4, 3, 5, 3, 6, 3, 7, 3, 8, 3, 1, 4, 2, 4, 3, 4, 4, 4, 5, 4, 6, 4, 7, 4, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 2, 6, 3, 6, 4, 6, 5, 6, 6, 6, 2, 7, 3, 7, 4, 7, 5, 7, 6, 7, 3, 8, 4, 8, 5, 8, 3, 9, 4, 9, 5, 9, 4, 10, 4, 11] },
+  reset: { c: "#3fe6ff", w: 12, h: 12, p: [6, 0, 7, 0, 5, 1, 6, 1, 7, 1, 8, 1, 4, 2, 5, 2, 8, 2, 9, 2, 3, 3, 4, 3, 9, 3, 10, 3, 3, 4, 10, 4, 3, 5, 9, 5, 4, 6, 8, 6, 4, 7, 5, 7, 6, 7, 7, 7, 8, 7, 5, 8, 6, 8, 7, 8, 7, 9, 6, 10, 5, 11] },
+  seedling: { c: "#4ade80", w: 10, h: 12, p: [3, 0, 4, 0, 5, 0, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 1, 2, 2, 2, 4, 2, 5, 2, 6, 2, 7, 2, 2, 3, 3, 3, 4, 3, 5, 3, 6, 3, 3, 4, 4, 4, 5, 4, 4, 5, 4, 6, 3, 7, 4, 7, 5, 7, 3, 8, 4, 8, 5, 8, 3, 9, 4, 9, 5, 9, 2, 10, 3, 10, 4, 10, 5, 10, 6, 10] },
+  search: { c: "#8489bd", w: 12, h: 12, p: [2, 0, 3, 0, 4, 0, 5, 0, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 0, 3, 1, 3, 2, 3, 3, 3, 4, 3, 5, 3, 6, 3, 7, 3, 0, 4, 1, 4, 2, 4, 3, 4, 4, 4, 5, 4, 6, 4, 7, 4, 1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 2, 6, 3, 6, 4, 6, 5, 6, 3, 7, 4, 7, 5, 8, 6, 8, 5, 9, 6, 9, 7, 10, 8, 10, 7, 11, 8, 11] },
+  close: { c: "#8489bd", w: 10, h: 10, p: [1, 0, 7, 0, 0, 1, 2, 1, 6, 1, 8, 1, 0, 2, 3, 2, 5, 2, 8, 2, 0, 3, 4, 3, 2, 4, 2, 5, 1, 6, 4, 6, 0, 7, 3, 7, 5, 7, 8, 7, 0, 8, 2, 8, 6, 8, 8, 8, 1, 9, 7, 9] },
+  play: { c: "#3fe6ff", w: 10, h: 12, p: [3, 0, 2, 1, 3, 1, 1, 2, 2, 2, 3, 2, 0, 3, 1, 3, 2, 3, 3, 3, 0, 4, 1, 4, 2, 4, 3, 4, 0, 5, 1, 5, 2, 5, 3, 5, 0, 6, 1, 6, 2, 6, 3, 6, 1, 7, 2, 7, 3, 7, 2, 8, 3, 8, 3, 9] },
+  link: { c: "#3fe6ff", w: 12, h: 10, p: [4, 0, 5, 0, 6, 0, 7, 0, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2, 9, 2, 1, 3, 2, 3, 3, 3, 4, 3, 5, 3, 6, 3, 7, 3, 8, 3, 9, 3, 10, 3, 0, 4, 1, 4, 10, 4, 0, 5, 1, 5, 10, 5, 1, 6, 2, 6, 9, 6, 2, 7, 3, 7, 8, 7, 3, 8, 4, 8, 5, 8, 6, 8, 7, 8, 2, 9, 3, 9, 4, 9, 5, 9, 6, 9, 7, 9, 8, 9] },
+  diamond: { c: "#3fe6ff", w: 10, h: 10, p: [4, 0, 5, 0, 3, 1, 4, 1, 5, 1, 6, 1, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 1, 3, 2, 3, 3, 3, 4, 3, 5, 3, 6, 3, 7, 3, 8, 3, 0, 4, 1, 4, 2, 4, 3, 4, 4, 4, 5, 4, 6, 4, 7, 4, 8, 4, 9, 4, 0, 5, 1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 1, 6, 2, 6, 3, 6, 4, 6, 5, 6, 6, 6, 7, 6, 8, 6, 2, 7, 3, 7, 4, 7, 5, 7, 6, 7, 7, 7, 3, 8, 4, 8, 5, 8, 6, 8, 4, 9, 5, 9] },
+  flag: { c: "#ff3f9c", w: 10, h: 12, p: [1, 0, 1, 1, 2, 1, 3, 1, 1, 2, 2, 2, 3, 2, 4, 2, 1, 3, 2, 3, 4, 3, 1, 4, 2, 4, 3, 4, 1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 1, 6, 2, 6, 3, 6, 4, 6, 5, 6, 6, 6, 1, 7, 1, 8, 1, 9, 1, 10, 1, 11] },
+  note: { c: "#ffd166", w: 10, h: 12, p: [2, 0, 3, 0, 4, 0, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 0, 3, 1, 3, 2, 3, 3, 3, 5, 3, 0, 4, 1, 4, 2, 4, 3, 4, 5, 4, 0, 5, 1, 5, 2, 5, 3, 5, 4, 5, 1, 6, 2, 6, 3, 6, 4, 6, 2, 7, 3, 7, 2, 8, 3, 8, 2, 9, 3, 9] },
+  mountain: { c: "#4ade80", w: 16, h: 12, p: [0, 9, 1, 8, 9, 10, 10, 9, 2, 7, 3, 6, 8, 8, 9, 7, 10, 8, 4, 5, 5, 4, 6, 5, 7, 6, 8, 7, 3, 5, 7, 5, 2, 6, 8, 6, 0, 10, 1, 9, 2, 8, 3, 7, 4, 6, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 9, 12, 8, 13, 7, 14, 6, 15, 5, 11, 8, 12, 7, 13, 6, 14, 5, 15, 4, 11, 9, 12, 8, 13, 7, 14, 6, 15, 5, 14, 4, 15, 3] },
+  cloud: { c: "#8489bd", w: 16, h: 10, p: [2, 3, 3, 3, 4, 3, 5, 3, 6, 3, 1, 4, 2, 4, 3, 4, 4, 4, 5, 4, 6, 4, 7, 4, 0, 5, 1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 1, 6, 2, 6, 3, 6, 4, 6, 5, 6, 6, 6, 7, 6, 2, 7, 3, 7, 4, 7, 5, 7, 6, 7, 10, 4, 11, 4, 12, 4, 13, 4, 9, 5, 10, 5, 11, 5, 12, 5, 13, 5, 14, 5, 10, 6, 11, 6, 12, 6, 13, 6, 11, 7, 12, 7] },
+  expand: { c: "#3fe6ff", w: 10, h: 10, p: [0, 0, 1, 0, 2, 0, 0, 1, 0, 2, 7, 0, 8, 0, 9, 0, 9, 1, 9, 2, 0, 7, 0, 8, 0, 9, 1, 9, 2, 9, 7, 9, 8, 9, 9, 9, 9, 8, 9, 7] },
+  compass: { c: "#3fe6ff", w: 12, h: 12, p: [5, 0, 6, 0, 4, 1, 5, 1, 6, 1, 7, 1, 3, 2, 7, 2, 2, 3, 3, 3, 7, 3, 8, 3, 1, 4, 2, 4, 3, 4, 4, 4, 5, 4, 6, 4, 7, 4, 8, 4, 9, 4, 0, 5, 1, 5, 9, 5, 10, 5, 0, 6, 1, 6, 9, 6, 10, 6, 1, 7, 2, 7, 8, 7, 9, 7, 2, 8, 3, 8, 7, 8, 8, 8, 3, 9, 4, 9, 5, 9, 6, 9, 7, 9, 4, 10, 5, 10, 6, 10] },
+  clock: { c: "#ffd166", w: 12, h: 12, p: [5, 0, 6, 0, 4, 1, 5, 1, 6, 1, 7, 1, 3, 2, 7, 2, 2, 3, 3, 3, 7, 3, 8, 3, 1, 4, 2, 4, 8, 4, 9, 4, 0, 5, 1, 5, 5, 5, 9, 5, 10, 5, 0, 6, 1, 6, 5, 6, 9, 6, 10, 6, 1, 7, 2, 7, 5, 7, 8, 7, 9, 7, 2, 8, 3, 8, 7, 8, 8, 8, 3, 9, 4, 9, 5, 9, 6, 9, 7, 9, 4, 10, 5, 10, 6, 10] },
+  mail: { c: "#3fe6ff", w: 12, h: 10, p: [1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 9, 1, 10, 1, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2, 9, 2, 10, 2, 11, 2, 2, 3, 3, 3, 4, 3, 5, 3, 6, 3, 7, 3, 8, 3, 9, 3, 10, 3, 3, 4, 4, 4, 5, 4, 6, 4, 7, 4, 8, 4, 1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5] },
 };
 
 const PS = 2;
-function PxIcon({name,size=18,color}) {
-  const art=PIXEL_ART[name]; if(!art) return null;
-  const vw=art.w*PS,vh=art.h*PS,c=color||art.c;
-  const rects=[];
-  for(let i=0;i<art.p.length;i+=2) rects.push(<rect key={i/2} x={art.p[i]*PS} y={art.p[i+1]*PS} width={PS} height={PS} fill={c} shapeRendering="crispEdges" />);
-  return <svg width={size} height={size} viewBox={`0 0 ${vw} ${vh}`} style={{display:'inline-block',verticalAlign:'middle',flexShrink:0}} aria-hidden="true">{rects}</svg>;
+function PxIcon({ name, size = 18, color }) {
+  const art = PIXEL_ART[name]; if (!art) return null;
+  const vw = art.w * PS, vh = art.h * PS, c = color || art.c;
+  const rects = [];
+  for (let i = 0; i < art.p.length; i += 2) rects.push(<rect key={i / 2} x={art.p[i] * PS} y={art.p[i + 1] * PS} width={PS} height={PS} fill={c} shapeRendering="crispEdges" />);
+  return <svg width={size} height={size} viewBox={`0 0 ${vw} ${vh}`} style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }} aria-hidden="true">{rects}</svg>;
 }
 
 /* =============================================================
    📦 extra icons (github, mail)
    ============================================================= */
-const iconProps = (s,c) => ({width:s,height:s,viewBox:"0 0 24 24",fill:"none",stroke:c,strokeWidth:1.5,strokeLinecap:"round",strokeLinejoin:"round"});
-function IconGithub({s=18,c="currentColor"}){return <svg {...iconProps(s,c)}><path d="M9 19c-4 1.2-4-2.1-5.5-2.5M17 22v-3.2c0-.9-.3-1.5-.6-1.8 2.1-.2 4.3-1 4.3-4.7 0-1-.4-1.9-1-2.6.1-.3.4-1.3-.1-2.7 0 0-.9-.3-2.9 1a10 10 0 00-5.4 0c-2-1.3-2.9-1-2.9-1-.5 1.4-.2 2.4-.1 2.7-.6.7-1 1.6-1 2.6 0 3.7 2.2 4.5 4.3 4.7-.3.3-.5.7-.6 1.4V22"/></svg>}
-function IconMail({s=18,c="currentColor"}){return <svg {...iconProps(s,c)}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>}
+const iconProps = (s, c) => ({ width: s, height: s, viewBox: "0 0 24 24", fill: "none", stroke: c, strokeWidth: 1.5, strokeLinecap: "round", strokeLinejoin: "round" });
+function IconGithub({ s = 18, c = "currentColor" }) { return <svg {...iconProps(s, c)}><path d="M9 19c-4 1.2-4-2.1-5.5-2.5M17 22v-3.2c0-.9-.3-1.5-.6-1.8 2.1-.2 4.3-1 4.3-4.7 0-1-.4-1.9-1-2.6.1-.3.4-1.3-.1-2.7 0 0-.9-.3-2.9 1a10 10 0 00-5.4 0c-2-1.3-2.9-1-2.9-1-.5 1.4-.2 2.4-.1 2.7-.6.7-1 1.6-1 2.6 0 3.7 2.2 4.5 4.3 4.7-.3.3-.5.7-.6 1.4V22" /></svg> }
+function IconMail({ s = 18, c = "currentColor" }) { return <svg {...iconProps(s, c)}><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3.5 6.5L12 13l8.5-6.5" /></svg> }
 
 /* =============================================================
    🌌 starry bg with mountains n clouds
    ============================================================= */
 function PixelBackground() {
-  const ref=useRef(null);
-  useEffect(()=>{
-    const canvas=ref.current; if(!canvas) return;
-    const ctx=canvas.getContext('2d'); let anim,w,h,stars=[],clouds=[],offset=0;
-    function resize(){w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight;}
+  const ref = useRef(null);
+  useEffect(() => {
+    const canvas = ref.current; if (!canvas) return;
+    const ctx = canvas.getContext('2d'); let anim, w, h, stars = [], clouds = [], offset = 0;
+    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
     resize();
-    function init(){
-      stars=[]; for(let i=0;i<80;i++) stars.push({x:Math.random()*w,y:Math.random()*h*0.4,s:Math.random()*2+1,a:Math.random()*0.7+0.3,sp:Math.random()*0.3+0.05,phase:Math.random()*Math.PI*2});
-      clouds=[]; for(let i=0;i<4;i++) clouds.push({x:Math.random()*w,y:40+Math.random()*(h*0.25),w2:60+Math.random()*120,h2:14+Math.random()*8,sp:0.15+Math.random()*0.3});
+    function init() {
+      stars = []; for (let i = 0; i < 80; i++) stars.push({ x: Math.random() * w, y: Math.random() * h * 0.4, s: Math.random() * 2 + 1, a: Math.random() * 0.7 + 0.3, sp: Math.random() * 0.3 + 0.05, phase: Math.random() * Math.PI * 2 });
+      clouds = []; for (let i = 0; i < 4; i++) clouds.push({ x: Math.random() * w, y: 40 + Math.random() * (h * 0.25), w2: 60 + Math.random() * 120, h2: 14 + Math.random() * 8, sp: 0.15 + Math.random() * 0.3 });
     }
     init();
-    function drawMountain(ox,oy,mw,mh,color){ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(ox,oy+mh);ctx.lineTo(ox+mw/2,oy);ctx.lineTo(ox+mw,oy+mh);ctx.closePath();ctx.fill();}
-    function animate(time){
-      ctx.clearRect(0,0,w,h);
-      for(const s of stars){const tw=0.5+0.5*Math.sin(time*0.002+s.phase);ctx.globalAlpha=s.a*tw;ctx.fillStyle='#eef0ff';ctx.fillRect(Math.floor(s.x),Math.floor(s.y),s.s,s.s);s.y+=s.sp*0.1;if(s.y>h*0.4){s.y=0;s.x=Math.random()*w;}}
-      ctx.globalAlpha=1;
-      const mc=['#0f1535','#151b45','#1c2355']; for(let i=0;i<3;i++){const mw=w*0.8,mh=50+i*20,mx=(w-mw)/2+Math.sin(offset*0.005+i)*20;drawMountain(mx,h-80-i*15,mw,mh,mc[i]);drawMountain(mx-mw*0.3,h-80-i*15,mw*0.5,mh*0.6,mc[i]);drawMountain(mx+mw*0.5,h-80-i*15,mw*0.6,mh*0.7,mc[i]);}
-      for(const c of clouds){ctx.fillStyle='rgba(132,137,189,0.12)';const cx=Math.floor(c.x),cy=Math.floor(c.y);const cw=c.w2,ch=c.h2;ctx.fillRect(cx-cw/2,cy-ch/2,cw,ch);ctx.fillRect(cx-cw/2+10,cy-ch/2-4,cw-20,ch-2);ctx.fillRect(cx-cw/2+20,cy-ch/2-8,cw-40,ch-4);c.x+=c.sp;if(c.x>w+cw)c.x=-cw;}
-      ctx.fillStyle='#070911';ctx.fillRect(0,h-16,w,16);ctx.fillStyle='rgba(63,230,255,0.03)';ctx.fillRect(0,h-16,w,1);
-      offset++; anim=requestAnimationFrame(animate);
+    function drawMountain(ox, oy, mw, mh, color) { ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(ox, oy + mh); ctx.lineTo(ox + mw / 2, oy); ctx.lineTo(ox + mw, oy + mh); ctx.closePath(); ctx.fill(); }
+    function animate(time) {
+      ctx.clearRect(0, 0, w, h);
+      for (const s of stars) { const tw = 0.5 + 0.5 * Math.sin(time * 0.002 + s.phase); ctx.globalAlpha = s.a * tw; ctx.fillStyle = '#eef0ff'; ctx.fillRect(Math.floor(s.x), Math.floor(s.y), s.s, s.s); s.y += s.sp * 0.1; if (s.y > h * 0.4) { s.y = 0; s.x = Math.random() * w; } }
+      ctx.globalAlpha = 1;
+      const mc = ['#0f1535', '#151b45', '#1c2355']; for (let i = 0; i < 3; i++) { const mw = w * 0.8, mh = 50 + i * 20, mx = (w - mw) / 2 + Math.sin(offset * 0.005 + i) * 20; drawMountain(mx, h - 80 - i * 15, mw, mh, mc[i]); drawMountain(mx - mw * 0.3, h - 80 - i * 15, mw * 0.5, mh * 0.6, mc[i]); drawMountain(mx + mw * 0.5, h - 80 - i * 15, mw * 0.6, mh * 0.7, mc[i]); }
+      for (const c of clouds) { ctx.fillStyle = 'rgba(132,137,189,0.12)'; const cx = Math.floor(c.x), cy = Math.floor(c.y); const cw = c.w2, ch = c.h2; ctx.fillRect(cx - cw / 2, cy - ch / 2, cw, ch); ctx.fillRect(cx - cw / 2 + 10, cy - ch / 2 - 4, cw - 20, ch - 2); ctx.fillRect(cx - cw / 2 + 20, cy - ch / 2 - 8, cw - 40, ch - 4); c.x += c.sp; if (c.x > w + cw) c.x = -cw; }
+      ctx.fillStyle = '#070911'; ctx.fillRect(0, h - 16, w, 16); ctx.fillStyle = 'rgba(63,230,255,0.03)'; ctx.fillRect(0, h - 16, w, 1);
+      offset++; anim = requestAnimationFrame(animate);
     }
-    anim=requestAnimationFrame(animate);
-    const onResize=()=>{resize();init();};
-    window.addEventListener('resize',onResize);
-    return ()=>{cancelAnimationFrame(anim);window.removeEventListener('resize',onResize);};
-  },[]);
-  return <canvas ref={ref} style={{position:'fixed',inset:0,zIndex:0,pointerEvents:'none',opacity:0.3}} aria-hidden="true" />;
+    anim = requestAnimationFrame(animate);
+    const onResize = () => { resize(); init(); };
+    window.addEventListener('resize', onResize);
+    return () => { cancelAnimationFrame(anim); window.removeEventListener('resize', onResize); };
+  }, []);
+  return <canvas ref={ref} style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.3 }} aria-hidden="true" />;
 }
 
 /* =============================================================
    🌧️ pixel rain cuz why not
    ============================================================= */
 function PixelRain() {
-  const ref=useRef(null);
-  useEffect(()=>{
-    const c=ref.current; if(!c) return;
-    const ctx=c.getContext("2d"); let a,p=[];
-    function rs(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  const ref = useRef(null);
+  useEffect(() => {
+    const c = ref.current; if (!c) return;
+    const ctx = c.getContext("2d"); let a, p = [];
+    function rs() { c.width = window.innerWidth; c.height = window.innerHeight; }
     rs();
-    function init(){
-      p=[]; const ct=Math.floor((c.width*c.height)/8000); const cl=["#3fe6ff","#ff3f9c","#ffd166","#a29bfe","#fff","#ff6b6b"];
-      for(let j=0;j<ct;j++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,s:Math.random()*2+0.5,sy:Math.random()*0.6+0.05,sx:(Math.random()-0.5)*0.3,cl:cl[Math.floor(Math.random()*cl.length)],op:Math.random()*0.4+0.1});
+    function init() {
+      p = []; const ct = Math.floor((c.width * c.height) / 8000); const cl = ["#3fe6ff", "#ff3f9c", "#ffd166", "#a29bfe", "#fff", "#ff6b6b"];
+      for (let j = 0; j < ct; j++)p.push({ x: Math.random() * c.width, y: Math.random() * c.height, s: Math.random() * 2 + 0.5, sy: Math.random() * 0.6 + 0.05, sx: (Math.random() - 0.5) * 0.3, cl: cl[Math.floor(Math.random() * cl.length)], op: Math.random() * 0.4 + 0.1 });
     }
     init();
-    function anim(t){
-      ctx.clearRect(0,0,c.width,c.height);
-      for(const q of p){q.y+=q.sy;q.x+=q.sx;if(q.y>c.height){q.y=-q.s;q.x=Math.random()*c.width;}ctx.globalAlpha=q.op;ctx.fillStyle=q.cl;ctx.fillRect(q.x,q.y,q.s,q.s);}
-      ctx.globalAlpha=1;a=requestAnimationFrame(anim);
+    function anim(t) {
+      ctx.clearRect(0, 0, c.width, c.height);
+      for (const q of p) { q.y += q.sy; q.x += q.sx; if (q.y > c.height) { q.y = -q.s; q.x = Math.random() * c.width; } ctx.globalAlpha = q.op; ctx.fillStyle = q.cl; ctx.fillRect(q.x, q.y, q.s, q.s); }
+      ctx.globalAlpha = 1; a = requestAnimationFrame(anim);
     }
-    a=requestAnimationFrame(anim);
-    const w=()=>{rs();init();}; window.addEventListener("resize",w);
-    return()=>{cancelAnimationFrame(a);window.removeEventListener("resize",w);};
-  },[]);
-  return <canvas ref={ref} style={{position:"fixed",inset:0,zIndex:1,pointerEvents:"none",opacity:0.15}} aria-hidden="true" />;
+    a = requestAnimationFrame(anim);
+    const w = () => { rs(); init(); }; window.addEventListener("resize", w);
+    return () => { cancelAnimationFrame(a); window.removeEventListener("resize", w); };
+  }, []);
+  return <canvas ref={ref} style={{ position: "fixed", inset: 0, zIndex: 1, pointerEvents: "none", opacity: 0.15 }} aria-hidden="true" />;
 }
 
 /* =============================================================
    🕐 live clock thingy
    ============================================================= */
-function RealtimeClock({className=""}) {
+function RealtimeClock({ className = "" }) {
   const [time, setTime] = useState(new Date());
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 1000);
@@ -132,7 +132,7 @@ function RealtimeClock({className=""}) {
 /* =============================================================
    🎬 intro splash - name starts in the middle then moves left
    ============================================================= */
-function IntroOverlay({onDone}) {
+function IntroOverlay({ onDone }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -234,7 +234,7 @@ function PixelLoader({ onDone }) {
         ctx.fillStyle = 'rgba(132,137,189,0.18)';
         ctx.fillRect(w / 2 - 100, barY, 200, 6);
         // Outer glow
-        const glow = ctx.createRadialGradient(w/2, barY+3, 0, w/2, barY+3, 140);
+        const glow = ctx.createRadialGradient(w / 2, barY + 3, 0, w / 2, barY + 3, 140);
         glow.addColorStop(0, 'rgba(63,230,255,0.2)');
         glow.addColorStop(0.5, 'rgba(63,230,255,0.06)');
         glow.addColorStop(1, 'rgba(63,230,255,0)');
@@ -245,7 +245,7 @@ function PixelLoader({ onDone }) {
         ctx.fillRect(w / 2 - 100, barY, 200 * p, 6);
         // Leading-edge highlight (brighter head)
         const fillEnd = (w / 2 - 100) + 200 * p;
-        const headGlow = ctx.createRadialGradient(fillEnd, barY+3, 0, fillEnd, barY+3, 30);
+        const headGlow = ctx.createRadialGradient(fillEnd, barY + 3, 0, fillEnd, barY + 3, 30);
         headGlow.addColorStop(0, 'rgba(63,230,255,0.5)');
         headGlow.addColorStop(1, 'rgba(63,230,255,0)');
         ctx.fillStyle = headGlow;
@@ -316,7 +316,7 @@ function PixelLoader({ onDone }) {
         // Cleanup
         setTimeout(() => actx.close(), 1000);
       }
-    } catch {}
+    } catch { }
 
     anim = requestAnimationFrame(draw);
     window.addEventListener('resize', resize);
@@ -354,7 +354,7 @@ function useHoverSound() {
       o.connect(g).connect(ctx.destination);
       o.start(ctx.currentTime);
       o.stop(ctx.currentTime + 0.12);
-    } catch {}
+    } catch { }
   }, []);
 
   return play;
@@ -377,133 +377,135 @@ function ScrollProgress() {
    📁 projects data n filters
    ============================================================= */
 const projects = [
-  {id:1,title:"Motion Website",desc:"A front-end inspiration hub for exploring layout and animation ideas.",tags:["HTML","CSS","JS"],demo:"https://motion-website-des.vercel.app",code:"https://github.com/houtaroudes/motion-website",type:"Full Stack",year:"2025"},
-  {id:2,title:"PixelPodWeb",desc:"A photobooth web app with PHP + MySQL backend — built solo as a school project.",tags:["PHP","MySQL","CSS","JS"],demo:"https://pixelpodweb.vercel.app",code:"https://github.com/houtaroudes/PixelPodWeb",type:"Full Stack",year:"2025"},
-  {id:3,title:"Houtarou Cafe",desc:"A concept cafe site with minimalist design — ordering flow and reservation system.",tags:["HTML","CSS","JS"],code:"https://github.com/houtaroudes/houtarou-cafe",type:"Frontend",year:"2026"},
-  {id:4,title:"Learning WebDev Hub",desc:"My gamified learning hub with 26+ exercises, live previews, and code challenges!",tags:["React","Vite","HTML","CSS"],demo:"https://random-learning-webdev-site.vercel.app",code:"https://github.com/houtaroudes/random-learning-webdev-site",type:"Full Stack",year:"2026",featured:true},
-  {id:5,title:"Modern Filipino Homes",desc:"MONO-inspired architecture landing page with word-by-word scroll reveals, house carousel, and phase-built gallery — a premium Filipino housing showcase.",tags:["React","Vite","Framer Motion"],demo:"https://modern-filipino-homes.vercel.app",code:"https://github.com/houtaroudes/Modern-Filipino-Homes",type:"Full Stack",year:"2026",featured:true},
-  {id:6,title:"Modern Filipino Homes Platform",desc:"A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture — sustainable homes for the modern Filipino.",tags:["React","Vite","tRPC","MySQL","Tailwind"],demo:"https://modern-fil-homes.vercel.app",code:"https://github.com/houtaroudes/modern-fil-homes",type:"Full Stack",year:"2026",featured:true},
+  { id: 1, title: "Motion Website", desc: "A front-end inspiration hub for exploring layout and animation ideas.", tags: ["HTML", "CSS", "JS"], demo: "https://motion-website-des.vercel.app", code: "https://github.com/houtaroudes/motion-website", type: "Full Stack", year: "2025" },
+  { id: 2, title: "PixelPodWeb", desc: "A photobooth web app with PHP + MySQL backend — built solo as a school project.", tags: ["PHP", "MySQL", "CSS", "JS"], demo: "https://pixelpodweb.vercel.app", code: "https://github.com/houtaroudes/PixelPodWeb", type: "Full Stack", year: "2025" },
+  { id: 3, title: "Houtarou Cafe", desc: "A concept cafe site with minimalist design — ordering flow and reservation system.", tags: ["HTML", "CSS", "JS"], code: "https://github.com/houtaroudes/houtarou-cafe", type: "Frontend", year: "2026" },
+  { id: 4, title: "Learning WebDev Hub", desc: "My gamified learning hub with 26+ exercises, live previews, and code challenges!", tags: ["React", "Vite", "HTML", "CSS"], demo: "https://random-learning-webdev-site.vercel.app", code: "https://github.com/houtaroudes/random-learning-webdev-site", type: "Full Stack", year: "2026", featured: true },
+  { id: 5, title: "Modern Filipino Homes", desc: "MONO-inspired architecture landing page with word-by-word scroll reveals, house carousel, and phase-built gallery — a premium Filipino housing showcase.", tags: ["React", "Vite", "Framer Motion"], demo: "https://modern-filipino-homes.vercel.app", code: "https://github.com/houtaroudes/Modern-Filipino-Homes", type: "Full Stack", year: "2026", featured: true },
+  { id: 6, title: "Modern Filipino Homes Platform", desc: "A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture — sustainable homes for the modern Filipino.", tags: ["React", "Vite", "tRPC", "MySQL", "Tailwind"], demo: "https://modern-fil-homes.vercel.app", code: "https://github.com/houtaroudes/modern-fil-homes", type: "Full Stack", year: "2026", featured: true },
 ];
 const skillBadges = [
-  {name:"HTML5",icon:"diamond",color:"#e34f26"},{name:"CSS3",icon:"diamond",color:"#1572b6"},{name:"JS",icon:"diamond",color:"#f7df1e"},{name:"React",icon:"diamond",color:"#61dafb"},{name:"PHP",icon:"diamond",color:"#777bb3"},{name:"MySQL",icon:"diamond",color:"#4479a1"},{name:"Git",icon:"diamond",color:"#f05032"},{name:"Vite",icon:"diamond",color:"#a29bfe"},{name:"C#",icon:"diamond",color:"#68217a"},{name:"C++",icon:"diamond",color:"#00599c"},
+  { name: "HTML5", icon: "diamond", color: "#e34f26" }, { name: "CSS3", icon: "diamond", color: "#1572b6" }, { name: "JS", icon: "diamond", color: "#f7df1e" }, { name: "React", icon: "diamond", color: "#61dafb" }, { name: "PHP", icon: "diamond", color: "#777bb3" }, { name: "MySQL", icon: "diamond", color: "#4479a1" }, { name: "Git", icon: "diamond", color: "#f05032" }, { name: "Vite", icon: "diamond", color: "#a29bfe" }, { name: "C#", icon: "diamond", color: "#68217a" }, { name: "C++", icon: "diamond", color: "#00599c" },
 ];
 const categories = [
-  {id:"all",label:"All Projects",icon:"star",color:"var(--gold)"},{id:"fullstack",label:"Full Stack",icon:"bolt",color:"var(--cyan)"},{id:"frontend",label:"Frontend",icon:"palette",color:"var(--magenta)"},
+  { id: "all", label: "All Projects", icon: "star", color: "var(--gold)" }, { id: "fullstack", label: "Full Stack", icon: "bolt", color: "var(--cyan)" }, { id: "frontend", label: "Frontend", icon: "palette", color: "var(--magenta)" },
 ];
 
 /* =============================================================
    🪝 custom hooks i made
    ============================================================= */
-function useReveal(t=0.1, deps=[]){const r=useRef(null);const[v,s]=useState(false);useEffect(()=>{const e=r.current;if(!e)return;const o=new IntersectionObserver(([n])=>{if(n.isIntersecting){s(true);o.unobserve(e);}},{threshold:t});o.observe(e);return()=>o.disconnect();},[t,...deps]);return[r,v];}
-function RS({children,className="",variant="up",...p}){const[r,v]=useReveal(0.08);return <section ref={r} className={`reveal-section reveal-${variant} ${v?"revealed":""} ${className}`} {...p}>{children}</section>;}
-function useActiveSection(ids){const[a,set]=useState(ids[0]||"");useEffect(()=>{const o=new IntersectionObserver((e)=>{for(const n of e){if(n.isIntersecting){set(n.target.id);break;}}},{rootMargin:"-40% 0px -55% 0px",threshold:0});ids.forEach(id=>{const el=document.getElementById(id);if(el)o.observe(el);});return()=>o.disconnect();},[ids]);return a;}
+function useReveal(t = 0.1, deps = []) { const r = useRef(null); const [v, s] = useState(false); useEffect(() => { const e = r.current; if (!e) return; const o = new IntersectionObserver(([n]) => { if (n.isIntersecting) { s(true); o.unobserve(e); } }, { threshold: t }); o.observe(e); return () => o.disconnect(); }, [t, ...deps]); return [r, v]; }
+function RS({ children, className = "", variant = "up", ...p }) { const [r, v] = useReveal(0.08); return <section ref={r} className={`reveal-section reveal-${variant} ${v ? "revealed" : ""} ${className}`} {...p}>{children}</section>; }
+function useActiveSection(ids) { const [a, set] = useState(ids[0] || ""); useEffect(() => { const o = new IntersectionObserver((e) => { for (const n of e) { if (n.isIntersecting) { set(n.target.id); break; } } }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 }); ids.forEach(id => { const el = document.getElementById(id); if (el) o.observe(el); }); return () => o.disconnect(); }, [ids]); return a; }
 /* =============================================================
    🔢 number go brr counter
    ============================================================= */
-function CountUpValue({target,suffix='',duration=1500,delay=300}){
-  const[c,set]=useState(0);const[r,setR]=useState(false);const ref=useRef(null);
-  useEffect(()=>{const e=ref.current;if(!e)return;const o=new IntersectionObserver(([n])=>{if(n.isIntersecting){setR(true);o.unobserve(e);}},{threshold:0.3});o.observe(e);return()=>o.disconnect();},[]);
-  useEffect(()=>{if(!r)return;let t,aid;const a=(time)=>{if(!t)t=time;const e=time-t,p=Math.min(e/duration,1),v=1-Math.pow(1-p,3);set(Math.floor(v*target));if(p<1)aid=requestAnimationFrame(a);};const s=setTimeout(()=>{aid=requestAnimationFrame(a);},delay);return()=>{clearTimeout(s);if(aid)cancelAnimationFrame(aid);};},[r,target,duration,delay]);
+function CountUpValue({ target, suffix = '', duration = 1500, delay = 300 }) {
+  const [c, set] = useState(0); const [r, setR] = useState(false); const ref = useRef(null);
+  useEffect(() => { const e = ref.current; if (!e) return; const o = new IntersectionObserver(([n]) => { if (n.isIntersecting) { setR(true); o.unobserve(e); } }, { threshold: 0.3 }); o.observe(e); return () => o.disconnect(); }, []);
+  useEffect(() => { if (!r) return; let t, aid; const a = (time) => { if (!t) t = time; const e = time - t, p = Math.min(e / duration, 1), v = 1 - Math.pow(1 - p, 3); set(Math.floor(v * target)); if (p < 1) aid = requestAnimationFrame(a); }; const s = setTimeout(() => { aid = requestAnimationFrame(a); }, delay); return () => { clearTimeout(s); if (aid) cancelAnimationFrame(aid); }; }, [r, target, duration, delay]);
   return <span ref={ref}>{c}{suffix}</span>;
 }
 
 /* =============================================================
    🪟 project detail popup
    ============================================================= */
-function ProjectModal({project,onClose}){
-  const closeRef=useRef(onClose);closeRef.current=onClose;
-  useEffect(()=>{const h=e=>{if(e.key==='Escape')closeRef.current();};window.addEventListener('keydown',h);return()=>window.removeEventListener('keydown',h);},[]);
-  useEffect(()=>{document.body.style.overflow='hidden';return()=>{document.body.style.overflow='';};},[]);
-  if(!project)return null;
+function ProjectModal({ project, onClose }) {
+  const closeRef = useRef(onClose); closeRef.current = onClose;
+  useEffect(() => { const h = e => { if (e.key === 'Escape') closeRef.current(); }; window.addEventListener('keydown', h); return () => window.removeEventListener('keydown', h); }, []);
+  useEffect(() => { document.body.style.overflow = 'hidden'; return () => { document.body.style.overflow = ''; }; }, []);
+  if (!project) return null;
   return <div style={{
-    position:'fixed',inset:0,zIndex:9999,
-    display:'flex',alignItems:'center',justifyContent:'center',padding:'24px',
-    background:'rgba(0,0,0,0.85)'
+    position: 'fixed', inset: 0, zIndex: 9999,
+    display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px',
+    background: 'rgba(0,0,0,0.85)'
   }} onClick={onClose}>
-      <div onClick={e=>e.stopPropagation()} style={{
-        background:'#111827',border:'2px solid #3fe6ff',borderRadius:'20px',
-        padding:'36px 32px',maxWidth:'500px',width:'100%',position:'relative',
-        boxShadow:'0 24px 80px rgba(0,0,0,0.7)',
-        maxHeight:'85vh',overflowY:'auto'
-      }}>
-        <button onClick={onClose} style={{
-          position:'absolute',top:'14px',right:'14px',width:'32px',height:'32px',
-          borderRadius:'8px',border:'1px solid rgba(255,255,255,0.15)',
-          background:'#1f2937',color:'#9ca3af',cursor:'pointer',
-          display:'flex',alignItems:'center',justifyContent:'center',
-          fontSize:'18px',lineHeight:1,transition:'all .2s'
-        }} onMouseEnter={e=>{e.currentTarget.style.background='#db2777';e.currentTarget.style.color='#fff';e.currentTarget.style.transform='rotate(90deg)'}}
-          onMouseLeave={e=>{e.currentTarget.style.background='#1f2937';e.currentTarget.style.color='#9ca3af';e.currentTarget.style.transform='rotate(0deg)'}}
+    <div onClick={e => e.stopPropagation()} style={{
+      background: '#111827', border: '2px solid #3fe6ff', borderRadius: '20px',
+      padding: '36px 32px', maxWidth: '500px', width: '100%', position: 'relative',
+      boxShadow: '0 24px 80px rgba(0,0,0,0.7)',
+      maxHeight: '85vh', overflowY: 'auto'
+    }}>
+      <button onClick={onClose} style={{
+        position: 'absolute', top: '14px', right: '14px', width: '32px', height: '32px',
+        borderRadius: '8px', border: '1px solid rgba(255,255,255,0.15)',
+        background: '#1f2937', color: '#9ca3af', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '18px', lineHeight: 1, transition: 'all .2s'
+      }} onMouseEnter={e => { e.currentTarget.style.background = '#db2777'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'rotate(90deg)' }}
+        onMouseLeave={e => { e.currentTarget.style.background = '#1f2937'; e.currentTarget.style.color = '#9ca3af'; e.currentTarget.style.transform = 'rotate(0deg)' }}
         aria-label="Close modal">
-          <PxIcon name="close" size={14} />
-        </button>
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'16px'}}>
-          <span style={{fontFamily:'"JetBrains Mono",monospace',fontSize:'0.75rem',color:'#9ca3af'}}>{project.year}</span>
-          <span style={{
-            fontFamily:'"Press Start 2P",monospace',fontSize:'8px',letterSpacing:'1px',textTransform:'uppercase',
-            padding:'4px 12px',borderRadius:'6px',
-            background:project.featured?'#ffd166':'#3fe6ff',
-            color:'#070911'
-          }}>{project.type}</span>
-        </div>
-        <h3 style={{
-          fontFamily:'"Press Start 2P",monospace',fontSize:'18px',marginBottom:'14px',lineHeight:'1.4',
-          paddingRight:'32px',color:'#f8fafc'
-        }}>{project.title}</h3>
-        {project.featured && <div style={{
-          display:'inline-flex',alignItems:'center',gap:'6px',
-          fontFamily:'"Press Start 2P",monospace',fontSize:'8px',letterSpacing:'2px',
-          color:'#ffd166',border:'1px solid rgba(255,209,102,0.3)',
-          background:'rgba(255,209,102,0.08)',padding:'4px 14px',borderRadius:'100px',marginBottom:'14px'
-        }}><PxIcon name="trophy" size={10} color="#ffd166" /> MAIN QUEST</div>}
-        <p style={{color:'#e2e8f0',fontSize:'0.95rem',lineHeight:'1.7',marginBottom:'20px'}}>{project.desc}</p>
-        <div style={{marginBottom:'20px'}}>
-          <h4 style={{fontFamily:'"Press Start 2P",monospace',fontSize:'9px',letterSpacing:'1px',textTransform:'uppercase',color:'#94a3b8',marginBottom:'8px'}}>Technologies</h4>
-          <div style={{display:'flex',gap:'6px',flexWrap:'wrap'}}>
-            {project.tags.map(t=>(
-              <span key={t} style={{
-                padding:'5px 12px',borderRadius:'8px',fontSize:'0.75rem',
-                background:'rgba(63,230,255,0.1)',color:'#67e8f9',
-                border:'1px solid rgba(63,230,255,0.25)',fontFamily:'"JetBrains Mono",monospace'
-              }}>{t}</span>
-            ))}
-          </div>
-        </div>
-        <div style={{display:'flex',gap:'10px',flexWrap:'wrap',marginTop:'4px'}}>
-          {project.demo&&(
-            <a href={project.demo} target="_blank" rel="noopener" style={{
-              display:'inline-flex',alignItems:'center',gap:'6px',padding:'10px 22px',
-              borderRadius:'10px',fontSize:'0.75rem',fontFamily:'"Press Start 2P",monospace',
-              background:'#3fe6ff',color:'#070911',border:'none',cursor:'pointer',textDecoration:'none',
-              transition:'all .2s'
-            }} onMouseEnter={e=>{e.currentTarget.style.background='#22d3ee'}}
-              onMouseLeave={e=>{e.currentTarget.style.background='#3fe6ff'}}
-            ><PxIcon name="play" size={12} color="#070911" /> Live Demo</a>
-          )}
-          <a href={project.code} target="_blank" rel="noopener" style={{
-            display:'inline-flex',alignItems:'center',gap:'6px',padding:'10px 22px',
-            borderRadius:'10px',fontSize:'0.75rem',fontFamily:'"Press Start 2P",monospace',
-            background:'transparent',color:'#94a3b8',border:'1px solid rgba(255,255,255,0.15)',
-            cursor:'pointer',textDecoration:'none',transition:'all .2s'
-          }} onMouseEnter={e=>{e.currentTarget.style.color='#3fe6ff';e.currentTarget.style.borderColor='#3fe6ff'}}
-            onMouseLeave={e=>{e.currentTarget.style.color='#94a3b8';e.currentTarget.style.borderColor='rgba(255,255,255,0.15)'}}
-          ><PxIcon name="file" size={12} /> View Code</a>
+        <PxIcon name="close" size={14} />
+      </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: '0.75rem', color: '#9ca3af' }}>{project.year}</span>
+        <span style={{
+          fontFamily: '"Press Start 2P",monospace', fontSize: '8px', letterSpacing: '1px', textTransform: 'uppercase',
+          padding: '4px 12px', borderRadius: '6px',
+          background: project.featured ? '#ffd166' : '#3fe6ff',
+          color: '#070911'
+        }}>{project.type}</span>
+      </div>
+      <h3 style={{
+        fontFamily: '"Press Start 2P",monospace', fontSize: '18px', marginBottom: '14px', lineHeight: '1.4',
+        paddingRight: '32px', color: '#f8fafc'
+      }}>{project.title}</h3>
+      {project.featured && <div style={{
+        display: 'inline-flex', alignItems: 'center', gap: '6px',
+        fontFamily: '"Press Start 2P",monospace', fontSize: '8px', letterSpacing: '2px',
+        color: '#ffd166', border: '1px solid rgba(255,209,102,0.3)',
+        background: 'rgba(255,209,102,0.08)', padding: '4px 14px', borderRadius: '100px', marginBottom: '14px'
+      }}><PxIcon name="trophy" size={10} color="#ffd166" /> MAIN QUEST</div>}
+      <p style={{ color: '#e2e8f0', fontSize: '0.95rem', lineHeight: '1.7', marginBottom: '20px' }}>{project.desc}</p>
+      <div style={{ marginBottom: '20px' }}>
+        <h4 style={{ fontFamily: '"Press Start 2P",monospace', fontSize: '9px', letterSpacing: '1px', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '8px' }}>Technologies</h4>
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          {project.tags.map(t => (
+            <span key={t} style={{
+              padding: '5px 12px', borderRadius: '8px', fontSize: '0.75rem',
+              background: 'rgba(63,230,255,0.1)', color: '#67e8f9',
+              border: '1px solid rgba(63,230,255,0.25)', fontFamily: '"JetBrains Mono",monospace'
+            }}>{t}</span>
+          ))}
         </div>
       </div>
-    </div>;
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '4px' }}>
+        {project.demo && (
+          <a href={project.demo} target="_blank" rel="noopener" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 22px',
+            borderRadius: '10px', fontSize: '0.75rem', fontFamily: '"Press Start 2P",monospace',
+            background: '#3fe6ff', color: '#070911', border: 'none', cursor: 'pointer', textDecoration: 'none',
+            transition: 'all .2s'
+          }} onMouseEnter={e => { e.currentTarget.style.background = '#22d3ee' }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#3fe6ff' }}
+          ><PxIcon name="play" size={12} color="#070911" /> Live Demo</a>
+        )}
+        <a href={project.code} target="_blank" rel="noopener" style={{
+          display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 22px',
+          borderRadius: '10px', fontSize: '0.75rem', fontFamily: '"Press Start 2P",monospace',
+          background: 'transparent', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.15)',
+          cursor: 'pointer', textDecoration: 'none', transition: 'all .2s'
+        }} onMouseEnter={e => { e.currentTarget.style.color = '#3fe6ff'; e.currentTarget.style.borderColor = '#3fe6ff' }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#94a3b8'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)' }}
+        ><PxIcon name="file" size={12} /> View Code</a>
+      </div>
+    </div>
+  </div>;
 }
 
 /* =============================================================
    ➕ pixel divider line thing
    ============================================================= */
-function PixelDivider(){return <div className="pixel-divider" aria-hidden="true"><div className="divider-glow-track"><span className="divider-glow-dot" /></div><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span></div>;}
+function PixelDivider() { return <div className="pixel-divider" aria-hidden="true"><div className="divider-glow-track"><span className="divider-glow-dot" /></div><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span></div>; }
 
 /* =============================================================
    ⬆️ back to top button
    ============================================================= */
-function ScrollToTop(){const[v,s]=useState(false);useEffect(()=>{const h=()=>s(window.scrollY>400);window.addEventListener('scroll',h,{passive:true});return()=>window.removeEventListener('scroll',h);},[]);return <motion.button className={`scroll-top-btn ${v?'visible':''}`} onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} aria-label="Scroll to top"
-  animate={{scale:v?1:0,opacity:v?1:0}} transition={{duration:0.3,ease:"backOut"}}
-><PxIcon name="star" size={16} /></motion.button>;}
+function ScrollToTop() {
+  const [v, s] = useState(false); useEffect(() => { const h = () => s(window.scrollY > 400); window.addEventListener('scroll', h, { passive: true }); return () => window.removeEventListener('scroll', h); }, []); return <motion.button className={`scroll-top-btn ${v ? 'visible' : ''}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Scroll to top"
+    animate={{ scale: v ? 1 : 0, opacity: v ? 1 : 0 }} transition={{ duration: 0.3, ease: "backOut" }}
+  ><PxIcon name="star" size={16} /></motion.button>;
+}
 
 /* =============================================================
    🔁 typewriter thing - cycles thru different texts
@@ -524,7 +526,7 @@ function CycleTypewriter() {
     const current = PHRASES[idx];
     const speed = dir === 1 ? 45 : 20;
     const pause = dir === 1 && char === current.length ? 2500 :
-                  dir === -1 && char === 0 ? 600 : 0;
+      dir === -1 && char === 0 ? 600 : 0;
 
     if (pause > 0) {
       const t = setTimeout(() => {
@@ -550,7 +552,7 @@ function CycleTypewriter() {
 /* =============================================================
    👀 scroll reveal animation
    ============================================================= */
-function AttentionGrabber({children, className="", delay=0}) {
+function AttentionGrabber({ children, className = "", delay = 0 }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   return (
@@ -588,32 +590,32 @@ function getIntroLimit() {
 
 export default function Portfolio() {
   const introLimited = getIntroLimit();
-  const[activeCat,setActiveCat]=useState("all");
-  const[scrolled,setScrolled]=useState(false);
-  const[hovered,setHovered]=useState(null);
-  const[darkMode,setDarkMode]=useState(()=>localStorage.getItem("theme")!=="light");
-  const[modalProject,setModalProject]=useState(null);
-  const[formSent,setFormSent]=useState(false);
-  const[introDone,setIntroDone]=useState(introLimited);
-  const[loading,setLoading]=useState(!introLimited);
-  const[showContent,setShowContent]=useState(introLimited);
-  const activeSection=useActiveSection(["hero","projects","skills","contact"]);
+  const [activeCat, setActiveCat] = useState("all");
+  const [scrolled, setScrolled] = useState(false);
+  const [hovered, setHovered] = useState(null);
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem("theme") !== "light");
+  const [modalProject, setModalProject] = useState(null);
+  const [formSent, setFormSent] = useState(false);
+  const [introDone, setIntroDone] = useState(introLimited);
+  const [loading, setLoading] = useState(!introLimited);
+  const [showContent, setShowContent] = useState(introLimited);
+  const activeSection = useActiveSection(["hero", "projects", "skills", "contact"]);
 
-  useEffect(()=>{
-    document.documentElement.setAttribute("data-theme",darkMode?"dark":"light");
-    localStorage.setItem("theme",darkMode?"dark":"light");
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
     // Dispatch custom event for smooth theme transitions
-    window.dispatchEvent(new CustomEvent('themechange', {detail: {theme: darkMode ? 'dark' : 'light'}}));
-  },[darkMode]);
+    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: darkMode ? 'dark' : 'light' } }));
+  }, [darkMode]);
 
-  useEffect(()=>{
-    const o=()=>{
-      const y=window.scrollY;
-      setScrolled(y>50);
+  useEffect(() => {
+    const o = () => {
+      const y = window.scrollY;
+      setScrolled(y > 50);
     };
-    window.addEventListener("scroll",o,{passive:true});
-    return()=>window.removeEventListener("scroll",o);
-  },[]);
+    window.addEventListener("scroll", o, { passive: true });
+    return () => window.removeEventListener("scroll", o);
+  }, []);
 
   useEffect(() => {
     if (loading || introDone) return;
@@ -622,7 +624,7 @@ export default function Portfolio() {
       try {
         const c = parseInt(localStorage.getItem('_introCount') || '0', 10);
         localStorage.setItem('_introCount', String(c + 1));
-      } catch {}
+      } catch { }
       setShowContent(true);
       const t2 = setTimeout(() => {
         setIntroDone(true);
@@ -633,16 +635,16 @@ export default function Portfolio() {
   }, [loading, introDone]);
 
   const hoverSound = useHoverSound();
-  const filtered=activeCat==="all"?projects:projects.filter(p=>p.type?.toLowerCase().replace(" ","")===activeCat);
-  const feat=projects.find(p=>p.featured);
+  const filtered = activeCat === "all" ? projects : projects.filter(p => p.type?.toLowerCase().replace(" ", "") === activeCat);
+  const feat = projects.find(p => p.featured);
 
   return (<>
     <style>{CSS}</style>
     <div id="app">
-      <PixelBackground/>
-      <PixelRain/>
-      <div className="vignette"/>
-      <div className="scanlines"/>
+      <PixelBackground />
+      <PixelRain />
+      <div className="vignette" />
+      <div className="scanlines" />
       <ScrollProgress />
 
       {/* 🖱️ Pixel mouse trail */}
@@ -662,7 +664,7 @@ export default function Portfolio() {
       {/* 🎬 Intro splash screen */}
       <AnimatePresence>
         {!loading && !introDone && (
-          <IntroOverlay onDone={() => {}} />
+          <IntroOverlay onDone={() => { }} />
         )}
       </AnimatePresence>
 
@@ -676,14 +678,14 @@ export default function Portfolio() {
         <div className="nav-inner">
           <a href="#" className="logo">
             <PxIcon name="star" size={20} />
-            <span className="logo-text">Houtarou<span className="accent">Des</span></span>
+            <span className="logo-text">Bryan<span className="accent">Sacueza</span></span>
           </a>
           <div className="nav-links">
             {[
-              {id:"projects",label:"Projects"},
-              {id:"skills",label:"Skills"},
-              {id:"contact",label:"Contact"},
-            ].map(n=><a key={n.id} href={`#${n.id}`} className={activeSection===n.id?"nav-active":""}>{n.label}</a>)}
+              { id: "projects", label: "Projects" },
+              { id: "skills", label: "Skills" },
+              { id: "contact", label: "Contact" },
+            ].map(n => <a key={n.id} href={`#${n.id}`} className={activeSection === n.id ? "nav-active" : ""}>{n.label}</a>)}
           </div>
           <div className="nav-right">
             <a href="https://houtaroudes-myportfolio.vercel.app" className="version-btn" target="_blank" rel="noopener">
@@ -692,15 +694,15 @@ export default function Portfolio() {
             <RealtimeClock className="nav-clock" />
             <motion.button
               className="theme-toggle-btn"
-              onClick={()=>setDarkMode(!darkMode)}
-              title={darkMode?"Light Mode":"Dark Mode"}
+              onClick={() => setDarkMode(!darkMode)}
+              title={darkMode ? "Light Mode" : "Dark Mode"}
               whileHover={{ rotate: 15 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{display:'block'}}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: 'block' }}>
                 {darkMode
-                  ? <><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></>
-                  : <><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></>}
+                  ? <><circle cx="12" cy="12" r="5" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></>
+                  : <><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></>}
               </svg>
             </motion.button>
           </div>
@@ -709,7 +711,7 @@ export default function Portfolio() {
 
       {/* HERO */}
       <header className="hero" id="hero">
-        <div className="hero-scan" aria-hidden="true"/>
+        <div className="hero-scan" aria-hidden="true" />
         <div className="hero-content">
           <>
             {/* Left side — Name flies here from center after intro */}
@@ -745,7 +747,7 @@ export default function Portfolio() {
 
                   <div className="hero-actions">
                     <a href="#projects" className="btn primary">View Projects</a>
-                    <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn"><IconGithub s={15}/> GitHub</a>
+                    <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn"><IconGithub s={15} /> GitHub</a>
                   </div>
                 </>
               )}
@@ -772,7 +774,7 @@ export default function Portfolio() {
       <div className="xp-bar">
         <div className="xp-inner">
           <div className="xp-info"><span className="xp-level">Lv. 3</span><span className="xp-label">Full-Stack Developer</span></div>
-          <div className="xp-track"><motion.div className="xp-fill" initial={{width:0}} whileInView={{width:"65%"}} viewport={{once:true}} transition={{duration:1.5,ease:"easeOut"}}/><span className="xp-text">4 / 6 projects shipped</span></div>
+          <div className="xp-track"><motion.div className="xp-fill" initial={{ width: 0 }} whileInView={{ width: "65%" }} viewport={{ once: true }} transition={{ duration: 1.5, ease: "easeOut" }} /><span className="xp-text">4 / 6 projects shipped</span></div>
         </div>
       </div>
 
@@ -786,37 +788,39 @@ export default function Portfolio() {
           <p className="section-desc">Real builds from my GitHub — click to see the code or play a live demo.</p>
         </div>
         <div className="filter-bar">
-          {categories.map(c=><button key={c.id} className={`filter-btn ${activeCat===c.id?"active":""}`} onClick={()=>setActiveCat(c.id)} style={activeCat===c.id?{borderColor:c.color,color:c.color}:{}}><PxIcon name={c.icon} size={14} /><span>{c.label}</span></button>)}
+          {categories.map(c => <button key={c.id} className={`filter-btn ${activeCat === c.id ? "active" : ""}`} onClick={() => setActiveCat(c.id)} style={activeCat === c.id ? { borderColor: c.color, color: c.color } : {}}><PxIcon name={c.icon} size={14} /><span>{c.label}</span></button>)}
         </div>
         <motion.div className="project-grid stagger-children" layout>
-          {filtered.map((p,i)=>(
+          {filtered.map((p, i) => (
             <motion.article
               layout
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className={`project-card ${p.featured?"featured":""}`} key={p.id}
-              onMouseEnter={()=>{setHovered(p.id);hoverSound();}} onMouseLeave={()=>setHovered(null)}
+              className={`project-card ${p.featured ? "featured" : ""}`} key={p.id}
+              onMouseEnter={() => { setHovered(p.id); hoverSound(); }} onMouseLeave={() => setHovered(null)}
             >
-              <div className="card-glow" style={{opacity:hovered===p.id?1:0,
-                background:`radial-gradient(400px circle at 50% 50%,${p.featured?"rgba(255,209,102,0.08)":"rgba(63,230,255,0.06)"},transparent)`}}/>
+              <div className="card-glow" style={{
+                opacity: hovered === p.id ? 1 : 0,
+                background: `radial-gradient(400px circle at 50% 50%,${p.featured ? "rgba(255,209,102,0.08)" : "rgba(63,230,255,0.06)"},transparent)`
+              }} />
               <div className="card-top">
                 <span className="card-year">{p.year}</span>
-                <span className="card-badge" style={{background:p.featured?"var(--gold)":"var(--cyan)",color:"var(--void)"}}>{p.type}</span>
+                <span className="card-badge" style={{ background: p.featured ? "var(--gold)" : "var(--cyan)", color: "var(--void)" }}>{p.type}</span>
               </div>
               <h3 className="card-title">{p.title}</h3>
               <p className="card-desc">{p.desc}</p>
-              <div className="card-tags">{p.tags.map(t=><span className="tag" key={t}>{t}</span>)}</div>
+              <div className="card-tags">{p.tags.map(t => <span className="tag" key={t}>{t}</span>)}</div>
               <div className="card-actions">
-                <button className="card-link details-link" onClick={()=>setModalProject(p)}><PxIcon name="expand" size={12} /> Details</button>
-                {p.demo&&<a href={p.demo} target="_blank" rel="noopener" className="card-link demo-link"><PxIcon name="play" size={12} color="#ffd166" /> Live Demo</a>}
+                <button className="card-link details-link" onClick={() => setModalProject(p)}><PxIcon name="expand" size={12} /> Details</button>
+                {p.demo && <a href={p.demo} target="_blank" rel="noopener" className="card-link demo-link"><PxIcon name="play" size={12} color="#ffd166" /> Live Demo</a>}
                 <a href={p.code} target="_blank" rel="noopener" className="card-link"><PxIcon name="file" size={12} /> View Code</a>
               </div>
             </motion.article>
           ))}
         </motion.div>
-        {filtered.length===0&&<div className="empty-state"><PxIcon name="search" size={24} /><p>No projects in this category yet.</p></div>}
+        {filtered.length === 0 && <div className="empty-state"><PxIcon name="search" size={24} /><p>No projects in this category yet.</p></div>}
       </RS>
 
       <PixelDivider />
@@ -824,11 +828,11 @@ export default function Portfolio() {
       {/* SKILLS */}
       <RS className="section" id="skills" variant="scale">
         <div className="section-head"><div className="eyebrow"><PxIcon name="wrench" size={14} /> Equipment Loadout</div><h2 className="section-title">Skills & <span className="accent">Tools</span></h2><p className="section-desc">Technologies I use to build stuff.</p></div>
-        <div className="skills-grid stagger-children">{skillBadges.map((s,i)=><motion.div
+        <div className="skills-grid stagger-children">{skillBadges.map((s, i) => <motion.div
           className="skill-badge" key={s.name}
           whileHover={{ scale: 1.1, y: -4 }}
           transition={{ type: "spring", stiffness: 300 }}
-          style={{"--badge-color":s.color}}
+          style={{ "--badge-color": s.color }}
         ><PxIcon name="diamond" size={14} color={s.color} /><span className="skill-name">{s.name}</span></motion.div>)}</div>
       </RS>
 
@@ -838,11 +842,11 @@ export default function Portfolio() {
       {feat && (
         <RS className="section" variant="scale">
           <div className="featured-card featured-full" onMouseEnter={hoverSound}>
-            <div className="featured-glow"/>
+            <div className="featured-glow" />
             <div className="featured-badge"><PxIcon name="trophy" size={10} /> MAIN QUEST <PxIcon name="trophy" size={10} /></div>
             <h3 className="featured-title">{feat.title}</h3>
             <p className="featured-desc">{feat.desc}</p>
-            <div className="featured-tags">{feat.tags.map(t=><span className="tag featured-tag" key={t}>{t}</span>)}</div>
+            <div className="featured-tags">{feat.tags.map(t => <span className="tag featured-tag" key={t}>{t}</span>)}</div>
             <div className="featured-actions">
               <a href={feat.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} /> Explore the Hub</a>
               <a href={feat.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
@@ -856,27 +860,27 @@ export default function Portfolio() {
       {/* CONTACT */}
       <RS className="section" id="contact" variant="right">
         <div className="contact-card">
-          <div className="eyebrow" style={{textAlign:"center"}}><PxIcon name="link" size={14} /> Multiplayer Lobby</div>
-          <h2 className="section-title" style={{textAlign:"center"}}>Let's Build Something <span className="accent">Together</span></h2>
-          <p className="section-desc" style={{textAlign:"center",marginBottom:24}}>Open for freelance gigs, school projects, or just talking shop about pixel art and web dev.</p>
-          <div className="hero-actions" style={{justifyContent:"center",flexDirection:'column',alignItems:'center',gap:'16px'}}>
-            <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn primary"><IconGithub s={15}/> GitHub Profile</a>
-            <form onSubmit={async (e) => { e.preventDefault(); const d = new FormData(e.target); try { await fetch('https://formspree.io/f/xzdnjdbd', { method: 'POST', body: d, headers: { 'Accept': 'application/json' } }); setFormSent(true); } catch { e.target.submit(); } }} style={{display:'flex',flexDirection:'column',gap:'10px',width:'100%',maxWidth:'400px'}}>
+          <div className="eyebrow" style={{ textAlign: "center" }}><PxIcon name="link" size={14} /> Multiplayer Lobby</div>
+          <h2 className="section-title" style={{ textAlign: "center" }}>Let's Build Something <span className="accent">Together</span></h2>
+          <p className="section-desc" style={{ textAlign: "center", marginBottom: 24 }}>Open for freelance gigs, school projects, or just talking shop about pixel art and web dev.</p>
+          <div className="hero-actions" style={{ justifyContent: "center", flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+            <a href="https://github.com/houtaroudes" target="_blank" rel="noopener" className="btn primary"><IconGithub s={15} /> GitHub Profile</a>
+            <form onSubmit={async (e) => { e.preventDefault(); const d = new FormData(e.target); try { await fetch('https://formspree.io/f/xzdnjdbd', { method: 'POST', body: d, headers: { 'Accept': 'application/json' } }); setFormSent(true); } catch { e.target.submit(); } }} style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '400px' }}>
               {!formSent ? (
-                <div className="fs-fields" style={{display:'flex',flexDirection:'column',gap:'10px'}}>
+                <div className="fs-fields" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <input type="text" name="name" placeholder="Your name" className="fs-input" required />
                   <input type="email" name="email" placeholder="Your email" className="fs-input" required />
                   <textarea name="message" placeholder="Your message..." className="fs-input fs-textarea" required rows={3}></textarea>
-                  <div style={{display:'flex',alignItems:'center',gap:'6px',fontSize:'0.7rem',color:'var(--dimmer)',fontFamily:'var(--font-mono)'}}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.7rem', color: 'var(--dimmer)', fontFamily: 'var(--font-mono)' }}>
                     <PxIcon name="mail" size={10} color="var(--cyan)" />
                     <span>Sends to: houtaroudes@gmail.com</span>
                   </div>
                   <input type="hidden" name="_subject" value="New portfolio message!" />
-                  <input type="text" name="_gotcha" style={{display:'none'}} />
+                  <input type="text" name="_gotcha" style={{ display: 'none' }} />
                   <button type="submit" className="btn primary"><PxIcon name="play" size={12} color="var(--void)" /> Send Message</button>
                 </div>
               ) : (
-                <div style={{textAlign:'center',padding:'20px 0',color:'var(--gold)',fontFamily:'var(--font-display)',fontSize:'11px',letterSpacing:'1px'}}>
+                <div style={{ textAlign: 'center', padding: '20px 0', color: 'var(--gold)', fontFamily: 'var(--font-display)', fontSize: '11px', letterSpacing: '1px' }}>
                   <PxIcon name="check" size={14} color="var(--gold)" /> MESSAGE DELIVERED!
                 </div>
               )}
@@ -889,13 +893,13 @@ export default function Portfolio() {
       <footer>
         <div className="footer-inner">
           <div className="pixel-footer-art" aria-hidden="true"><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /></div>
-          <p className="footer-credits"><strong>HoutarouDes</strong> — Full-Stack Developer</p>
+          <p className="footer-credits"><strong>Bryan Sacueza</strong> — Full-Stack Developer</p>
           <p className="footer-sub">4 projects &middot; 26+ exercises &middot; infinite curiosity</p>
         </div>
       </footer>
     </div>
     <AnimatePresence>
-      {modalProject && <ProjectModal project={modalProject} onClose={()=>setModalProject(null)} />}
+      {modalProject && <ProjectModal project={modalProject} onClose={() => setModalProject(null)} />}
     </AnimatePresence>
     <ScrollToTop />
   </>);
