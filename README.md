@@ -1,5 +1,5 @@
 
-#  HoutarouDes — Portfolio
+#  Bryan Sacueza — Portfolio
 
 > Full-stack developer portfolio with a retro pixel-art theme. Built with React, Vite, and hand-crafted pixel icons.
 
@@ -99,7 +99,7 @@ portfolio/
 
 ##  Author
 
-**HoutarouDes** — Full-stack developer building pixel-perfect worlds, one commit at a time.
+**Bryan Sacueza** — Full-stack developer building pixel-perfect worlds, one commit at a time.
 
 ---
 
