@@ -378,12 +378,13 @@ function ScrollProgress() {
    ============================================================= */
 const projects = [
   { id: 1, title: "Motion Website", desc: "A front-end inspiration hub for exploring layout and animation ideas.", tags: ["HTML", "CSS", "JS"], demo: "https://motion-website-des.vercel.app", code: "https://github.com/houtaroudes/motion-website", type: "Full Stack", year: "2025" },
-  { id: 2, title: "PixelPodWeb", desc: "A photobooth web app with PHP + MySQL backend — built solo as a school project.", tags: ["PHP", "MySQL", "CSS", "JS"], demo: "https://pixelpodweb.vercel.app", code: "https://github.com/houtaroudes/PixelPodWeb", type: "Full Stack", year: "2025" },
-  { id: 3, title: "Houtarou Cafe", desc: "A concept cafe site with minimalist design — ordering flow and reservation system.", tags: ["HTML", "CSS", "JS"], code: "https://github.com/houtaroudes/houtarou-cafe", type: "Frontend", year: "2026" },
-  { id: 4, title: "Learning WebDev Hub", desc: "My gamified learning hub with 26+ exercises, live previews, and code challenges!", tags: ["React", "Vite", "HTML", "CSS"], demo: "https://random-learning-webdev-site.vercel.app", code: "https://github.com/houtaroudes/random-learning-webdev-site", type: "Full Stack", year: "2026", featured: true },
-  { id: 5, title: "Modern Filipino Homes", desc: "MONO-inspired architecture landing page with word-by-word scroll reveals, house carousel, and phase-built gallery — a premium Filipino housing showcase.", tags: ["React", "Vite", "Framer Motion"], demo: "https://modern-filipino-homes.vercel.app", code: "https://github.com/houtaroudes/Modern-Filipino-Homes", type: "Full Stack", year: "2026", featured: true },
-  { id: 6, title: "Modern Filipino Homes Platform", desc: "A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture — sustainable homes for the modern Filipino.", tags: ["React", "Vite", "tRPC", "MySQL", "Tailwind"], demo: "https://modern-fil-homes.vercel.app", code: "https://github.com/houtaroudes/modern-fil-homes", type: "Full Stack", year: "2026", featured: true },
-  { id: 7, title: "MediQueue", desc: "Campus clinic appointment booking and walk-in queueing system — live NOW SERVING board that updates in real time, role-based dashboards for students/staff/admin, and a 38-check smoke test. Built in 15 modified-waterfall phases.", tags: ["PHP", "MySQL", "JS", "CSS"], code: "https://github.com/houtaroudes/mediqueue", type: "Full Stack", year: "2026", featured: true },
+  { id: 8, title: "St. Joseph Village", desc: "A cinematic subdivision landing page: a generated 3D village you fly through on scroll, an interactive 68-lot site plan, and a real Pag-IBIG vs bank financing calculator.", tags: ["React", "Vite", "Three.js"], demo: "https://st-joseph-village.vercel.app", code: "https://github.com/houtaroudes/st-joseph-village", type: "Full Stack", year: "2026", featured: true },
+  { id: 2, title: "PixelPodWeb", desc: "A photobooth web app with PHP + MySQL backend, built solo as a school project.", tags: ["PHP", "MySQL", "CSS", "JS"], demo: "https://pixelpodweb.vercel.app", code: "https://github.com/houtaroudes/PixelPodWeb", type: "Full Stack", year: "2025" },
+  { id: 3, title: "Houtarou Cafe", desc: "A concept cafe site with minimalist design: ordering flow and reservation system.", tags: ["HTML", "CSS", "JS"], code: "https://github.com/houtaroudes/houtarou-cafe", type: "Frontend", year: "2026" },
+  { id: 4, title: "Learning WebDev Hub", desc: "My gamified learning hub with 26+ exercises, live previews, and code challenges!", tags: ["React", "Vite", "HTML", "CSS"], demo: "https://random-learning-webdev-site.vercel.app", code: "https://github.com/houtaroudes/random-learning-webdev-site", type: "Full Stack", year: "2026", flag: true, featured: true },
+  { id: 5, title: "Modern Filipino Homes", desc: "MONO-inspired architecture landing page with word-by-word scroll reveals, house carousel, and phase-built gallery, a premium Filipino housing showcase.", tags: ["React", "Vite", "Framer Motion"], demo: "https://modern-filipino-homes.vercel.app", code: "https://github.com/houtaroudes/Modern-Filipino-Homes", type: "Full Stack", year: "2026", featured: true },
+  { id: 6, title: "Modern Filipino Homes Platform", desc: "A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture. Sustainable homes for the modern Filipino.", tags: ["React", "Vite", "tRPC", "MySQL", "Tailwind"], demo: "https://modern-fil-homes.vercel.app", code: "https://github.com/houtaroudes/modern-fil-homes", type: "Full Stack", year: "2026", featured: true },
+  { id: 7, title: "MediQueue", desc: "Campus clinic appointment booking and walk-in queueing system with a live NOW SERVING board that updates in real time, role-based dashboards for students/staff/admin, and a 38-check smoke test. Built in 15 modified-waterfall phases.", tags: ["PHP", "MySQL", "JS", "CSS"], code: "https://github.com/houtaroudes/mediqueue", type: "Full Stack", year: "2026", featured: true },
 ];
 const skillBadges = [
   { name: "HTML5", icon: "diamond", color: "#e34f26" }, { name: "CSS3", icon: "diamond", color: "#1572b6" }, { name: "JS", icon: "diamond", color: "#f7df1e" }, { name: "React", icon: "diamond", color: "#61dafb" }, { name: "PHP", icon: "diamond", color: "#777bb3" }, { name: "MySQL", icon: "diamond", color: "#4479a1" }, { name: "Git", icon: "diamond", color: "#f05032" }, { name: "Vite", icon: "diamond", color: "#a29bfe" }, { name: "C#", icon: "diamond", color: "#68217a" }, { name: "C++", icon: "diamond", color: "#00599c" },
@@ -637,7 +638,9 @@ export default function Portfolio() {
 
   const hoverSound = useHoverSound();
   const filtered = activeCat === "all" ? projects : projects.filter(p => p.type?.toLowerCase().replace(" ", "") === activeCat);
-  const feat = projects.find(p => p.featured);
+  /* The flagship keeps the MAIN QUEST slot; `flag` marks it explicitly so adding
+     another `featured` showcase (St. Joseph Village) cannot displace it. */
+  const feat = projects.find(p => p.flag) || projects.find(p => p.featured);
 
   return (<>
     <style>{CSS}</style>
@@ -715,7 +718,7 @@ export default function Portfolio() {
         <div className="hero-scan" aria-hidden="true" />
         <div className="hero-content">
           <>
-            {/* Left side — Name flies here from center after intro */}
+            {/* Left side - Name flies here from center after intro */}
             <motion.div className="hero-left"
               layoutId="main-title"
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
@@ -727,7 +730,7 @@ export default function Portfolio() {
               </h1>
             </motion.div>
 
-            {/* Right side — About info + typing */}
+            {/* Right side - About info + typing */}
             <motion.div className="hero-right"
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: showContent ? 1 : 0, x: showContent ? 0 : 40 }}
@@ -735,12 +738,12 @@ export default function Portfolio() {
             >
               {showContent && (
                 <>
-                  <div className="hero-badge"><PxIcon name="star" size={12} /> Player File — Slot 01</div>
+                  <div className="hero-badge"><PxIcon name="star" size={12} /> Player File - Slot 01</div>
 
                   <p className="hero-tagline pixel-typewriter"><CycleTypewriter /><span className="cursor-blink">|</span></p>
 
                   <div className="hero-stats">
-                    <div className="hero-stat"><PxIcon name="bolt" size={14} /><div><div className="hero-stat-value"><CountUpValue target={7} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
+                    <div className="hero-stat"><PxIcon name="bolt" size={14} /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
                     <div className="hero-stat"><PxIcon name="diamond" size={14} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={10} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
                     <div className="hero-stat"><PxIcon name="star" size={14} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
                     <div className="hero-stat"><PxIcon name="diamond" size={14} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
@@ -775,7 +778,7 @@ export default function Portfolio() {
       <div className="xp-bar">
         <div className="xp-inner">
           <div className="xp-info"><span className="xp-level">Lv. 3</span><span className="xp-label">Full-Stack Developer</span></div>
-          <div className="xp-track"><motion.div className="xp-fill" initial={{ width: 0 }} whileInView={{ width: "100%" }} viewport={{ once: true }} transition={{ duration: 1.5, ease: "easeOut" }} /><span className="xp-text">7 / 7 projects shipped</span></div>
+          <div className="xp-track"><motion.div className="xp-fill" initial={{ width: 0 }} whileInView={{ width: "100%" }} viewport={{ once: true }} transition={{ duration: 1.5, ease: "easeOut" }} /><span className="xp-text">8 / 8 projects shipped</span></div>
         </div>
       </div>
 
@@ -786,7 +789,7 @@ export default function Portfolio() {
         <div className="section-head">
           <div className="eyebrow"><PxIcon name="note" size={14} /> Cartridge Library</div>
           <h2 className="section-title">Project <span className="accent">Catalog</span></h2>
-          <p className="section-desc">Real builds from my GitHub — click to see the code or play a live demo.</p>
+          <p className="section-desc">Real builds from my GitHub: click to see the code or play a live demo.</p>
         </div>
         <div className="filter-bar">
           {categories.map(c => <button key={c.id} className={`filter-btn ${activeCat === c.id ? "active" : ""}`} onClick={() => setActiveCat(c.id)} style={activeCat === c.id ? { borderColor: c.color, color: c.color } : {}}><PxIcon name={c.icon} size={14} /><span>{c.label}</span></button>)}
@@ -894,7 +897,7 @@ export default function Portfolio() {
       <footer>
         <div className="footer-inner">
           <div className="pixel-footer-art" aria-hidden="true"><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /></div>
-          <p className="footer-credits"><strong>Bryan Sacueza</strong> — Full-Stack Developer</p>
+          <p className="footer-credits"><strong>Bryan Sacueza</strong>, Full-Stack Developer</p>
           <p className="footer-sub">7 projects &middot; 26+ exercises &middot; infinite curiosity</p>
         </div>
       </footer>

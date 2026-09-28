@@ -1,5 +1,5 @@
 
-#  Bryan Sacueza — Portfolio
+#  Bryan Sacueza - Portfolio
 
 > Full-stack developer portfolio with a retro pixel-art theme. Built with React, Vite, and hand-crafted pixel icons.
 
@@ -14,7 +14,7 @@
 ##  Features
 
 ###  Pixel Art Icon System
-Hand-crafted pixel SVG icons for every section — stars, diamonds, bolts, trophies, and more. Each icon is built from raw coordinate data with no external dependencies.
+Hand-crafted pixel SVG icons for every section - stars, diamonds, bolts, trophies, and more. Each icon is built from raw coordinate data with no external dependencies.
 
 ###  Dark / Light Mode
 Toggle between dark (void) and light themes. Preference persists via localStorage.
@@ -26,7 +26,7 @@ Hero statistics (projects, technologies, exercises) animate from 0 to their targ
 Click "Details" on any project card to open a full modal with ESC close, backdrop blur, scale-in animation, and body scroll lock.
 
 ###  Scroll Reveal System
-Sections animate in as you scroll — supporting up, left, right, scale, and fade variants with staggered child animations.
+Sections animate in as you scroll - supporting up, left, right, scale, and fade variants with staggered child animations.
 
 ###  Active Nav Highlighting
 The navigation bar automatically highlights the current section based on scroll position using `IntersectionObserver`.
@@ -99,7 +99,7 @@ portfolio/
 
 ##  Author
 
-**Bryan Sacueza** — Full-stack developer building pixel-perfect worlds, one commit at a time.
+**Bryan Sacueza** - Full-stack developer building pixel-perfect worlds, one commit at a time.
 
 ---
 
@@ -107,7 +107,7 @@ portfolio/
   <sub>Built with React, Vite, and pixel art</sub>
 </p>
 =======
-# HOUTAROUDES — Portfolio
+# HOUTAROUDES - Portfolio
 
 > A retro-futuristic, pixel-accented developer portfolio built with React + Vite.
 
@@ -117,14 +117,14 @@ portfolio/
 
 ## About
 
-This is my first full version of my personal developer portfolio — a single-page React app with a retro-arcade visual language: pixel-style icons, glowing accent colors, animated particle backgrounds, scroll-reveal sections, and a typewriter hero intro. It showcases my projects in a filterable "Project Catalog," lists my tools as an "Equipment Loadout," and ends with a contact section, all wrapped in a dark/light theme toggle.
+This is my first full version of my personal developer portfolio - a single-page React app with a retro-arcade visual language: pixel-style icons, glowing accent colors, animated particle backgrounds, scroll-reveal sections, and a typewriter hero intro. It showcases my projects in a filterable "Project Catalog," lists my tools as an "Equipment Loadout," and ends with a contact section, all wrapped in a dark/light theme toggle.
 
 ## Features
 
-- **Retro-arcade aesthetic** — pixel icons, gradient accents, and an animated canvas particle background
+- **Retro-arcade aesthetic** - pixel icons, gradient accents, and an animated canvas particle background
 - **Typewriter hero intro** with staggered entrance animations
-- **Project Catalog** — filterable by category (All / Full Stack / Frontend), pulling in real project links and repos
-- **Equipment Loadout** — animated skill badges for the tools and languages I use
+- **Project Catalog** - filterable by category (All / Full Stack / Frontend), pulling in real project links and repos
+- **Equipment Loadout** - animated skill badges for the tools and languages I use
 - **Dark / light theme toggle**, persisted via `localStorage`
 - **Scroll-based reveal animations** using `IntersectionObserver`
 - **Animated stat counters** that count up into view
@@ -173,7 +173,7 @@ npm run preview
 
 The Project Catalog pulls from a small curated list of my own repos, including:
 
-- **Motion Website** — a front-end inspiration hub for layout and animation ideas
-- **PixelPodWeb** — a photobooth web app with a PHP + MySQL backend
-- **Houtarou Cafe** — a minimalist concept café site with ordering and reservation flows
-- **Learning WebDev Hub** — a gamified learning hub with 26+ live-preview coding exercises
+- **Motion Website** - a front-end inspiration hub for layout and animation ideas
+- **PixelPodWeb** - a photobooth web app with a PHP + MySQL backend
+- **Houtarou Cafe** - a minimalist concept café site with ordering and reservation flows
+- **Learning WebDev Hub** - a gamified learning hub with 26+ live-preview coding exercises
