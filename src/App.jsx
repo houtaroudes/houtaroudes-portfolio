@@ -381,9 +381,9 @@ const projects = [
   { id: 8, title: "St. Joseph Village", desc: "A cinematic subdivision landing page: a generated 3D village you fly through on scroll, an interactive 68-lot site plan, and a real Pag-IBIG vs bank financing calculator.", tags: ["React", "Vite", "Three.js"], shot: "/shots/st-joseph.png", demo: "https://st-joseph-village.vercel.app", code: "https://github.com/houtaroudes/st-joseph-village", type: "Full Stack", year: "2026", featured: true },
   { id: 2, title: "PixelPodWeb", desc: "A photobooth web app with PHP + MySQL backend, built solo as a school project.", tags: ["PHP", "MySQL", "CSS", "JS"], code: "https://github.com/houtaroudes/PixelPodWeb", type: "Full Stack", year: "2025" },
   { id: 3, title: "Houtarou Cafe", desc: "A concept cafe site with minimalist design: ordering flow and reservation system.", tags: ["HTML", "CSS", "JS"], code: "https://github.com/houtaroudes/houtarou-cafe", type: "Frontend", year: "2026" },
-  { id: 4, title: "Learning WebDev Hub", desc: "My gamified learning hub with 26+ exercises, live previews, and code challenges!", tags: ["React", "Vite", "HTML", "CSS"], shot: "/shots/learning.png", demo: "https://random-learning-webdev-site.vercel.app", code: "https://github.com/houtaroudes/random-learning-webdev-site", type: "Full Stack", year: "2026", flag: true, featured: true },
+  { id: 4, title: "Learning WebDev Hub", desc: "My gamified learning hub with 26+ exercises, live previews, and code challenges!", tags: ["React", "Vite", "HTML", "CSS"], shot: "/shots/learning.png", demo: "https://random-learning-webdev-site.vercel.app", code: "https://github.com/houtaroudes/Random-Learning-WebDev", type: "Full Stack", year: "2026", flag: true, featured: true },
   { id: 5, title: "Modern Filipino Homes", desc: "MONO-inspired architecture landing page with word-by-word scroll reveals, house carousel, and phase-built gallery, a premium Filipino housing showcase.", tags: ["React", "Vite", "Framer Motion"], shot: "/shots/mfh-landing.png", demo: "https://modern-filipino-homes.vercel.app", code: "https://github.com/houtaroudes/Modern-Filipino-Homes", type: "Full Stack", year: "2026", featured: true },
-  { id: 6, title: "Modern Filipino Homes Platform", desc: "A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture. Sustainable homes for the modern Filipino.", tags: ["React", "Vite", "tRPC", "MySQL", "Tailwind"], shot: "/shots/mfh-platform.png", demo: "https://modern-fil-homes.vercel.app", code: "https://github.com/houtaroudes/modern-fil-homes", type: "Full Stack", year: "2026", featured: true },
+  { id: 6, title: "Modern Filipino Homes Platform", desc: "A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture. Sustainable homes for the modern Filipino.", tags: ["React", "Vite", "tRPC", "MySQL", "Tailwind"], shot: "/shots/mfh-platform.png", demo: "https://modern-fil-homes.vercel.app", type: "Full Stack", year: "2026", featured: true },
   { id: 7, title: "MediQueue", desc: "Campus clinic appointment booking and walk-in queueing system with a live NOW SERVING board that updates in real time, role-based dashboards for students/staff/admin, and a 38-check smoke test. Built in 15 modified-waterfall phases.", tags: ["PHP", "MySQL", "JS", "CSS"], code: "https://github.com/houtaroudes/mediqueue", type: "Full Stack", year: "2026", featured: true },
 ];
 const skillBadges = [
@@ -482,14 +482,14 @@ function ProjectModal({ project, onClose }) {
             onMouseLeave={e => { e.currentTarget.style.background = '#3fe6ff' }}
           ><PxIcon name="play" size={12} color="#070911" /> Live Demo</a>
         )}
-        <a href={project.code} target="_blank" rel="noopener" style={{
+        {project.code && <a href={project.code} target="_blank" rel="noopener" style={{
           display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 22px',
           borderRadius: '10px', fontSize: '0.75rem', fontFamily: '"Press Start 2P",monospace',
           background: 'transparent', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.15)',
           cursor: 'pointer', textDecoration: 'none', transition: 'all .2s'
         }} onMouseEnter={e => { e.currentTarget.style.color = '#3fe6ff'; e.currentTarget.style.borderColor = '#3fe6ff' }}
           onMouseLeave={e => { e.currentTarget.style.color = '#94a3b8'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)' }}
-        ><PxIcon name="file" size={12} /> View Code</a>
+        ><PxIcon name="file" size={12} /> View Code</a>}
       </div>
     </div>
   </div>;
@@ -825,7 +825,7 @@ export default function Portfolio() {
               <div className="card-actions">
                 <button className="card-link details-link" onClick={() => setModalProject(p)}><PxIcon name="expand" size={12} /> Details</button>
                 {p.demo && <a href={p.demo} target="_blank" rel="noopener" className="card-link demo-link"><PxIcon name="play" size={12} color="#ffd166" /> Live Demo</a>}
-                <a href={p.code} target="_blank" rel="noopener" className="card-link"><PxIcon name="file" size={12} /> View Code</a>
+                {p.code && <a href={p.code} target="_blank" rel="noopener" className="card-link"><PxIcon name="file" size={12} /> View Code</a>}
               </div>
             </motion.article>
           ))}
