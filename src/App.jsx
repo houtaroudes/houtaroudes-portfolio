@@ -377,13 +377,13 @@ function ScrollProgress() {
    📁 projects data n filters
    ============================================================= */
 const projects = [
-  { id: 1, title: "Motion Website", desc: "A front-end inspiration hub for exploring layout and animation ideas.", tags: ["HTML", "CSS", "JS"], demo: "https://motion-website-des.vercel.app", code: "https://github.com/houtaroudes/motion-website", type: "Full Stack", year: "2025" },
-  { id: 8, title: "St. Joseph Village", desc: "A cinematic subdivision landing page: a generated 3D village you fly through on scroll, an interactive 68-lot site plan, and a real Pag-IBIG vs bank financing calculator.", tags: ["React", "Vite", "Three.js"], demo: "https://st-joseph-village.vercel.app", code: "https://github.com/houtaroudes/st-joseph-village", type: "Full Stack", year: "2026", featured: true },
-  { id: 2, title: "PixelPodWeb", desc: "A photobooth web app with PHP + MySQL backend, built solo as a school project.", tags: ["PHP", "MySQL", "CSS", "JS"], demo: "https://pixelpodweb.vercel.app", code: "https://github.com/houtaroudes/PixelPodWeb", type: "Full Stack", year: "2025" },
+  { id: 1, title: "Motion Website", desc: "A front-end inspiration hub for exploring layout and animation ideas.", tags: ["HTML", "CSS", "JS"], shot: "/shots/motion.png", demo: "https://motion-website-des.vercel.app", code: "https://github.com/houtaroudes/motion-website", type: "Full Stack", year: "2025" },
+  { id: 8, title: "St. Joseph Village", desc: "A cinematic subdivision landing page: a generated 3D village you fly through on scroll, an interactive 68-lot site plan, and a real Pag-IBIG vs bank financing calculator.", tags: ["React", "Vite", "Three.js"], shot: "/shots/st-joseph.png", demo: "https://st-joseph-village.vercel.app", code: "https://github.com/houtaroudes/st-joseph-village", type: "Full Stack", year: "2026", featured: true },
+  { id: 2, title: "PixelPodWeb", desc: "A photobooth web app with PHP + MySQL backend, built solo as a school project.", tags: ["PHP", "MySQL", "CSS", "JS"], code: "https://github.com/houtaroudes/PixelPodWeb", type: "Full Stack", year: "2025" },
   { id: 3, title: "Houtarou Cafe", desc: "A concept cafe site with minimalist design: ordering flow and reservation system.", tags: ["HTML", "CSS", "JS"], code: "https://github.com/houtaroudes/houtarou-cafe", type: "Frontend", year: "2026" },
-  { id: 4, title: "Learning WebDev Hub", desc: "My gamified learning hub with 26+ exercises, live previews, and code challenges!", tags: ["React", "Vite", "HTML", "CSS"], demo: "https://random-learning-webdev-site.vercel.app", code: "https://github.com/houtaroudes/random-learning-webdev-site", type: "Full Stack", year: "2026", flag: true, featured: true },
-  { id: 5, title: "Modern Filipino Homes", desc: "MONO-inspired architecture landing page with word-by-word scroll reveals, house carousel, and phase-built gallery, a premium Filipino housing showcase.", tags: ["React", "Vite", "Framer Motion"], demo: "https://modern-filipino-homes.vercel.app", code: "https://github.com/houtaroudes/Modern-Filipino-Homes", type: "Full Stack", year: "2026", featured: true },
-  { id: 6, title: "Modern Filipino Homes Platform", desc: "A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture. Sustainable homes for the modern Filipino.", tags: ["React", "Vite", "tRPC", "MySQL", "Tailwind"], demo: "https://modern-fil-homes.vercel.app", code: "https://github.com/houtaroudes/modern-fil-homes", type: "Full Stack", year: "2026", featured: true },
+  { id: 4, title: "Learning WebDev Hub", desc: "My gamified learning hub with 26+ exercises, live previews, and code challenges!", tags: ["React", "Vite", "HTML", "CSS"], shot: "/shots/learning.png", demo: "https://random-learning-webdev-site.vercel.app", code: "https://github.com/houtaroudes/random-learning-webdev-site", type: "Full Stack", year: "2026", flag: true, featured: true },
+  { id: 5, title: "Modern Filipino Homes", desc: "MONO-inspired architecture landing page with word-by-word scroll reveals, house carousel, and phase-built gallery, a premium Filipino housing showcase.", tags: ["React", "Vite", "Framer Motion"], shot: "/shots/mfh-landing.png", demo: "https://modern-filipino-homes.vercel.app", code: "https://github.com/houtaroudes/Modern-Filipino-Homes", type: "Full Stack", year: "2026", featured: true },
+  { id: 6, title: "Modern Filipino Homes Platform", desc: "A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture. Sustainable homes for the modern Filipino.", tags: ["React", "Vite", "tRPC", "MySQL", "Tailwind"], shot: "/shots/mfh-platform.png", demo: "https://modern-fil-homes.vercel.app", code: "https://github.com/houtaroudes/modern-fil-homes", type: "Full Stack", year: "2026", featured: true },
   { id: 7, title: "MediQueue", desc: "Campus clinic appointment booking and walk-in queueing system with a live NOW SERVING board that updates in real time, role-based dashboards for students/staff/admin, and a 38-check smoke test. Built in 15 modified-waterfall phases.", tags: ["PHP", "MySQL", "JS", "CSS"], code: "https://github.com/houtaroudes/mediqueue", type: "Full Stack", year: "2026", featured: true },
 ];
 const skillBadges = [
@@ -743,8 +743,8 @@ export default function Portfolio() {
                   <p className="hero-tagline pixel-typewriter"><CycleTypewriter /><span className="cursor-blink">|</span></p>
 
                   <div className="hero-stats">
-                    <div className="hero-stat"><PxIcon name="bolt" size={14} /><div><div className="hero-stat-value"><CountUpValue target={8} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
-                    <div className="hero-stat"><PxIcon name="diamond" size={14} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={10} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
+                    <div className="hero-stat"><PxIcon name="bolt" size={14} /><div><div className="hero-stat-value"><CountUpValue target={projects.length} duration={1600} delay={400} /></div><div className="hero-stat-label">Projects</div></div></div>
+                    <div className="hero-stat"><PxIcon name="diamond" size={14} color="#ffd166" /><div><div className="hero-stat-value"><CountUpValue target={skillBadges.length} duration={1600} delay={500} /></div><div className="hero-stat-label">Technologies</div></div></div>
                     <div className="hero-stat"><PxIcon name="star" size={14} /><div><div className="hero-stat-value"><CountUpValue target={26} suffix="+" duration={1800} delay={600} /></div><div className="hero-stat-label">Exercises</div></div></div>
                     <div className="hero-stat"><PxIcon name="diamond" size={14} color="#3fe6ff" /><div><div className="hero-stat-value">Open</div><div className="hero-stat-label">To Work</div></div></div>
                   </div>
@@ -813,6 +813,12 @@ export default function Portfolio() {
                 <span className="card-year">{p.year}</span>
                 <span className="card-badge" style={{ background: p.featured ? "var(--gold)" : "var(--cyan)", color: "var(--void)" }}>{p.type}</span>
               </div>
+              {p.shot && (
+                <div className="card-screen">
+                  <img src={p.shot} alt={`${p.title} screenshot`} loading="lazy" decoding="async" />
+                  <span className="card-screen-label" aria-hidden="true">INSERT COIN</span>
+                </div>
+              )}
               <h3 className="card-title">{p.title}</h3>
               <p className="card-desc">{p.desc}</p>
               <div className="card-tags">{p.tags.map(t => <span className="tag" key={t}>{t}</span>)}</div>
@@ -852,7 +858,7 @@ export default function Portfolio() {
             <p className="featured-desc">{feat.desc}</p>
             <div className="featured-tags">{feat.tags.map(t => <span className="tag featured-tag" key={t}>{t}</span>)}</div>
             <div className="featured-actions">
-              <a href={feat.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} /> Explore the Hub</a>
+              <a href={feat.demo} target="_blank" rel="noopener" className="btn primary"><PxIcon name="play" size={12} /> Launch {feat.title}</a>
               <a href={feat.code} target="_blank" rel="noopener" className="btn"><PxIcon name="file" size={12} /> View Code</a>
             </div>
           </div>
@@ -898,7 +904,7 @@ export default function Portfolio() {
         <div className="footer-inner">
           <div className="pixel-footer-art" aria-hidden="true"><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /><PxIcon name="star" size={10} /></div>
           <p className="footer-credits"><strong>Bryan Sacueza</strong>, Full-Stack Developer</p>
-          <p className="footer-sub">7 projects &middot; 26+ exercises &middot; infinite curiosity</p>
+          <p className="footer-sub">{projects.length} projects &middot; 26+ exercises &middot; infinite curiosity</p>
         </div>
       </footer>
     </div>
@@ -1178,6 +1184,13 @@ nav.scrolled {
 .project-card.featured{border-color:rgba(255,209,102,0.25);background:linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%)}
 .project-card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 8px 30px rgba(63,230,255,0.08)}
 .project-card.featured:hover{border-color:var(--gold);box-shadow:0 8px 30px rgba(255,209,102,0.1)}
+.project-card .card-screen{position:relative;margin:2px 0 10px;border:2px solid var(--border);border-radius:10px;overflow:hidden;background:#05070f;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.65),0 0 0 3px rgba(63,230,255,0.06)}
+[data-theme="light"] .project-card .card-screen{border-color:rgba(0,0,0,0.18)}
+.project-card .card-screen::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,0.05) 0 1px,transparent 1px 3px);pointer-events:none}
+.project-card .card-screen img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;object-position:top center;filter:saturate(0.92);transition:transform .4s var(--ease-out),filter .4s var(--ease-out)}
+.project-card:hover .card-screen img{transform:scale(1.04);filter:saturate(1.05)}
+.project-card .card-screen-label{position:absolute;bottom:6px;right:8px;font-family:var(--font-display);font-size:6px;letter-spacing:2px;color:var(--gold);opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;pointer-events:none;text-shadow:0 0 8px rgba(255,209,102,0.7)}
+.project-card:hover .card-screen-label{opacity:1;transform:translateY(0)}
 .card-glow{position:absolute;inset:0;border-radius:14px;transition:opacity .3s;pointer-events:none}
 .card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .card-year{font-family:var(--font-mono);font-size:.65rem;color:var(--dimmer)}
