@@ -1,7 +1,11 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { motion, AnimatePresence, useScroll, useInView } from "framer-motion";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
 import PixelTrail from "./components/PixelTrail";
 import "./components/PixelTrail.css";
+import PixelBackground from "./components/PixelBackground";
+import PixelRain from "./components/PixelRain";
+import PixelLoader from "./components/PixelLoader";
+import { projects, skillBadges, categories } from "./data/portfolio";
 
 /* =============================================================
    🎨 pixel icons i drew myself lol
@@ -46,71 +50,10 @@ function PxIcon({ name, size = 18, color }) {
 }
 
 /* =============================================================
-   📦 extra icons (github, mail)
+   📦 extra github icon
    ============================================================= */
 const iconProps = (s, c) => ({ width: s, height: s, viewBox: "0 0 24 24", fill: "none", stroke: c, strokeWidth: 1.5, strokeLinecap: "round", strokeLinejoin: "round" });
 function IconGithub({ s = 18, c = "currentColor" }) { return <svg {...iconProps(s, c)}><path d="M9 19c-4 1.2-4-2.1-5.5-2.5M17 22v-3.2c0-.9-.3-1.5-.6-1.8 2.1-.2 4.3-1 4.3-4.7 0-1-.4-1.9-1-2.6.1-.3.4-1.3-.1-2.7 0 0-.9-.3-2.9 1a10 10 0 00-5.4 0c-2-1.3-2.9-1-2.9-1-.5 1.4-.2 2.4-.1 2.7-.6.7-1 1.6-1 2.6 0 3.7 2.2 4.5 4.3 4.7-.3.3-.5.7-.6 1.4V22" /></svg> }
-function IconMail({ s = 18, c = "currentColor" }) { return <svg {...iconProps(s, c)}><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3.5 6.5L12 13l8.5-6.5" /></svg> }
-
-/* =============================================================
-   🌌 starry bg with mountains n clouds
-   ============================================================= */
-function PixelBackground() {
-  const ref = useRef(null);
-  useEffect(() => {
-    const canvas = ref.current; if (!canvas) return;
-    const ctx = canvas.getContext('2d'); let anim, w, h, stars = [], clouds = [], offset = 0;
-    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-    resize();
-    function init() {
-      stars = []; for (let i = 0; i < 80; i++) stars.push({ x: Math.random() * w, y: Math.random() * h * 0.4, s: Math.random() * 2 + 1, a: Math.random() * 0.7 + 0.3, sp: Math.random() * 0.3 + 0.05, phase: Math.random() * Math.PI * 2 });
-      clouds = []; for (let i = 0; i < 4; i++) clouds.push({ x: Math.random() * w, y: 40 + Math.random() * (h * 0.25), w2: 60 + Math.random() * 120, h2: 14 + Math.random() * 8, sp: 0.15 + Math.random() * 0.3 });
-    }
-    init();
-    function drawMountain(ox, oy, mw, mh, color) { ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(ox, oy + mh); ctx.lineTo(ox + mw / 2, oy); ctx.lineTo(ox + mw, oy + mh); ctx.closePath(); ctx.fill(); }
-    function animate(time) {
-      ctx.clearRect(0, 0, w, h);
-      for (const s of stars) { const tw = 0.5 + 0.5 * Math.sin(time * 0.002 + s.phase); ctx.globalAlpha = s.a * tw; ctx.fillStyle = '#eef0ff'; ctx.fillRect(Math.floor(s.x), Math.floor(s.y), s.s, s.s); s.y += s.sp * 0.1; if (s.y > h * 0.4) { s.y = 0; s.x = Math.random() * w; } }
-      ctx.globalAlpha = 1;
-      const mc = ['#0f1535', '#151b45', '#1c2355']; for (let i = 0; i < 3; i++) { const mw = w * 0.8, mh = 50 + i * 20, mx = (w - mw) / 2 + Math.sin(offset * 0.005 + i) * 20; drawMountain(mx, h - 80 - i * 15, mw, mh, mc[i]); drawMountain(mx - mw * 0.3, h - 80 - i * 15, mw * 0.5, mh * 0.6, mc[i]); drawMountain(mx + mw * 0.5, h - 80 - i * 15, mw * 0.6, mh * 0.7, mc[i]); }
-      for (const c of clouds) { ctx.fillStyle = 'rgba(132,137,189,0.12)'; const cx = Math.floor(c.x), cy = Math.floor(c.y); const cw = c.w2, ch = c.h2; ctx.fillRect(cx - cw / 2, cy - ch / 2, cw, ch); ctx.fillRect(cx - cw / 2 + 10, cy - ch / 2 - 4, cw - 20, ch - 2); ctx.fillRect(cx - cw / 2 + 20, cy - ch / 2 - 8, cw - 40, ch - 4); c.x += c.sp; if (c.x > w + cw) c.x = -cw; }
-      ctx.fillStyle = '#070911'; ctx.fillRect(0, h - 16, w, 16); ctx.fillStyle = 'rgba(63,230,255,0.03)'; ctx.fillRect(0, h - 16, w, 1);
-      offset++; anim = requestAnimationFrame(animate);
-    }
-    anim = requestAnimationFrame(animate);
-    const onResize = () => { resize(); init(); };
-    window.addEventListener('resize', onResize);
-    return () => { cancelAnimationFrame(anim); window.removeEventListener('resize', onResize); };
-  }, []);
-  return <canvas ref={ref} style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.3 }} aria-hidden="true" />;
-}
-
-/* =============================================================
-   🌧️ pixel rain cuz why not
-   ============================================================= */
-function PixelRain() {
-  const ref = useRef(null);
-  useEffect(() => {
-    const c = ref.current; if (!c) return;
-    const ctx = c.getContext("2d"); let a, p = [];
-    function rs() { c.width = window.innerWidth; c.height = window.innerHeight; }
-    rs();
-    function init() {
-      p = []; const ct = Math.floor((c.width * c.height) / 8000); const cl = ["#3fe6ff", "#ff3f9c", "#ffd166", "#a29bfe", "#fff", "#ff6b6b"];
-      for (let j = 0; j < ct; j++)p.push({ x: Math.random() * c.width, y: Math.random() * c.height, s: Math.random() * 2 + 0.5, sy: Math.random() * 0.6 + 0.05, sx: (Math.random() - 0.5) * 0.3, cl: cl[Math.floor(Math.random() * cl.length)], op: Math.random() * 0.4 + 0.1 });
-    }
-    init();
-    function anim(t) {
-      ctx.clearRect(0, 0, c.width, c.height);
-      for (const q of p) { q.y += q.sy; q.x += q.sx; if (q.y > c.height) { q.y = -q.s; q.x = Math.random() * c.width; } ctx.globalAlpha = q.op; ctx.fillStyle = q.cl; ctx.fillRect(q.x, q.y, q.s, q.s); }
-      ctx.globalAlpha = 1; a = requestAnimationFrame(anim);
-    }
-    a = requestAnimationFrame(anim);
-    const w = () => { rs(); init(); }; window.addEventListener("resize", w);
-    return () => { cancelAnimationFrame(a); window.removeEventListener("resize", w); };
-  }, []);
-  return <canvas ref={ref} style={{ position: "fixed", inset: 0, zIndex: 1, pointerEvents: "none", opacity: 0.15 }} aria-hidden="true" />;
-}
 
 /* =============================================================
    🕐 live clock thingy
@@ -132,7 +75,7 @@ function RealtimeClock({ className = "" }) {
 /* =============================================================
    🎬 intro splash - name starts in the middle then moves left
    ============================================================= */
-function IntroOverlay({ onDone }) {
+function IntroOverlay() {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -171,159 +114,6 @@ function IntroOverlay({ onDone }) {
       </motion.div>
     </motion.div>
   );
-}
-
-/* =============================================================
-   🖥️ loading screen - grid fills up then shows the name
-   ============================================================= */
-function PixelLoader({ onDone }) {
-  const canvasRef = useRef(null);
-  const doneRef = useRef(onDone);
-  doneRef.current = onDone;
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let w, h;
-    const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
-    resize();
-
-    const GRID = 8;
-    const total = GRID * GRID;
-
-    const NAME = 'BRYAN SACUEZA';
-    const GRID_DUR = 800;
-    const NAME_DUR = 500;
-    let phase = 'grid';
-    let anim;
-    let done = false;
-    let start = performance.now();
-
-    function draw(time) {
-      const elapsed = time - start;
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = '#070911';
-      ctx.fillRect(0, 0, w, h);
-
-      if (phase === 'grid') {
-        const p = Math.min(elapsed / GRID_DUR, 1);
-        const e = 1 - Math.pow(1 - p, 3);
-        const show = Math.floor(e * total);
-        const cw = w / GRID, ch = h / GRID;
-
-        for (let i = 0; i < show && i < total; i++) {
-          const col = Math.floor(i / GRID);
-          const row = i % GRID;
-          const alpha = 0.12 + (i / total) * 0.6;
-          ctx.globalAlpha = alpha;
-          const bright = 0.4 + (i / total) * 0.6;
-          ctx.fillStyle = `rgba(63,230,255,${bright})`;
-          ctx.fillRect(Math.floor(col * cw), Math.floor(row * ch), Math.ceil(cw), Math.ceil(ch));
-        }
-        ctx.globalAlpha = 1;
-
-        const bootText = '> INITIALIZING PIXEL ENGINE...';
-        const chars = Math.floor(p * bootText.length);
-        ctx.fillStyle = '#8489bd';
-        ctx.font = '11px "JetBrains Mono", monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText(bootText.slice(0, Math.max(chars, 1)), w / 2, h - 70);
-        const barY = h - 55;
-        // Background track
-        ctx.fillStyle = 'rgba(132,137,189,0.18)';
-        ctx.fillRect(w / 2 - 100, barY, 200, 6);
-        // Outer glow
-        const glow = ctx.createRadialGradient(w / 2, barY + 3, 0, w / 2, barY + 3, 140);
-        glow.addColorStop(0, 'rgba(63,230,255,0.2)');
-        glow.addColorStop(0.5, 'rgba(63,230,255,0.06)');
-        glow.addColorStop(1, 'rgba(63,230,255,0)');
-        ctx.fillStyle = glow;
-        ctx.fillRect(w / 2 - 140, barY - 10, 280, 26);
-        // Fill itself
-        ctx.fillStyle = '#3fe6ff';
-        ctx.fillRect(w / 2 - 100, barY, 200 * p, 6);
-        // Leading-edge highlight (brighter head)
-        const fillEnd = (w / 2 - 100) + 200 * p;
-        const headGlow = ctx.createRadialGradient(fillEnd, barY + 3, 0, fillEnd, barY + 3, 30);
-        headGlow.addColorStop(0, 'rgba(63,230,255,0.5)');
-        headGlow.addColorStop(1, 'rgba(63,230,255,0)');
-        ctx.fillStyle = headGlow;
-        ctx.fillRect(fillEnd - 30, barY - 4, 60, 14);
-        // scanline sweep - makes it look cool
-        const sweepX = (w / 2 - 100) + (200 * p * (Math.sin(elapsed * 0.008) * 0.5 + 0.5));
-        ctx.fillStyle = 'rgba(255,255,255,0.25)';
-        ctx.fillRect(sweepX, barY - 1, 3, 8);
-        // Percentage text
-        ctx.fillStyle = '#eef0ff';
-        ctx.font = 'bold 11px "JetBrains Mono", monospace';
-        ctx.textAlign = 'left';
-        ctx.fillText(`${Math.floor(p * 100)}%`, w / 2 + 105, barY + 5);
-
-        if (p >= 1) { phase = 'name'; start = time; }
-        anim = requestAnimationFrame(draw);
-        return;
-      }
-
-      if (phase === 'name') {
-        const p = Math.min(elapsed / NAME_DUR, 1);
-        const e = 1 - Math.pow(1 - p, 2);
-        const n = Math.floor(e * NAME.length);
-
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        for (let i = 0; i < n && i < NAME.length; i++) {
-          ctx.font = 'bold 22px "Press Start 2P", monospace';
-          ctx.fillStyle = '#3fe6ff';
-          ctx.globalAlpha = 0.3 + 0.7 * ((i + 1) / Math.max(n, 1));
-          ctx.fillText(NAME[i], w / 2 - (NAME.length * 16) / 2 + i * 16 + 8, h / 2);
-        }
-        ctx.globalAlpha = 1;
-
-        ctx.fillStyle = '#8489bd';
-        ctx.font = '11px "JetBrains Mono", monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText('> LOADING COMPLETE', w / 2, h - 70);
-
-        if (p >= 1 && !done) {
-          done = true;
-          setTimeout(() => { if (doneRef.current) doneRef.current(); }, 100);
-          return;
-        }
-        anim = requestAnimationFrame(draw);
-      }
-    }
-
-    // 🔊 retro startup sound (beep boop)
-    try {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (AC) {
-        const actx = new AC();
-        const now = actx.currentTime;
-        // rising arpeggio thingy - c5, e5, g5, c6
-        const notes = [523, 659, 784, 1047];
-        notes.forEach((freq, i) => {
-          const o = actx.createOscillator();
-          const g = actx.createGain();
-          o.type = 'square';
-          o.frequency.setValueAtTime(freq, now + i * 0.09);
-          g.gain.setValueAtTime(0.04, now + i * 0.09);
-          g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.15);
-          o.connect(g).connect(actx.destination);
-          o.start(now + i * 0.09);
-          o.stop(now + i * 0.09 + 0.15);
-        });
-        // Cleanup
-        setTimeout(() => actx.close(), 1000);
-      }
-    } catch { }
-
-    anim = requestAnimationFrame(draw);
-    window.addEventListener('resize', resize);
-    return () => { cancelAnimationFrame(anim); window.removeEventListener('resize', resize); };
-  }, []);
-
-  return <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, zIndex: 200 }} />;
 }
 
 /* =============================================================
@@ -372,26 +162,6 @@ function ScrollProgress() {
     />
   );
 }
-
-/* =============================================================
-   📁 projects data n filters
-   ============================================================= */
-const projects = [
-  { id: 1, title: "Motion Website", desc: "A front-end inspiration hub for exploring layout and animation ideas.", tags: ["HTML", "CSS", "JS"], shot: "/shots/motion.png", demo: "https://motion-website-des.vercel.app", code: "https://github.com/houtaroudes/motion-website", type: "Full Stack", year: "2025" },
-  { id: 8, title: "St. Joseph Village", desc: "A cinematic subdivision landing page: a generated 3D village you fly through on scroll, an interactive 68-lot site plan, and a real Pag-IBIG vs bank financing calculator.", tags: ["React", "Vite", "Three.js"], shot: "/shots/st-joseph.png", demo: "https://st-joseph-village.vercel.app", code: "https://github.com/houtaroudes/st-joseph-village", type: "Full Stack", year: "2026", featured: true },
-  { id: 2, title: "PixelPodWeb", desc: "A photobooth web app with PHP + MySQL backend, built solo as a school project.", tags: ["PHP", "MySQL", "CSS", "JS"], code: "https://github.com/houtaroudes/PixelPodWeb", type: "Full Stack", year: "2025" },
-  { id: 3, title: "Houtarou Cafe", desc: "A concept cafe site with minimalist design: ordering flow and reservation system.", tags: ["HTML", "CSS", "JS"], code: "https://github.com/houtaroudes/houtarou-cafe", type: "Frontend", year: "2026" },
-  { id: 4, title: "Learning WebDev Hub", desc: "My gamified learning hub with 26+ exercises, live previews, and code challenges!", tags: ["React", "Vite", "HTML", "CSS"], shot: "/shots/learning.png", demo: "https://random-learning-webdev-site.vercel.app", code: "https://github.com/houtaroudes/Random-Learning-WebDev", type: "Full Stack", year: "2026", flag: true, featured: true },
-  { id: 5, title: "Modern Filipino Homes", desc: "MONO-inspired architecture landing page with word-by-word scroll reveals, house carousel, and phase-built gallery, a premium Filipino housing showcase.", tags: ["React", "Vite", "Framer Motion"], shot: "/shots/mfh-landing.png", demo: "https://modern-filipino-homes.vercel.app", code: "https://github.com/houtaroudes/Modern-Filipino-Homes", type: "Full Stack", year: "2026", featured: true },
-  { id: 6, title: "Modern Filipino Homes Platform", desc: "A secure proptech platform: property showcase, interactive financing calculator, climate resilience matrix, AI chat assistant, and secure lead capture. Sustainable homes for the modern Filipino.", tags: ["React", "Vite", "tRPC", "MySQL", "Tailwind"], shot: "/shots/mfh-platform.png", demo: "https://modern-fil-homes.vercel.app", type: "Full Stack", year: "2026", featured: true },
-  { id: 7, title: "MediQueue", desc: "Campus clinic appointment booking and walk-in queueing system with a live NOW SERVING board that updates in real time, role-based dashboards for students/staff/admin, and a 38-check smoke test. Built in 15 modified-waterfall phases.", tags: ["PHP", "MySQL", "JS", "CSS"], code: "https://github.com/houtaroudes/mediqueue", type: "Full Stack", year: "2026", featured: true },
-];
-const skillBadges = [
-  { name: "HTML5", icon: "diamond", color: "#e34f26" }, { name: "CSS3", icon: "diamond", color: "#1572b6" }, { name: "JS", icon: "diamond", color: "#f7df1e" }, { name: "React", icon: "diamond", color: "#61dafb" }, { name: "PHP", icon: "diamond", color: "#777bb3" }, { name: "MySQL", icon: "diamond", color: "#4479a1" }, { name: "Git", icon: "diamond", color: "#f05032" }, { name: "Vite", icon: "diamond", color: "#a29bfe" }, { name: "C#", icon: "diamond", color: "#68217a" }, { name: "C++", icon: "diamond", color: "#00599c" },
-];
-const categories = [
-  { id: "all", label: "All Projects", icon: "star", color: "var(--gold)" }, { id: "fullstack", label: "Full Stack", icon: "bolt", color: "var(--cyan)" }, { id: "frontend", label: "Frontend", icon: "palette", color: "var(--magenta)" },
-];
 
 /* =============================================================
    🪝 custom hooks i made
@@ -552,25 +322,6 @@ function CycleTypewriter() {
 }
 
 /* =============================================================
-   👀 scroll reveal animation
-   ============================================================= */
-function AttentionGrabber({ children, className = "", delay = 0 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  return (
-    <div ref={ref} className={`attention-grabber ${className}`}>
-      <motion.div
-        initial={{ opacity: 0, y: 60, scale: 0.9 }}
-        animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-        transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-}
-
-/* =============================================================
    🏠 main portfolio component - everything comes together here
    ============================================================= */
 /* =============================================================
@@ -668,7 +419,7 @@ export default function Portfolio() {
       {/* 🎬 Intro splash screen */}
       <AnimatePresence>
         {!loading && !introDone && (
-          <IntroOverlay onDone={() => { }} />
+          <IntroOverlay />
         )}
       </AnimatePresence>
 
@@ -838,7 +589,7 @@ export default function Portfolio() {
       {/* SKILLS */}
       <RS className="section" id="skills" variant="scale">
         <div className="section-head"><div className="eyebrow"><PxIcon name="wrench" size={14} /> Equipment Loadout</div><h2 className="section-title">Skills & <span className="accent">Tools</span></h2><p className="section-desc">Technologies I use to build stuff.</p></div>
-        <div className="skills-grid stagger-children">{skillBadges.map((s, i) => <motion.div
+        <div className="skills-grid stagger-children">{skillBadges.map((s) => <motion.div
           className="skill-badge" key={s.name}
           whileHover={{ scale: 1.1, y: -4 }}
           transition={{ type: "spring", stiffness: 300 }}
