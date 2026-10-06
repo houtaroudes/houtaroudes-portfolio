@@ -92,8 +92,8 @@ portfolio/
 
 ##  Stats
 
-- **Projects:** 4 (Motion Website, PixelPodWeb, Houtarou Cafe, Learning WebDev Hub)
-- **Technologies:** 8 (HTML5, CSS3, JS, React, PHP, MySQL, Git, Vite)
+- **Projects:** 8 (Motion Website, PixelPodWeb, Houtarou Cafe, Learning WebDev Hub, Modern Filipino Homes, Modern Filipino Homes Platform, MediQueue, St. Joseph Village)
+- **Technologies:** 10 (HTML5, CSS3, JS, React, PHP, MySQL, Git, Vite, C#, C++)
 - **Icons:** 20+ hand-crafted pixel SVGs
 - **Sections:** Hero with typewriter effect, projects with filter, skills grid, featured project, contact
 
