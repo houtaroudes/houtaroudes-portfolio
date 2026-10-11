@@ -12,10 +12,9 @@ import DailyDrivers from "./DailyDrivers";
 
    Random Web Dev is the flagship and St. Joseph Village is the second
    highlight: both span the full row and carry a real screenshot, the way
-   the template's wide cards carry their media. PixCodes is the third
-   highlight: a screenshot card too, but two columns wide instead of the
-   whole row, so it sits between the wide cards and the plain stack.
-   Motion Website is the fourth: another two column screenshot card.
+   the template's wide cards carry their media.   the template's wide cards carry their media. Motion Website is the third
+   highlight: another two column screenshot card. PixCodes is the fourth:
+   a two column screenshot card that carries its own build story.
 */
 const PROJECTS = [
   {
@@ -53,18 +52,6 @@ const PROJECTS = [
     },
   },
   {
-    id: "pixcodes",
-    hl: true,
-    kicker: "Playable build",
-    title: "PixCodes",
-    desc: "A browser game about writing CSS: a rendered target, sixteen levels, and checks that grade your code against it in a sandboxed frame.",
-    tags: ["React", "Vite", "CSS", "Codemirror"],
-    logos: ["/icons/react.svg", "/icons/vite.svg", "/icons/css3.svg"],
-    demo: "https://pixcodes.vercel.app",
-    code: "https://github.com/houtaroudes/pixcodes",
-    shot: "/images/shot-pixcodes.png",
-  },
-  {
     id: "motion",
     hl: true,
     kicker: "Frontend",
@@ -78,6 +65,23 @@ const PROJECTS = [
     story: {
       problem: "Good layout and animation references are scattered: demos and snippets spread across sites, with no single place to browse ideas at a glance.",
       approach: "I built an inspiration hub that collects layout and animation patterns so it is easy to skim ideas and steal the good parts for real builds.",
+      proof: "Public repo on GitHub, deployed live on Vercel",
+    },
+  },
+  {
+    id: "pixcodes",
+    hl: true,
+    kicker: "Playable build",
+    title: "PixCodes",
+    desc: "A browser game about writing CSS: a rendered target, sixteen levels, and checks that grade your code against it in a sandboxed frame.",
+    tags: ["React", "Vite", "CSS", "Codemirror"],
+    logos: ["/icons/react.svg", "/icons/vite.svg", "/icons/css3.svg"],
+    demo: "https://pixcodes.vercel.app",
+    code: "https://github.com/houtaroudes/pixcodes",
+    shot: "/images/shot-pixcodes.png",
+    story: {
+      problem: "Learning CSS from docs gives you properties but not a feel for how they render, and existing practice tools grade multiple-choice answers rather than real code.",
+      approach: "I built a browser game: you write actual CSS against a rendered target, sixteen levels ramp from flexbox to sticky navs, and a sandboxed frame grades your code pixel by pixel.",
       proof: "Public repo on GitHub, deployed live on Vercel",
     },
   },
