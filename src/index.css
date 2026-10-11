@@ -240,8 +240,14 @@ h1,h2,h3,h4{font-family:var(--font-display);line-height:1.15;letter-spacing:-0.0
   transition:transform .2s var(--ease-out),color .2s,box-shadow .2s;
 }
 .sidebar-social:hover{color:var(--orange);transform:translateY(-2px);box-shadow:0 10px 22px -8px rgba(11,30,63,0.35)}
-.sidebar-social.theme{background:var(--navy);color:#fff}
+/* The theme toggle flips with the theme, the same way the project CTA does:
+   light mode keeps the ordinary social plate with a dark icon, dark mode
+   flips the button itself to the light plate with a dark icon, so the thing
+   you click to change the theme always reads as the odd one out in its row. */
+.sidebar-social.theme{background:var(--bg-card);color:var(--ink)}
 .sidebar-social.theme:hover{color:var(--orange-hover)}
+[data-theme="dark"] .sidebar-social.theme{background:#E9EDF5;color:#0B1E3F;box-shadow:0 6px 16px -6px rgba(0,0,0,0.55)}
+[data-theme="dark"] .sidebar-social.theme:hover{color:var(--orange-hover)}
 .sidebar-social-glyph{font-family:var(--font-display);font-weight:700;font-size:0.85rem;letter-spacing:0.02em}
 .sidebar-divider{height:1px;background:var(--border);margin:26px 0 18px}
 .sidebar-nav{display:flex;flex-direction:column;gap:6px}
@@ -659,7 +665,14 @@ footer{border-top:1px solid var(--border);padding:34px var(--container-x);text-a
 }
 .prj-card:hover{transform:translateY(-4px);border-color:var(--orange);box-shadow:0 24px 54px -20px rgba(11,30,63,0.4)}
 .prj-card--flag{grid-column:1/-1;flex-direction:row;align-items:center;gap:26px}
+/* The two highlight cards share one grid row, and the grid already stretches
+   both to the row height; making the shot fill the space left over after the
+   head is what makes their bottoms meet: the shot is the absorber, cropped
+   from the top by object-fit so neither card's text dictates the row. */
 .prj-card--hl{grid-column:span 2}
+.prj-card--hl .prj-card-head{flex:0 0 auto}
+.prj-card--hl .prj-shot{flex:1;min-height:0}
+.prj-card--hl .prj-shot img{height:100%;object-fit:cover;object-position:center top}
 .prj-card-head{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0}
 
 /* Stack marks share one ink (masked, not <img>) so near-black brand files
