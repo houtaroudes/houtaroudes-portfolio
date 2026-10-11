@@ -58,7 +58,7 @@ const PROJECTS = [
     desc: "A browser game about writing CSS: a rendered target, sixteen levels, and checks that grade your code against it in a sandboxed frame.",
     tags: ["React", "Vite", "CSS", "Codemirror"],
     logos: ["/icons/react.svg", "/icons/vite.svg", "/icons/css3.svg"],
-    demo: "https://site-7d4c5e9f5f5e44248af0691c372581ea.freebuff.page",
+    demo: "https://site-bb9aa758ffe047579a94d408b8503f3d.freebuff.page",
     code: "https://github.com/houtaroudes/pixcodes",
     shot: "/images/shot-pixcodes.png",
   },
