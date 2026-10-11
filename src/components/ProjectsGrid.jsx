@@ -6,8 +6,9 @@ import DailyDrivers from "./DailyDrivers";
    A glass panel holding raised cards: monochrome stack marks, an orange
    kicker, the title, one line of what it is, the stack tags and an arrow.
    Each card is an <a> straight to the live build (or its source when there
-   is nothing deployed). The two flagships also carry a story button: the
-   long version of the work opens in a drawer instead of crowding the grid.
+   is nothing deployed). Every highlight card carries a story button parked
+   above the card: the long version of the work opens in a drawer instead of
+   crowding the grid.
 
    Random Web Dev is the flagship and St. Joseph Village is the second
    highlight: both span the full row and carry a real screenshot, the way
@@ -74,6 +75,21 @@ const PROJECTS = [
     demo: "https://motion-website-des.vercel.app",
     code: "https://github.com/houtaroudes/motion-website",
     shot: "/images/shot-motion.png",
+    story: {
+      problem: "Good layout and animation references are scattered: demos and snippets spread across sites, with no single place to browse ideas at a glance.",
+      approach: "I built an inspiration hub that collects layout and animation patterns so it is easy to skim ideas and steal the good parts for real builds.",
+      proof: "Public repo on GitHub, deployed live on Vercel",
+    },
+  },
+  {
+    id: "voltcart",
+    kicker: "Storefront build",
+    title: "Voltcart",
+    desc: "A gadget storefront: catalog with category filters, deals with countdowns, product pages, cart and wishlist. Live on Vercel.",
+    tags: ["React", "Vite", "JS"],
+    logos: ["/icons/react.svg", "/icons/vite.svg", "/icons/javascript.svg"],
+    demo: "https://voltcart-gadgets.vercel.app",
+    code: "https://github.com/houtaroudes/voltcart",
   },
   {
     id: "pixelpod",
@@ -83,15 +99,6 @@ const PROJECTS = [
     tags: ["PHP", "MySQL", "CSS", "JS"],
     logos: ["/icons/php.svg", "/icons/mysql.svg", "/icons/javascript.svg"],
     code: "https://github.com/houtaroudes/PixelPodWeb",
-  },
-  {
-    id: "cafe",
-    kicker: "Frontend",
-    title: "Houtarou Cafe",
-    desc: "A concept cafe site with minimalist design: ordering flow and a reservation system.",
-    tags: ["HTML", "CSS", "JS"],
-    logos: ["/icons/html5.svg", "/icons/css3.svg", "/icons/javascript.svg"],
-    code: "https://github.com/houtaroudes/houtarou-cafe",
   },
   {
     id: "mfh",
@@ -110,6 +117,15 @@ const PROJECTS = [
     tags: ["PHP", "MySQL", "JS", "CSS"],
     logos: ["/icons/php.svg", "/icons/mysql.svg", "/icons/javascript.svg"],
     code: "https://github.com/houtaroudes/mediqueue",
+  },
+  {
+    id: "cafe",
+    kicker: "Frontend",
+    title: "Houtarou Cafe",
+    desc: "A concept cafe site with minimalist design: ordering flow and a reservation system.",
+    tags: ["HTML", "CSS", "JS"],
+    logos: ["/icons/html5.svg", "/icons/css3.svg", "/icons/javascript.svg"],
+    code: "https://github.com/houtaroudes/houtarou-cafe",
   },
   {
     id: "more",
@@ -266,7 +282,6 @@ function ProjectCard({ project, onStory }) {
   if (!project.story) return card;
   return (
     <div className={`prj-cardwrap${project.flag ? " prj-cardwrap--flag" : ""}`}>
-      {card}
       <button
         type="button"
         className="prj-story-btn"
@@ -274,6 +289,7 @@ function ProjectCard({ project, onStory }) {
       >
         Read the build story
       </button>
+      {card}
     </div>
   );
 }
