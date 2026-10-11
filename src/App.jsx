@@ -446,7 +446,6 @@ export default function Portfolio() {
             <a href="https://houtaroudes-myportfolio.vercel.app" className="version-btn" target="_blank" rel="noopener">
               <PxIcon name="sparkle" size={10} color="var(--cyan)" /> Simple Portfolio
             </a>
-            <RealtimeClock className="nav-clock" />
             <motion.button
               className="theme-toggle-btn"
               onClick={() => setDarkMode(!darkMode)}
@@ -658,6 +657,22 @@ export default function Portfolio() {
           <p className="footer-sub">{projects.length} projects &middot; 26+ exercises &middot; infinite curiosity</p>
         </div>
       </footer>
+
+      {/* HUD STATUS BAR - the page's persistent bottom HUD: identity, HP and
+          XP as game stats, the live clock relocated from the nav. Hidden on
+          small screens so it doesn't crowd mobile. */}
+      <div className="hud-bar" aria-hidden="true">
+        <div className="hud-inner">
+          <span className="hud-cell hud-player"><PxIcon name="star" size={10} /> BRYAN.SAV</span>
+          <span className="hud-cell"><span className="hud-stat-name">HP</span>
+            <span className="hud-bar-track"><span className="hud-hp-fill" /></span>
+          </span>
+          <span className="hud-cell"><span className="hud-stat-name">XP</span>
+            <span className="hud-bar-track"><motion.span className="hud-xp-fill" initial={{width:0}} whileInView={{width:"100%"}} viewport={{once:true}} transition={{duration:1.5,ease:"easeOut"}} /></span>
+          </span>
+          <RealtimeClock className="hud-clock" />
+        </div>
+      </div>
     </div>
     <AnimatePresence>
       {modalProject && <ProjectModal project={modalProject} onClose={() => setModalProject(null)} />}
@@ -816,12 +831,12 @@ nav.scrolled {
 }
 [data-theme="light"] .project-card {
   background: var(--panel);
-  border-color: rgba(0,0,0,0.08);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  border-color: rgba(0,0,0,0.35);
+  box-shadow: inset 0 0 0 2px var(--panel),inset 0 0 0 3px rgba(0,0,0,0.08),0 0 0 4px rgba(0,0,0,0.06);
 }
 [data-theme="light"] .project-card:hover {
   border-color: var(--cyan);
-  box-shadow: 0 4px 12px rgba(8,145,178,0.1);
+  box-shadow: inset 0 0 0 2px var(--panel),inset 0 0 0 3px rgba(8,145,178,0.35),0 0 0 4px rgba(0,0,0,0.06),0 0 20px rgba(8,145,178,0.15);
 }
 [data-theme="light"] .featured-card {
   background: white;
@@ -917,24 +932,32 @@ nav.scrolled {
 /* ===== 📐 Section layout ===== */
 .section{padding:80px 24px;max-width:1100px;margin:0 auto;position:relative;z-index:2}
 .section-head{text-align:center;margin-bottom:36px}
-.eyebrow{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;padding:6px 14px;border:1px solid var(--border);border-radius:100px}
+/* Dialog-box chrome: the classic NES double border - dark outer line, light
+   inner line, sharp corners. Applied to the chips that behave like speech
+   boxes (eyebrow, filters, clock rail) so the page reads as authored game UI. */
+.eyebrow{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;padding:8px 16px;border:2px solid var(--border-strong,rgba(80,225,255,0.45));border-radius:0;box-shadow:inset 0 0 0 2px var(--panel),inset 0 0 0 3px var(--border)}
 .section-title{font-family:var(--font-display);font-size:22px;letter-spacing:-0.5px;margin-bottom:8px;line-height:1.3;text-transform:uppercase}
 .accent{color:var(--cyan)}
 .section-desc{color:var(--dim);font-size:.9rem;max-width:560px;margin:0 auto}
 
 /* Filter Bar */
 .filter-bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px}
-.filter-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--dim);cursor:pointer;font-family:var(--font-body);font-size:.8rem;transition:all .3s var(--ease-out)}
+.filter-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:0;border:2px solid var(--border-strong,rgba(80,225,255,0.45));background:var(--panel);color:var(--dim);cursor:pointer;font-family:var(--font-body);font-size:.8rem;box-shadow:inset 0 0 0 2px var(--panel),inset 0 0 0 3px var(--border);transition:all .15s steps(2,end)}
 .filter-btn:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
 .filter-btn.active{background:rgba(63,230,255,0.08)}
 
 /* Project Grid */
 .project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
 @media(max-width:400px){.project-grid{grid-template-columns:1fr}}
-.project-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 20px 18px;position:relative;overflow:hidden;transition:all .4s var(--ease-out)}
-.project-card.featured{border-color:rgba(255,209,102,0.25);background:linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%)}
-.project-card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 8px 30px rgba(63,230,255,0.08)}
-.project-card.featured:hover{border-color:var(--gold);box-shadow:0 8px 30px rgba(255,209,102,0.1)}
+/* Cartridge cards: chunky double border like a game cart shell, and hover
+   "powering on" is stepped (steps easing) instead of eased, so it flicks
+   like a console switch rather than gliding like a web button. */
+.project-card{background:var(--panel);border:2px solid var(--border-strong,rgba(80,225,255,0.45));border-radius:0;padding:22px 20px 18px;position:relative;overflow:hidden;box-shadow:inset 0 0 0 2px var(--panel),inset 0 0 0 3px var(--border),0 0 0 4px rgba(7,9,17,0.55);transition:all .18s steps(3,end)}
+.project-card::before{content:"";position:absolute;top:10px;left:10px;width:8px;height:8px;background:var(--border);clip-path:polygon(0 0,100% 0,0 100%);opacity:.6;pointer-events:none}
+.project-card::after{content:"";position:absolute;top:10px;right:10px;width:8px;height:8px;background:var(--border);clip-path:polygon(100% 0,100% 100%,0 0);opacity:.6;pointer-events:none}
+.project-card.featured{border-color:rgba(255,209,102,0.55);background:linear-gradient(160deg,var(--panel) 0%,var(--panel-2) 100%)}
+.project-card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:inset 0 0 0 2px var(--panel),inset 0 0 0 3px rgba(63,230,255,0.55),0 0 0 4px rgba(7,9,17,0.55),0 0 24px rgba(63,230,255,0.18)}
+.project-card.featured:hover{border-color:var(--gold);box-shadow:inset 0 0 0 2px var(--panel),inset 0 0 0 3px rgba(255,209,102,0.55),0 0 0 4px rgba(7,9,17,0.55),0 0 24px rgba(255,209,102,0.18)}
 .project-card .card-screen{position:relative;margin:2px 0 10px;border:2px solid var(--border);border-radius:10px;overflow:hidden;background:#05070f;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.65),0 0 0 3px rgba(63,230,255,0.06)}
 [data-theme="light"] .project-card .card-screen{border-color:rgba(0,0,0,0.18)}
 .project-card .card-screen::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,0.05) 0 1px,transparent 1px 3px);pointer-events:none}
@@ -958,7 +981,7 @@ nav.scrolled {
 .details-link:hover{color:var(--magenta)!important}
 
 /* Scroll to top */
-.scroll-top-btn{position:fixed;bottom:24px;right:24px;z-index:50;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--panel);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.3)}
+.scroll-top-btn{position:fixed;bottom:64px;right:24px;z-index:50;width:44px;height:44px;border-radius:0;border:2px solid var(--border-strong,rgba(80,225,255,0.45));background:var(--panel);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 2px var(--panel),inset 0 0 0 3px var(--border)}
 .scroll-top-btn:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 4px 24px rgba(63,230,255,0.15)}
 
 /* Empty state */
@@ -969,8 +992,8 @@ nav.scrolled {
 .modal-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;
 background:rgba(7,9,17,1);}
 [data-theme="light"] .modal-overlay{background:rgba(0,0,0,0.75)}
-.modal-content{background:var(--panel);border:2px solid var(--cyan);border-radius:20px;padding:36px 32px;max-width:500px;width:100%;position:relative;
-box-shadow:0 0 60px rgba(63,230,255,0.08),0 24px 80px rgba(0,0,0,0.6);max-height:85vh;overflow-y:auto}
+.modal-content{background:var(--panel);border:3px solid var(--cyan);border-radius:0;padding:36px 32px;max-width:500px;width:100%;position:relative;
+box-shadow:inset 0 0 0 3px var(--panel),inset 0 0 0 5px rgba(63,230,255,0.4),0 0 60px rgba(63,230,255,0.08),0 24px 80px rgba(0,0,0,0.6);max-height:85vh;overflow-y:auto}
 [data-theme="light"] .modal-content{background:#ffffff;border-color:var(--cyan);box-shadow:0 8px 32px rgba(0,0,0,0.15)}
 .modal-close-btn{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);
 background:var(--panel-2);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;
@@ -989,7 +1012,7 @@ transition:all .3s var(--ease-out)}
 .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
 
 /* Featured */
-.featured-card{position:relative;overflow:hidden;background:linear-gradient(160deg,var(--panel-2) 0%,var(--panel) 100%);border:1px solid rgba(255,209,102,0.25);border-radius:20px;padding:48px 32px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.featured-card{position:relative;overflow:hidden;background:linear-gradient(160deg,var(--panel-2) 0%,var(--panel) 100%);border:2px solid rgba(255,209,102,0.55);border-radius:0;padding:48px 32px;text-align:center;display:flex;flex-direction:column;align-items:center;box-shadow:inset 0 0 0 2px var(--panel),inset 0 0 0 3px rgba(255,209,102,0.3)}
 .featured-glow{position:absolute;inset:0;background:radial-gradient(800px circle at 50% 50%,rgba(255,209,102,0.06),transparent);pointer-events:none}
 .featured-badge{font-family:var(--font-display);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(255,209,102,0.3);background:rgba(255,209,102,0.06);padding:6px 16px;border-radius:100px;margin-bottom:14px;position:relative;z-index:1;display:inline-flex;align-items:center;gap:6px}
 .featured-title{font-family:var(--font-display);font-size:20px;margin-bottom:12px;position:relative;z-index:1}
@@ -1006,7 +1029,7 @@ transition:all .3s var(--ease-out)}
 .btn.primary:hover{background:rgba(63,230,255,0.8);box-shadow:0 4px 20px rgba(63,230,255,0.25)}
 
 /* Footer */
-footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
+footer{padding:40px 24px 64px;border-top:1px solid var(--border);margin-top:40px}
 .footer-inner{max-width:1100px;margin:0 auto;text-align:center}
 .pixel-footer-art{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
 .footer-credits{font-family:var(--font-body);font-size:.85rem;color:var(--text);margin-bottom:4px}
@@ -1329,19 +1352,30 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
 }
 
 /* ===== 🎞️ CRT vignette + scanlines ===== */
+/* Vignette: CRT tubes fall off at the edges, not just dim */
 .vignette {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 3;
-  background: radial-gradient(ellipse at center, transparent 60%, rgba(7,9,17,0.6) 100%);
+  background:
+    radial-gradient(ellipse at center, rgba(63,230,255,0.015) 0%, transparent 45%),
+    radial-gradient(ellipse at center, transparent 55%, rgba(7,9,17,0.72) 100%);
 }
 .scanlines {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 4;
-  background: repeating-linear-gradient(
+  background:
+    /* RGB aperture grille: the faint colour triad a real CRT tube shows */
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,0,80,0.012) 0 1px,
+      rgba(0,255,120,0.012) 1px 2px,
+      rgba(0,120,255,0.012) 2px 3px
+    ),
+    repeating-linear-gradient(
     0deg,
     transparent,
     transparent 2px,
@@ -1351,10 +1385,45 @@ footer{padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
   opacity: 0.3;
 }
 
+/* ===== 📟 HUD status bar =====" */
+.hud-bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:55;pointer-events:none;
+  padding:8px 16px;
+  background:rgba(7,9,17,0.88);
+  border-top:2px solid var(--border-strong,rgba(80,225,255,0.45));
+  box-shadow:inset 0 0 0 1px rgba(7,9,17,0.9),inset 0 2px 0 rgba(80,225,255,0.12),0 -12px 32px rgba(0,0,0,0.35);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+[data-theme="light"] .hud-bar{
+  background:rgba(244,244,248,0.9);
+  border-top-color:rgba(0,0,0,0.35);
+  box-shadow:inset 0 0 0 1px rgba(244,244,248,0.9),inset 0 2px 0 rgba(8,145,178,0.15);
+}
+.hud-inner{
+  max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:18px;
+  font-family:var(--font-display);font-size:8px;letter-spacing:1px;color:var(--dim);
+  text-transform:uppercase;
+}
+.hud-cell{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.hud-player{color:var(--cyan)}
+.hud-stat-name{color:var(--gold)}
+.hud-bar-track{
+  position:relative;width:110px;height:8px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);
+  box-shadow:inset 0 0 0 1px rgba(7,9,17,0.9);
+  overflow:hidden;display:inline-block;
+}
+[data-theme="light"] .hud-bar-track{background:rgba(0,0,0,0.06)}
+.hud-hp-fill{position:absolute;inset:0;width:100%;background:var(--magenta);box-shadow:0 0 10px rgba(255,63,156,0.5)}
+.hud-xp-fill{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--magenta));box-shadow:0 0 10px rgba(63,230,255,0.45)}
+.hud-clock{font-family:var(--font-mono);font-size:0.65rem;color:var(--dimmer);display:inline-flex;align-items:center;gap:4px;margin-left:auto}
+
 /* ===== 📱 Mobile fixes ===== */
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .nav-clock { display: none; }
+  .hud-bar { display: none; }
   .hero-content {
     grid-template-columns: 1fr;
     gap: 30px;
