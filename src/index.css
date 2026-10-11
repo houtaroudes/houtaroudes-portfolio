@@ -646,7 +646,10 @@ footer{border-top:1px solid var(--border);padding:34px var(--container-x);text-a
   white-space:nowrap;pointer-events:none;
 }
 
-.prj-grid{display:grid;gap:16px;grid-template-columns:repeat(3,minmax(0,1fr))}
+/* Four column grid on purpose: the two two-wide highlight cards then share
+   one row, and a plain card fills the fourth slot beside each pair, so the
+   highlights never stagger by half a row. */
+.prj-grid{display:grid;gap:16px;grid-template-columns:repeat(4,minmax(0,1fr))}
 .prj-card{
   position:relative;display:flex;flex-direction:column;gap:14px;
   background:var(--bg-card);border:1px solid var(--border);
