@@ -14,6 +14,7 @@ import DailyDrivers from "./DailyDrivers";
    the template's wide cards carry their media. PixCodes is the third
    highlight: a screenshot card too, but two columns wide instead of the
    whole row, so it sits between the wide cards and the plain stack.
+   Motion Website is the fourth: another two column screenshot card.
 */
 const PROJECTS = [
   {
@@ -64,6 +65,7 @@ const PROJECTS = [
   },
   {
     id: "motion",
+    hl: true,
     kicker: "Frontend",
     title: "Motion Website",
     desc: "A front-end inspiration hub for exploring layout and animation ideas.",
@@ -71,6 +73,7 @@ const PROJECTS = [
     logos: ["/icons/javascript.svg", "/icons/html5.svg", "/icons/css3.svg"],
     demo: "https://motion-website-des.vercel.app",
     code: "https://github.com/houtaroudes/motion-website",
+    shot: "/images/shot-motion.png",
   },
   {
     id: "pixelpod",
@@ -107,20 +110,6 @@ const PROJECTS = [
     tags: ["PHP", "MySQL", "JS", "CSS"],
     logos: ["/icons/php.svg", "/icons/mysql.svg", "/icons/javascript.svg"],
     code: "https://github.com/houtaroudes/mediqueue",
-  },
-  {
-    id: "kalendaryo",
-    kicker: "Booking product",
-    title: "Kalendaryo",
-    desc: "Appointment booking for small businesses: pick a service, take an open time, and it is held. Owners get a dashboard for services, hours and bookings, on Supabase Postgres with row level security.",
-    tags: ["React", "Vite", "Tailwind", "Supabase"],
-    logos: ["/icons/react.svg", "/icons/vite.svg", "/icons/tailwindcss.svg"],
-    code: "https://github.com/houtaroudes/kalendaryo",
-    story: {
-      problem: "Small businesses take bookings by chat and memory, so double bookings and no-shows are normal. A slot can be promised to two people at once and nobody knows until both arrive.",
-      approach: "I built a four step booking flow (service, time, details, done) with a real availability engine that walks opening hours, subtracts what is taken and only offers times that finish before closing. The owner side edits services, prices and hours and sees every booking grouped by day. It runs on Supabase with row level security, and falls back to a seeded local store when no env vars are set so the flow works before a backend exists.",
-      proof: "11 tests pass on the pure slot logic, oxlint clean, production build green, and the database proven to expose booking times while denying the customer columns",
-    },
   },
   {
     id: "more",
