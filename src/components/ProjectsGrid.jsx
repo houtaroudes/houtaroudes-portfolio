@@ -285,7 +285,7 @@ function ProjectCard({ project, onStory }) {
   );
   if (!project.story) return card;
   return (
-    <div className={`prj-cardwrap${project.flag ? " prj-cardwrap--flag" : ""}`}>
+    <div className={`prj-cardwrap${project.flag ? " prj-cardwrap--flag" : project.hl ? " prj-cardwrap--hl" : ""}`}>
       <button
         type="button"
         className="prj-story-btn"
