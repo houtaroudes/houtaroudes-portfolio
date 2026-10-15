@@ -14,7 +14,8 @@ import DailyDrivers from "./DailyDrivers";
    highlight: both span the full row and carry a real screenshot, the way
    the template's wide cards carry their media.   the template's wide cards carry their media. Motion Website is the third
    highlight: another two column screenshot card. PixCodes is the fourth:
-   a two column screenshot card that carries its own build story.
+   a two column screenshot card that carries its own build story. Flipbook
+   Portfolio is the fifth: a screenshot card of the book's own cover.
 */
 const PROJECTS = [
   {
@@ -84,6 +85,18 @@ const PROJECTS = [
       approach: "I built a browser game: you write actual CSS against a rendered target, sixteen levels ramp from flexbox to sticky navs, and a sandboxed frame grades your code pixel by pixel.",
       proof: "Public repo on GitHub, deployed live on Vercel",
     },
+  },
+  {
+    id: "flipbook",
+    hl: true,
+    kicker: "3D build",
+    title: "Flipbook Portfolio",
+    desc: "My work bound as a 3D book: covers drawn in the browser, ten projects on the pages, and the site itself running inside whichever page you open.",
+    tags: ["Three.js", "Vite", "JS"],
+    logos: ["/icons/threedotjs.svg", "/icons/vite.svg", "/icons/javascript.svg"],
+    demo: "https://houtaroudes-flipbook-portfolio.vercel.app",
+    code: "https://github.com/houtaroudes/houtaroudes-flipbook-portfolio",
+    shot: "/images/shot-flipbook.png",
   },
   {
     id: "voltcart",
