@@ -12,10 +12,11 @@ import DailyDrivers from "./DailyDrivers";
 
    Random Web Dev is the flagship and St. Joseph Village is the second
    highlight: both span the full row and carry a real screenshot, the way
-   the template's wide cards carry their media.   the template's wide cards carry their media. Motion Website is the third
+   the template's wide cards carry their media. PixelPodWeb is the third
    highlight: another two column screenshot card. PixCodes is the fourth:
-   a two column screenshot card that carries its own build story. Flipbook
-   Portfolio is the fifth: a screenshot card of the book's own cover.
+   the two of them are the same size, on purpose. Motion Website is the
+   fifth and Flipbook Portfolio the sixth, the other matched pair, with
+   screenshots and their own build stories.
 */
 const PROJECTS = [
   {
@@ -53,20 +54,20 @@ const PROJECTS = [
     },
   },
   {
-    id: "motion",
+    id: "pixelpod",
     hl: true,
-    kicker: "Frontend",
-    title: "Motion Website",
-    desc: "A front-end inspiration hub for exploring layout and animation ideas.",
-    tags: ["HTML", "CSS", "JS"],
-    logos: ["/icons/javascript.svg", "/icons/html5.svg", "/icons/css3.svg"],
-    demo: "https://motion-website-des.vercel.app",
-    code: "https://github.com/houtaroudes/motion-website",
-    shot: "/images/shot-motion.png",
+    kicker: "Full Stack build",
+    title: "PixelPodWeb",
+    desc: "A photobooth app: PHP and MySQL behind the booking flow, an admin area for bookings, packages and payments, and a browser-only booth that composites the strip on a canvas.",
+    tags: ["PHP", "MySQL", "JS", "Canvas"],
+    logos: ["/icons/php.svg", "/icons/mysql.svg", "/icons/javascript.svg"],
+    demo: "https://pixelpodweb.vercel.app",
+    code: "https://github.com/houtaroudes/PixelPodWeb",
+    shot: "/images/shot-pixelpod.png",
     story: {
-      problem: "Good layout and animation references are scattered: demos and snippets spread across sites, with no single place to browse ideas at a glance.",
-      approach: "I built an inspiration hub that collects layout and animation patterns so it is easy to skim ideas and steal the good parts for real builds.",
-      proof: "Public repo on GitHub, deployed live on Vercel",
+      problem: "A photobooth business was run on paper: bookings taken by message, payments tracked in a notebook, and photos handed over as files on someone's laptop.",
+      approach: "I built the app end to end: a PHP and MySQL backend with a booking flow and an admin area for bookings, packages, customers, payments and the photo sessions, plus a browser booth that composites the strip on a canvas before anything is saved.",
+      proof: "Public repo on GitHub: the landing page is live on Vercel, the booth is live at pixelpod-booth.vercel.app, and the PHP side runs on PHP 8 and MySQL",
     },
   },
   {
@@ -83,6 +84,23 @@ const PROJECTS = [
     story: {
       problem: "Learning CSS from docs gives you properties but not a feel for how they render, and existing practice tools grade multiple-choice answers rather than real code.",
       approach: "I built a browser game: you write actual CSS against a rendered target, sixteen levels ramp from flexbox to sticky navs, and a sandboxed frame grades your code pixel by pixel.",
+      proof: "Public repo on GitHub, deployed live on Vercel",
+    },
+  },
+  {
+    id: "motion",
+    hl: true,
+    kicker: "Frontend",
+    title: "Motion Website",
+    desc: "A front-end inspiration hub for exploring layout and animation ideas.",
+    tags: ["HTML", "CSS", "JS"],
+    logos: ["/icons/javascript.svg", "/icons/html5.svg", "/icons/css3.svg"],
+    demo: "https://motion-website-des.vercel.app",
+    code: "https://github.com/houtaroudes/motion-website",
+    shot: "/images/shot-motion.png",
+    story: {
+      problem: "Good layout and animation references are scattered: demos and snippets spread across sites, with no single place to browse ideas at a glance.",
+      approach: "I built an inspiration hub that collects layout and animation patterns so it is easy to skim ideas and steal the good parts for real builds.",
       proof: "Public repo on GitHub, deployed live on Vercel",
     },
   },
@@ -107,15 +125,6 @@ const PROJECTS = [
     logos: ["/icons/react.svg", "/icons/vite.svg", "/icons/javascript.svg"],
     demo: "https://voltcart-gadgets.vercel.app",
     code: "https://github.com/houtaroudes/voltcart",
-  },
-  {
-    id: "pixelpod",
-    kicker: "Full Stack",
-    title: "PixelPodWeb",
-    desc: "A photobooth web app with a PHP + MySQL backend, built solo as a school project.",
-    tags: ["PHP", "MySQL", "CSS", "JS"],
-    logos: ["/icons/php.svg", "/icons/mysql.svg", "/icons/javascript.svg"],
-    code: "https://github.com/houtaroudes/PixelPodWeb",
   },
   {
     id: "mfh",
