@@ -339,7 +339,10 @@ export default function ProjectsGrid() {
             <div className="section-eyebrow">
               <Eyebrow /> Projects
             </div>
-            <h1 className="prj-title-lg">Real apps, sites and builds you can open.</h1>
+            {/* The name lives in the h1 as well as the title: a search for a
+                person is a search for a name, and this is the heading Google
+                weighs hardest. The tone is the same, the entity is now in it. */}
+            <h1 className="prj-title-lg">Real apps, sites and builds by Bryan Sacueza.</h1>
           </div>
           {/* The template's answer to "don't make them scroll to the bottom to
               reach me": a pill parked beside the headline that jumps straight
