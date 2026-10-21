@@ -9,7 +9,8 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "indexnow": "node tools/indexnow.mjs",
-    "bing": "node tools/bing-verify.mjs"
+    "bing": "node tools/bing-verify.mjs",
+    "google": "node tools/google-verify.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.42.2",
