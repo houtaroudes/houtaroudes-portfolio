@@ -125,6 +125,7 @@ const PROJECTS = [
     logos: ["/icons/react.svg", "/icons/vite.svg", "/icons/javascript.svg"],
     demo: "https://voltcart-gadgets.vercel.app",
     code: "https://github.com/houtaroudes/voltcart",
+    shot: "/images/shot-voltcart.png",
   },
   {
     id: "mfh",
