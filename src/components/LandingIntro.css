@@ -1,0 +1,307 @@
+/* ===== Landing intro =====
+   The first paint. A drop falls into the cup, a flash, six cream ripples trace
+   themselves outward, an orange ring closes, the monogram and name rise out of
+   nothing, then a cream flood wipes the overlay away over the page it just
+   finished loading.
+
+   The sequence is one timeline in seconds, written here rather than scattered
+   through JSX delays, so the beats can be read and moved in one place:
+     0.00  drop falls (0.58s)
+     0.45  white flash on impact (0.14s)
+     0.50  rings 1 to 6 start, 90ms apart, the last at 1.04s
+     1.15  orange ring draws (1.05s)
+     1.30  monogram, 1.42 name, 1.55 tagline
+     1.95  exit: flood 280ms, fade 1s from 320ms
+
+   Colours come from the theme tokens: deep ink stage, orange drop, cream
+   ripples and flood. The overlay never takes a pointer event, so a click
+   during the two seconds it is up can never be swallowed by it. */
+
+.li {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+}
+.li--leaving {
+  animation: li-fade-out 1s cubic-bezier(0.45, 0, 0.55, 1) 0.32s forwards;
+}
+@keyframes li-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+.li__stage {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 55%, rgba(242, 107, 29, 0.1), transparent 55%),
+    var(--navy-ink);
+}
+
+.li__scene {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(78vmin, 560px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+.li__ripple {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* The drop: falls, lands, then squashes flat and disappears into the cup. */
+.li__drop {
+  fill: var(--orange);
+  transform-box: view-box;
+  transform-origin: 300px 348px;
+  opacity: 0;
+  animation: li-drop 0.58s forwards;
+}
+@keyframes li-drop {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+  }
+  78% {
+    opacity: 1;
+    transform: scale(1) translateY(226px);
+    animation-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1.3);
+  }
+  88% {
+    opacity: 1;
+    transform: scale(1.45, 0.4) translateY(226px);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7, 0.28) translateY(226px);
+  }
+}
+
+.li__flash {
+  fill: var(--white);
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  transform: scale(0.2);
+  animation: li-flash 0.14s ease-out 0.45s forwards;
+}
+@keyframes li-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1.6);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/* Each ring draws itself as a dashed circle, the dash shrinking to zero, and
+   settles at its own opacity so the outer ripples read quieter than the first. */
+.li__ring {
+  stroke: var(--cream);
+  stroke-width: 1.5;
+  fill: none;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: li-ring 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.li__ring--1 {
+  --ring-o: 0.95;
+  transform: scale(0.85) rotate(1.2deg);
+  animation-delay: 0.5s;
+}
+.li__ring--2 {
+  --ring-o: 0.9;
+  transform: scale(0.85) rotate(-1.5deg);
+  animation-delay: 0.59s;
+}
+.li__ring--3 {
+  --ring-o: 0.85;
+  transform: scale(0.85) rotate(1.2deg);
+  animation-delay: 0.685s;
+}
+.li__ring--4 {
+  --ring-o: 0.72;
+  transform: scale(0.85) rotate(-1.5deg);
+  animation-delay: 0.79s;
+}
+.li__ring--5 {
+  --ring-o: 0.6;
+  transform: scale(0.85) rotate(1.2deg);
+  animation-delay: 0.91s;
+}
+.li__ring--6 {
+  --ring-o: 0.45;
+  transform: scale(0.85) rotate(-1.5deg);
+  animation-delay: 1.04s;
+}
+@keyframes li-ring {
+  to {
+    opacity: var(--ring-o);
+    stroke-dashoffset: 0;
+    transform: scale(1) rotate(0);
+  }
+}
+
+.li__ring-accent {
+  stroke: var(--orange);
+  stroke-width: 2;
+  fill: none;
+  opacity: 0;
+  animation: li-ring-accent 1.05s forwards 1.15s;
+}
+@keyframes li-ring-accent {
+  0% {
+    opacity: 0;
+    stroke-dashoffset: 698;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  10% {
+    opacity: 0.9;
+  }
+  57% {
+    opacity: 0.9;
+    stroke-dashoffset: 0;
+  }
+  to {
+    opacity: 0.35;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The lockup sits above the impact point, so the ripples spread behind it. */
+.li__lockup {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  z-index: 2;
+}
+.li__mark {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  padding: 8px;
+  background: var(--white);
+  box-shadow: 0 12px 32px -14px rgba(6, 12, 26, 0.5);
+  opacity: 0;
+  animation: li-mark 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 1.3s forwards;
+}
+@keyframes li-mark {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.li__word {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  color: var(--cream);
+  opacity: 0;
+  animation: li-word 0.43s cubic-bezier(0.22, 1, 0.36, 1) 1.42s forwards;
+}
+@keyframes li-word {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+    letter-spacing: 0.12em;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.04em;
+  }
+}
+.li__tag {
+  font-family: var(--font-body);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--cream);
+  opacity: 0;
+  animation: li-tag 0.4s var(--ease-out) 1.55s forwards;
+}
+@keyframes li-tag {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 0.6;
+    transform: translateY(0);
+  }
+}
+
+/* The flood is the page colour, not the accent: the overlay erases itself into
+   the page it was covering, so the reveal has no colour flash of its own. */
+.li__flood {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220vmax;
+  height: 220vmax;
+  margin: -110vmax 0 0 -110vmax;
+  border-radius: 50%;
+  background: var(--cream);
+  transform: scale(0);
+  z-index: 3;
+  will-change: transform;
+}
+.li--leaving .li__flood {
+  animation: li-flood 0.28s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+@keyframes li-flood {
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Reduced motion never mounts this (the component returns null), but if it is
+   ever rendered the plate should simply sit there complete. */
+.li--reduced {
+  animation: none;
+  transition: opacity 0.4s var(--ease-out);
+}
+.li--reduced.li--leaving {
+  opacity: 0;
+}
+.li--reduced .li__drop,
+.li--reduced .li__flash,
+.li--reduced .li__flood {
+  display: none;
+}
+.li--reduced .li__ring,
+.li--reduced .li__ring-accent,
+.li--reduced .li__mark,
+.li--reduced .li__word,
+.li--reduced .li__tag {
+  animation: none;
+  opacity: 1;
+}

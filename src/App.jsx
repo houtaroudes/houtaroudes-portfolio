@@ -1,8 +1,6 @@
 import { lazy, Suspense, useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import UseAnimations from "react-useanimations";
-import sunIcon from "react-useanimations/lib/sun";
-import moonIcon from "react-useanimations/lib/moon";
 import arrowUpIcon from "react-useanimations/lib/arrowUp";
 import mailIcon from "react-useanimations/lib/mail";
 import homeIcon from "react-useanimations/lib/home";
@@ -11,13 +9,16 @@ import briefcaseIcon from "react-useanimations/lib/briefcase";
 import messageCircleIcon from "react-useanimations/lib/messageCircle";
 import exploreIcon from "react-useanimations/lib/explore";
 import githubIcon from "react-useanimations/lib/github";
+import facebookIcon from "react-useanimations/lib/facebook";
 import menuIcon from "react-useanimations/lib/menu";
 import checkmarkIcon from "react-useanimations/lib/checkmark";
 // Decorative background - code-split so the shader stays out of the main bundle.
 const ContourBackground = lazy(() => import("./components/ContourBackground"));
 import ProjectsGrid, { PROJECT_COUNT } from "./components/ProjectsGrid";
 import TechStack from "./components/TechStack";
-import BootIntro from "./components/BootIntro";
+import LandingIntro from "./components/LandingIntro";
+import ThemeGlyph from "./components/ThemeGlyph";
+import { switchTheme } from "./themeSweep";
 
 const IconGithub = ({ s = 16 }) => <UseAnimations animation={githubIcon} size={s} />;
 const EyebrowIcon = () => (
@@ -58,8 +59,9 @@ const NAV_ITEMS = [
 ];
 
 const SIDEBAR_SOCIALS = [
-  { label: "GitHub", href: "https://github.com/houtaroudes" },
-  { label: "Pixel Portfolio", href: "https://houtaroudes-game-portfolio.vercel.app" },
+  { label: "GitHub", href: "https://github.com/houtaroudes", icon: "github" },
+  { label: "Facebook", href: "https://www.facebook.com/bsacueza", icon: "facebook" },
+  { label: "Pixel Portfolio", href: "https://houtaroudes-game-portfolio.vercel.app", icon: "explore" },
 ];
 
 /* ===== Hooks ===== */
@@ -180,16 +182,22 @@ function Sidebar({ active, onNavigate, open, dark, onToggleTheme }) {
       <div className="sidebar-socials">
         {SIDEBAR_SOCIALS.map((s) => (
           <a key={s.label} href={s.href} target="_blank" rel="noopener" className="sidebar-social" title={s.label} aria-label={s.label}>
-            {s.label === "GitHub" ? <IconGithub s={18} /> : s.label === "LinkedIn" ? <span className="sidebar-social-glyph">in</span> : <UseAnimations animation={exploreIcon} size={18} />}
+            {s.icon === "github" ? (
+              <UseAnimations animation={githubIcon} size={18} />
+            ) : s.icon === "facebook" ? (
+              <UseAnimations animation={facebookIcon} size={18} />
+            ) : (
+              <UseAnimations animation={exploreIcon} size={18} />
+            )}
           </a>
         ))}
         <button
           className="sidebar-social theme"
           onClick={onToggleTheme}
-          title={dark ? "Light Mode" : "Dark Mode"}
-          aria-label="Toggle theme"
+          title={dark ? "Switch to light theme" : "Switch to dark theme"}
+          aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
         >
-          {dark ? <UseAnimations animation={sunIcon} size={18} /> : <UseAnimations animation={moonIcon} size={18} />}
+          <ThemeGlyph dark={dark} size={21} />
         </button>
       </div>
       <div className="sidebar-divider" />
@@ -295,7 +303,7 @@ export default function PortfolioV2() {
   return (
     <>
       {/* Loading intro: overlays until the hero has painted, then lifts. */}
-      <BootIntro />
+      <LandingIntro />
 
       {/* Animated background */}
       <Suspense fallback={null}>
@@ -326,7 +334,11 @@ export default function PortfolioV2() {
         onNavigate={handleNavClick}
         open={sidebarOpen}
         dark={darkMode}
-        onToggleTheme={() => setDarkMode(!darkMode)}
+        onToggleTheme={(event) =>
+          switchTheme(darkMode ? "light" : "dark", event.currentTarget, () =>
+            setDarkMode(!darkMode)
+          )
+        }
       />
 
       {/* Main column (right of sidebar) */}
@@ -453,6 +465,7 @@ export default function PortfolioV2() {
             </a>
             <div className="contact-socials">
               <a href="https://github.com/houtaroudes" target="_blank" rel="noopener"><IconGithub s={14} /> GitHub</a>
+              <a href="https://www.facebook.com/bsacueza" target="_blank" rel="noopener"><UseAnimations animation={facebookIcon} size={15} /> Facebook</a>
               <a href="https://houtaroudes-game-portfolio.vercel.app" target="_blank" rel="noopener">Pixel Portfolio →</a>
             </div>
           </div>
