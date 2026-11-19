@@ -163,7 +163,6 @@ const PROJECTS = [
     desc: "A graded sneakers and apparel e-commerce store: pre-order catalog, cart, checkout, receipts and a status page, with a Three.js stockroom corridor as the landing.",
     tags: ["PHP", "MySQL", "React", "Three.js"],
     logos: ["/icons/php.svg", "/icons/mysql.svg", "/icons/react.svg"],
-    code: "https://github.com/houtaroudes/trey-kicks",
   },
   {
     id: "more",
@@ -285,12 +284,14 @@ function StoryDrawer({ project, onClose }) {
 }
 
 function ProjectCard({ project, onStory }) {
+  const href = project.demo || project.code;
+  /* A project with neither a live site nor a public repo still earns a card,
+     but not a link: an <a> with no href is a control that does nothing. */
+  const CardTag = href ? "a" : "div";
   const card = (
-    <a
-      className={`prj-card${project.flag && !project.story ? " prj-card--flag" : project.hl ? " prj-card--hl" : ""}`}
-      href={project.demo || project.code}
-      target="_blank"
-      rel="noopener noreferrer"
+    <CardTag
+      className={`prj-card${href ? "" : " prj-card--static"}${project.flag && !project.story ? " prj-card--flag" : project.hl ? " prj-card--hl" : ""}`}
+      {...(href ? { href, target: "_blank", rel: "noopener noreferrer" } : {})}
     >
       <span className="prj-card-head">
         <Marks logos={project.logos} />
@@ -304,16 +305,18 @@ function ProjectCard({ project, onStory }) {
             </span>
           ))}
         </span>
-        <span className="prj-arrow" aria-hidden="true">
-          <UseAnimations animation={arrowUpRightIcon} size={18} />
-        </span>
+        {href && (
+          <span className="prj-arrow" aria-hidden="true">
+            <UseAnimations animation={arrowUpRightIcon} size={18} />
+          </span>
+        )}
       </span>
       {project.shot && (
         <span className="prj-shot">
           <img src={project.shot} alt={`${project.title} screenshot`} loading="lazy" decoding="async" />
         </span>
       )}
-    </a>
+    </CardTag>
   );
   if (!project.story) return card;
   return (
