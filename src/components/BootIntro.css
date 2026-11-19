@@ -25,7 +25,7 @@
   --n8n-cable:rgba(11,30,63,0.28);
   --n8n-ok:#22A15C;
   --n8n-ink:var(--navy);
-  transition:background-color .45s var(--ease-out),opacity .6s var(--ease-out),visibility .6s var(--ease-out);
+  transition:background-color .45s var(--ease-out);
 }
 [data-theme="dark"] .boot{
   background:#060C1A;
@@ -35,7 +35,20 @@
   --n8n-ok:#3DBA74;
   --n8n-ink:#E9EDF5;
 }
-.boot--leaving{opacity:0;visibility:hidden}
+/* The exit, on the reference's own clock: the flood runs for 280ms, then the
+   overlay fades for 1s starting at 320ms, while the page content rises into
+   place underneath (see html[data-intro] .main-col). */
+.boot--leaving{animation:bootFadeOut 1s cubic-bezier(.45,0,.55,1) .32s forwards}
+@keyframes bootFadeOut{from{opacity:1}to{opacity:0;visibility:hidden}}
+
+.boot-flood{
+  position:absolute;left:50%;top:calc(50% + min(3.9vmin,28px));
+  width:220vmax;height:220vmax;margin:-110vmax 0 0 -110vmax;
+  border-radius:50%;background:var(--bg);transform:scale(0);
+  z-index:3;will-change:transform;pointer-events:none;
+}
+.boot--leaving .boot-flood{animation:bootFlood .28s cubic-bezier(.7,0,.84,0) forwards}
+@keyframes bootFlood{to{transform:scale(1)}}
 
 /* Once the contour canvas reports its first drawn frame, the plate fades out
    and the field passes through to the intro. If WebGL is unavailable the plate

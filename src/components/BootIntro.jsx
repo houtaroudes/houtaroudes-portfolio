@@ -141,11 +141,25 @@ export default function BootIntro() {
      stacking changes. A layout effect so the lift lands before the first paint
      instead of flashing the page for a frame. */
   useLayoutEffect(() => {
-    if (mode !== "run" || leaving) return undefined;
+    if (mode !== "run") return undefined;
     const root = document.documentElement;
     root.setAttribute("data-intro", "on");
     return () => root.removeAttribute("data-intro");
-  }, [mode, leaving]);
+  }, [mode]);
+
+  /* The exit is a wipe, not a cut: the flood covers the scene first, and only
+     after that beat does the page come back, so it never flashes through the
+     overlay. 320ms matches the fade's own delay. This lives in its own effect,
+     because sharing one with the mount above would let React's cleanup drop the
+     attribute the instant leaving flipped. */
+  useEffect(() => {
+    if (!leaving) return undefined;
+    const t = window.setTimeout(
+      () => document.documentElement.removeAttribute("data-intro"),
+      320,
+    );
+    return () => window.clearTimeout(t);
+  }, [leaving]);
 
   /* Cables are measured from the real node boxes, so they stay attached at any
      width, in either theme, and while the row reflows on a phone. */
@@ -242,7 +256,8 @@ export default function BootIntro() {
 
   useEffect(() => {
     if (!leaving) return undefined;
-    const t = window.setTimeout(() => setGone(true), 620);
+    /* Flood 280ms, the fade starts at 320ms and runs for 1s. */
+    const t = window.setTimeout(() => setGone(true), 1450);
     return () => window.clearTimeout(t);
   }, [leaving]);
 
@@ -345,6 +360,10 @@ export default function BootIntro() {
           {done ? "Build complete" : "Assembling the build"}
         </p>
       </div>
+
+      {/* The exit wipe: a plate swallows the scene, then the overlay fades and
+          the page rises behind it. */}
+      <div className="boot-flood" />
     </div>
   );
 }

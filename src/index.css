@@ -795,3 +795,9 @@ html[data-intro] .bg-contour{z-index:200}
 [data-theme="dark"] .sidebar-social.theme:hover{background:#FFFFFF}
 [data-theme="dark"] .sidebar-link.active{background:#13233F;box-shadow:inset 0 0 0 1px rgba(233,237,245,0.12),0 10px 26px -12px rgba(0,0,0,0.55)}
 [data-theme="dark"] .scrolltop{background:#182C4F;color:#E9EDF5}
+
+/* The page rises into place as the intro flood clears, matching the reference
+   beat. Only the main column is offset: the sidebar carries its own drawer
+   transform transition on phones and has to keep it. */
+.main-col{transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+html[data-intro] .main-col{opacity:0;transform:translateY(14px)}
