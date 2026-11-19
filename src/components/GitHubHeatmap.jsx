@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import UseAnimations from "react-useanimations";
+import githubIcon from "react-useanimations/lib/github";
 
 // The upstream API caches and GitHub's own graph lags, so asking more often
 // than this only produces identical answers. Overridable for tests.
@@ -10,11 +12,7 @@ const MIN_REFRESH_GAP_MS = 30 * 1000;
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-const GithubIcon = ({ s = 16 }) => (
-  <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 19c-4 1.2-4-2.1-5.5-2.5M17 22v-3.2c0-.9-.3-1.5-.6-1.8 2.1-.2 4.3-1 4.3-4.7 0-1-.4-1.9-1-2.6.1-.3.4-1.3-.1-2.7 0 0-.9-.3-2.9 1a10 10 0 00-5.4 0c-2-1.3-2.9-1-2.9-1-.5 1.4-.2 2.4-.1 2.7-.6.7-1 1.6-1 2.6 0 3.7 2.2 4.5 4.3 4.7-.3.3-.5.7-.6 1.4V22" />
-  </svg>
-);
+const GithubIcon = ({ s = 16 }) => <UseAnimations animation={githubIcon} size={s} />;
 
 export default function GitHubHeatmap({ username = "houtaroudes", year, refreshMs = REFRESH_MS }) {
   // The chart year is state rather than a value sampled once at mount: a tab

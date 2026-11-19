@@ -1,6 +1,10 @@
 import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Monitor, Gear, Package, Game } from "reicon-react";
+import UseAnimations from "react-useanimations";
+import monitorIcon from "react-useanimations/lib/monitor";
+import databaseIcon from "react-useanimations/lib/database";
+import packageIcon from "react-useanimations/lib/package";
+import penToolIcon from "react-useanimations/lib/penTool";
 import { TECH_GROUPS, TOTAL_TECH_SKILLS } from "../data/techStack.js";
 
 /* ===== Motion ===== */
@@ -14,14 +18,19 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } },
 };
 
-const GROUP_ICONS = { "Frontend & Core": Monitor, "Backend & Databases": Gear, "Tools & Platforms": Package, "Creative & More": Game };
+const GROUP_ICONS = {
+  "Frontend & Core": monitorIcon,
+  "Backend & Databases": databaseIcon,
+  "Tools & Platforms": packageIcon,
+  "Creative & More": penToolIcon,
+};
 
 function TechGroup({ name, skills }) {
-  const Icon = GROUP_ICONS[name] ?? Gear;
+  const Icon = GROUP_ICONS[name] ?? packageIcon;
   return (
     <motion.div className="ts-group" variants={itemVariants}>
       <div className="ts-group-head">
-        <span className="ts-group-icon"><Icon size={17} weight="Outline" /></span>
+        <span className="ts-group-icon"><UseAnimations animation={Icon} size={18} /></span>
         <h4 className="ts-group-name">{name}</h4>
         <span className="ts-group-count">{skills.length}</span>
       </div>
@@ -94,7 +103,9 @@ export default function TechStackModal({ open, onClose }) {
                 onClick={onClose}
                 aria-label="Close tech stack"
               >
-                <X size={18} weight="Outline" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+                  <path d="M3 3l10 10M13 3L3 13" />
+                </svg>
               </button>
             </div>
 
