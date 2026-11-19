@@ -1,5 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { CodeCircle, Compass, Rocket } from "reicon-react";
+import UseAnimations from "react-useanimations";
+import exploreIcon from "react-useanimations/lib/explore";
+import codeIcon from "react-useanimations/lib/code";
+import uploadIcon from "react-useanimations/lib/upload";
 
 /*
  * Loading intro for v2.
@@ -26,9 +29,9 @@ import { CodeCircle, Compass, Rocket } from "reicon-react";
 
 const TITLE = ["Bryan", "Sacueza"];
 const STEPS = [
-  { label: "Discover", Icon: Compass },
-  { label: "Build", Icon: CodeCircle },
-  { label: "Launch", Icon: Rocket },
+  { label: "Discover", Icon: exploreIcon },
+  { label: "Build", Icon: codeIcon },
+  { label: "Launch", Icon: uploadIcon },
 ];
 
 /* Intro budget. Same rule as the game portfolio: three plays a day, counted in
@@ -286,11 +289,11 @@ export default function BootIntro() {
             >
               <span className="boot-node-port boot-node-port--in" />
               <span className="boot-node-card">
-                <step.Icon
+                <UseAnimations
+                  animation={step.Icon}
                   className="boot-node-icon"
-                  size={21}
-                  weight="Outline"
-                  aria-hidden="true"
+                  size={22}
+                  interaction="hover-replay"
                 />
                 <span className="boot-node-check">
                   <svg viewBox="0 0 24 24" width="9" height="9" aria-hidden="true">

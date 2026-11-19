@@ -1,5 +1,7 @@
 import { Suspense, lazy, useState } from "react";
-import { ArrowUpRight, Cpu } from "reicon-react";
+import UseAnimations from "react-useanimations";
+import arrowUpRightIcon from "react-useanimations/lib/arrowUpRight";
+import cpuIcon from "react-useanimations/lib/cpu";
 import { TECH_STACK_PREVIEW, TOTAL_TECH_SKILLS } from "../data/techStack.js";
 
 /* The modal is code-split - most visitors never open it, so its code only
@@ -51,7 +53,7 @@ export default function TechStack() {
         aria-label="Open my tech stack and skills"
       >
         <span className="dd-stack-icon">
-          <Cpu size={20} weight="Outline" />
+          <UseAnimations animation={cpuIcon} size={22} />
         </span>
         <span className="dd-stack-body">
           <span className="dd-stack-title">{TOTAL_TECH_SKILLS} tools &amp; technologies</span>
@@ -67,7 +69,7 @@ export default function TechStack() {
           </span>
         </span>
         <span className="dd-stack-arrow" aria-hidden="true">
-          <ArrowUpRight size={18} weight="Outline" />
+          <UseAnimations animation={arrowUpRightIcon} size={18} />
         </span>
       </button>
 

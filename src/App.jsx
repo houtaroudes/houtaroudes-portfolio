@@ -1,17 +1,25 @@
 import { lazy, Suspense, useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sun, Moon, ArrowUp, Envelope, Home, User, Briefcase, MessageCircle, Gamepad } from "reicon-react";
+import UseAnimations from "react-useanimations";
+import sunIcon from "react-useanimations/lib/sun";
+import moonIcon from "react-useanimations/lib/moon";
+import arrowUpIcon from "react-useanimations/lib/arrowUp";
+import mailIcon from "react-useanimations/lib/mail";
+import homeIcon from "react-useanimations/lib/home";
+import userIcon from "react-useanimations/lib/user";
+import briefcaseIcon from "react-useanimations/lib/briefcase";
+import messageCircleIcon from "react-useanimations/lib/messageCircle";
+import exploreIcon from "react-useanimations/lib/explore";
+import githubIcon from "react-useanimations/lib/github";
+import menuIcon from "react-useanimations/lib/menu";
+import checkmarkIcon from "react-useanimations/lib/checkmark";
 // Decorative background - code-split so the shader stays out of the main bundle.
 const ContourBackground = lazy(() => import("./components/ContourBackground"));
 import ProjectsGrid, { PROJECT_COUNT } from "./components/ProjectsGrid";
 import TechStack from "./components/TechStack";
 import BootIntro from "./components/BootIntro";
 
-const IconGithub = ({ s = 16 }) => (
-  <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 19c-4 1.2-4-2.1-5.5-2.5M17 22v-3.2c0-.9-.3-1.5-.6-1.8 2.1-.2 4.3-1 4.3-4.7 0-1-.4-1.9-1-2.6.1-.3.4-1.3-.1-2.7 0 0-.9-.3-2.9 1a10 10 0 00-5.4 0c-2-1.3-2.9-1-2.9-1-.5 1.4-.2 2.4-.1 2.7-.6.7-1 1.6-1 2.6 0 3.7 2.2 4.5 4.3 4.7-.3.3-.5.7-.6 1.4V22" />
-  </svg>
-);
+const IconGithub = ({ s = 16 }) => <UseAnimations animation={githubIcon} size={s} />;
 const EyebrowIcon = () => (
   <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor" style={{marginRight:6}}>
     <path d="M4 0L8 4L4 8L0 4Z"/>
@@ -43,10 +51,10 @@ const faqs = [
 ];
 
 const NAV_ITEMS = [
-  { id: "home", label: "Home", Icon: Home },
-  { id: "about", label: "About", Icon: User },
-  { id: "services", label: "Services", Icon: Briefcase },
-  { id: "contact", label: "FAQs / Contact", Icon: MessageCircle },
+  { id: "home", label: "Home", Icon: homeIcon },
+  { id: "about", label: "About", Icon: userIcon },
+  { id: "services", label: "Services", Icon: briefcaseIcon },
+  { id: "contact", label: "FAQs / Contact", Icon: messageCircleIcon },
 ];
 
 const SIDEBAR_SOCIALS = [
@@ -172,7 +180,7 @@ function Sidebar({ active, onNavigate, open, dark, onToggleTheme }) {
       <div className="sidebar-socials">
         {SIDEBAR_SOCIALS.map((s) => (
           <a key={s.label} href={s.href} target="_blank" rel="noopener" className="sidebar-social" title={s.label} aria-label={s.label}>
-            {s.label === "GitHub" ? <IconGithub s={16} /> : s.label === "LinkedIn" ? <span className="sidebar-social-glyph">in</span> : <Gamepad size={16} weight="Outline" />}
+            {s.label === "GitHub" ? <IconGithub s={18} /> : s.label === "LinkedIn" ? <span className="sidebar-social-glyph">in</span> : <UseAnimations animation={exploreIcon} size={18} />}
           </a>
         ))}
         <button
@@ -181,14 +189,14 @@ function Sidebar({ active, onNavigate, open, dark, onToggleTheme }) {
           title={dark ? "Light Mode" : "Dark Mode"}
           aria-label="Toggle theme"
         >
-          {dark ? <Sun size={16} weight="Outline" /> : <Moon size={16} weight="Outline" />}
+          {dark ? <UseAnimations animation={sunIcon} size={18} /> : <UseAnimations animation={moonIcon} size={18} />}
         </button>
       </div>
       <div className="sidebar-divider" />
       <nav className="sidebar-nav">
         {NAV_ITEMS.map((n) => (
           <a key={n.id} href={`#${n.id}`} className={`sidebar-link ${active === n.id ? "active" : ""}`} onClick={onNavigate}>
-            <span className="sidebar-link-icon"><n.Icon size={19} weight="Outline" /></span>
+            <span className="sidebar-link-icon"><UseAnimations animation={n.Icon} size={22} /></span>
             {n.label}
           </a>
         ))}
@@ -256,7 +264,7 @@ function ScrollToTop() {
       whileHover={{ color: "var(--orange)", borderColor: "var(--orange)" }}
       aria-label="Scroll to top"
     >
-      <ArrowUp size={16} weight="Outline" />
+      <UseAnimations animation={arrowUpIcon} size={18} interaction="hover-replay" />
     </motion.button>
   );
 }
@@ -306,7 +314,7 @@ export default function PortfolioV2() {
           aria-label="Menu"
           aria-expanded={sidebarOpen}
         >
-          <span /><span /><span />
+          <UseAnimations animation={menuIcon} size={24} active={sidebarOpen} />
         </button>
       </header>
 
@@ -441,7 +449,7 @@ export default function PortfolioV2() {
               Have a project in mind? Send me a message and I'll get back to you as soon as I can.
             </p>
             <a href="mailto:houtaroudes@gmail.com" className="contact-email">
-              <Envelope size={15} weight="Outline" /> houtaroudes@gmail.com
+              <UseAnimations animation={mailIcon} size={18} /> houtaroudes@gmail.com
             </a>
             <div className="contact-socials">
               <a href="https://github.com/houtaroudes" target="_blank" rel="noopener"><IconGithub s={14} /> GitHub</a>
@@ -477,7 +485,7 @@ export default function PortfolioV2() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="form-success"
               >
-                <div>✓</div>
+                <div><UseAnimations animation={checkmarkIcon} size={30} interaction="hover" /></div>
                 <h4>Message Sent!</h4>
                 <p>Thanks for reaching out. I'll reply as soon as possible.</p>
               </motion.div>
