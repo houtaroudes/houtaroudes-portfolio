@@ -779,3 +779,19 @@ footer{border-top:1px solid var(--border);padding:34px var(--container-x);text-a
   .dd-band{flex-direction:column;align-items:stretch;gap:10px;padding:14px 16px}
   .dd-band-head{padding:0 0 8px;border-right:none;border-bottom:1px solid var(--border)}
 }
+
+/* While the boot intro is mounted the contour canvas is lifted above the page, so the shader background is what covers the page and the field keeps drawing behind the diagram. Dropping the flag returns the canvas to the page layer with the lines exactly where they were, which is what makes the handover seamless. */
+html[data-intro] .bg-contour{z-index:200}
+
+/* ===== Icon controls in dark mode =====
+   A button does not inherit the page colour, so the burger glyph kept the UA
+   buttontext (black) and vanished on the dark bar. The rest of the row had the
+   opposite problem: a plate one step off the page background, so the buttons
+   were there but invisible as buttons. */
+.nav-burger{color:var(--ink)}
+[data-theme="dark"] .sidebar-social{background:#182C4F;box-shadow:inset 0 0 0 1px rgba(233,237,245,0.18),0 6px 16px -8px rgba(0,0,0,0.6)}
+[data-theme="dark"] .sidebar-social:hover{background:#1E3762;box-shadow:inset 0 0 0 1px rgba(233,237,245,0.26),0 10px 22px -8px rgba(0,0,0,0.65)}
+[data-theme="dark"] .sidebar-social.theme{background:#E9EDF5;box-shadow:0 6px 16px -6px rgba(0,0,0,0.55)}
+[data-theme="dark"] .sidebar-social.theme:hover{background:#FFFFFF}
+[data-theme="dark"] .sidebar-link.active{background:#13233F;box-shadow:inset 0 0 0 1px rgba(233,237,245,0.12),0 10px 26px -12px rgba(0,0,0,0.55)}
+[data-theme="dark"] .scrolltop{background:#182C4F;color:#E9EDF5}

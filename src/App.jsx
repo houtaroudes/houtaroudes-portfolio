@@ -16,7 +16,7 @@ import checkmarkIcon from "react-useanimations/lib/checkmark";
 const ContourBackground = lazy(() => import("./components/ContourBackground"));
 import ProjectsGrid, { PROJECT_COUNT } from "./components/ProjectsGrid";
 import TechStack from "./components/TechStack";
-import LandingIntro from "./components/LandingIntro";
+import BootIntro from "./components/BootIntro";
 import ThemeGlyph from "./components/ThemeGlyph";
 import { switchTheme } from "./themeSweep";
 
@@ -303,7 +303,7 @@ export default function PortfolioV2() {
   return (
     <>
       {/* Loading intro: overlays until the hero has painted, then lifts. */}
-      <LandingIntro />
+      <BootIntro />
 
       {/* Animated background */}
       <Suspense fallback={null}>

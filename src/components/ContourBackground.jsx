@@ -184,6 +184,12 @@ export default function ContourBackground() {
     let raf = 0;
     let running = !reducedMotion;
 
+    /* The intro holds an opaque plate until the field is actually on screen.
+       This is the only honest signal that it is: the shader has drawn. Until
+       then the page would show through the intro's transparent overlay, and
+       after a WebGL failure it never would. */
+    let painted = false;
+
     const draw = (t) => {
       cursor.x += (cursor.tx - cursor.x) * 0.04;
       cursor.y += (cursor.ty - cursor.y) * 0.04;
@@ -193,6 +199,10 @@ export default function ContourBackground() {
       gl.uniform2f(uCursor, cursor.x, cursor.y);
       gl.uniform1f(uDark, dark);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+      if (!painted) {
+        painted = true;
+        document.documentElement.setAttribute("data-contour", "ready");
+      }
     };
 
     const loop = (t) => {
@@ -214,6 +224,7 @@ export default function ContourBackground() {
 
     return () => {
       cancelAnimationFrame(raf);
+      if (painted) document.documentElement.removeAttribute("data-contour");
       themeObserver.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointer);
